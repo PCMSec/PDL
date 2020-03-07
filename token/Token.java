@@ -1,18 +1,58 @@
 package token;
-//Interfaz con los metodos basicos de un token
+import token.TiposToken;
+//Token. Cuando es un {, { ... el valor es cero. Si necesita mas info, usamos valor != 0
 public class Token {
-	String tipo;
-	int adicional;
+	//Tipos dentro de los especificados
+	private TiposToken token;
+	//Valor para pos TS
+	private int valor=0;
+	//Valor para cadenas
+	private String lexema="";
 	
-	public Token(String tipo, int adicional) {
-		this.tipo=tipo;
-		this.adicional=adicional;
+	
+	//Constructores por defecto, tipo de token y su valor
+	public Token(TiposToken token, int valor) {
+		this.token=token;
+		this.valor=valor;
 	}
 	
+	//Constructor por defecto, tipo de token y el lexema que posee
+	public Token(TiposToken token, String lexema) {
+		this.token=token;
+		this.lexema=lexema;
+	}
+	//Constructor para solo token
+	public Token(TiposToken token) {
+		this.token=token;
+	}
+
+	public TiposToken getToken() {
+		return token;
+	}
+
+	public void setToken(TiposToken token) {
+		this.token = token;
+	}
+
+	public int getValor() {
+		return valor;
+	}
+
+	public void setValor(int valor) {
+		this.valor = valor;
+	}
+
+
+	//Imprimir estructura pedida
 	public String tokenizar() {
-		return "<" + tipo + ", " + adicional +">";
-	}
-	public String tipo() {
-		return tipo;
+		if (valor == 0 && lexema =="") {
+			return "<" + token + ", " + valor + ">";
+		}
+		else if (valor != 0) {
+			return "<" + token + ", " + valor + ">";
+		}		
+		else {	
+			return "<" + token + ", " + lexema + ">";
+		}
 	}
 }
