@@ -19,6 +19,13 @@ import token.Token;
 
 public class Lex {
 	
+	private int linea;
+	public static boolean noContar;
+	
+	public Lex() {
+		linea=0;
+		noContar=false;
+	}
 	public static String leerArchivo(String filePath) {
 		String resultado="";
 		try {
