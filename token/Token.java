@@ -5,7 +5,7 @@ public class Token {
 	//Tipos dentro de los especificados
 	private TiposToken token;
 	//Valor para pos TS
-	private int valor=0;
+	private int valor=-1;
 	//Valor para cadenas
 	private String lexema="";
 	
@@ -41,14 +41,22 @@ public class Token {
 	public void setValor(int valor) {
 		this.valor = valor;
 	}
+	
+	public String getLexema() {
+		return lexema;
+	}
+
+	public void setLexema(String lexema) {
+		this.lexema = lexema;
+	}
 
 
 	//Imprimir estructura pedida
 	public String tokenizar() {
-		if (valor == 0 && lexema =="") {
+		if (valor == -1 && lexema =="") {
 			return "<" + token + ", " + valor + ">";
 		}
-		else if (valor != 0) {
+		else if (valor != -1) {
 			return "<" + token + ", " + valor + ">";
 		}		
 		else {	

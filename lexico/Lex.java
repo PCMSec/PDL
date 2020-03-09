@@ -13,19 +13,52 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import token.TiposToken;
 import token.Token;
 
-
+//{"function","return","switch","case","default","var","int","boolean","true","false","break","print","input"};
 public class Lex {
-	
-	private int linea;
+	public static final ArrayList<String> palabrasReservadas=new ArrayList<String>(Arrays.asList("function","return","switch","case","default","var","int","boolean","true","false","break","print","input"));
 	public static boolean noContar;
-	
+
 	public Lex() {
-		linea=0;
 		noContar=false;
 	}
+	public static TiposToken decodificar(String palabra) {
+		switch(palabrasReservadas.indexOf(palabra)) {
+		case 0:
+			return TiposToken.T_FUNC;
+		case 1:
+			return TiposToken.T_RETURN;
+		case 2:
+			return TiposToken.T_SWITCH;
+		case 3:
+			return TiposToken.T_CASE;
+		case 4:
+			return TiposToken.T_DEFAULT;
+		case 5:
+			return TiposToken.T_VAR;
+		case 6:
+			return TiposToken.T_INT;
+		case 7:
+			return TiposToken.T_BOOLEAN;
+		case 8:
+			return TiposToken.T_TRUE;
+		case 9:
+			return TiposToken.T_FALSE;
+		case 10:
+			return TiposToken.T_BREAK;
+		case 11:
+			return TiposToken.T_PRINT;
+		case 12:
+			return TiposToken.T_INPUT;
+		}
+		return TiposToken.T_ERROR;
+	}
+
 	public static String leerArchivo(String filePath) {
 		String resultado="";
 		try {
@@ -36,5 +69,5 @@ public class Lex {
 		}
 		return resultado;
 	}
-	
+
 }
