@@ -7,12 +7,14 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList; 
 import lexico.Lex;
+import tabla.TablaSimbolos;
 import token.*;
+import tabla.*;
 public class Principal {
 
 	public static void main(String[] args) {
 
-		String texto=lexico.Lex.leerArchivo("/home/pablo/eclipse-workspace/PDL/docs/test.txt");
+		String texto=lexico.Lex.leerArchivo("/home/pablo/eclipse-workspace/PDL/docs/sencillo.txt");
 		//Se deja preparado el texto con el que se va a trabajar
 		texto=texto.replace(";", " ; ");
 		texto=texto.replace(",", " , ");
@@ -154,7 +156,7 @@ public class Principal {
 		try {
 			PrintWriter writer = new PrintWriter("/home/pablo/eclipse-workspace/PDL/docs/tokens.txt", "UTF-8");
 			for (Token token:listaTokens) {
-				System.out.println(token.tokenizar());
+				//System.out.println(token.tokenizar());
 				writer.println(token.tokenizar());
 			}
 			writer.close();
@@ -165,8 +167,141 @@ public class Principal {
 			
 			e.printStackTrace();
 		}
-
-
+		//INICIO TABLA SIMBOLOS
+		//Var o no var indica cambio entre definicion y uso.
+		//Declaracion, tabla global y tabla actual con la que se esta trabajando
+		
+		//declaracion para obtener var int s etc...
+		boolean declaracion=false;
+		//Tenemos ya el tipo del var?
+		boolean tipo=false;
+		//Estamos o no en una function
+		boolean funcion=false;
+		//boolean para comprobar si tiene o no parametros la function
+		boolean parametros=false;
+		//boolean antesFunc porque quiero empezar a leer los parametro de entrada en el parentesis de la func
+		boolean antesFunc=false;
+		//cuerpo de func
+		boolean cuerpo=false;
+		//leyendo elementos denro del parentesis
+		boolean dentroParentesis=false;
+		boolean tipoid=false;
+		int nCorchetes=0;
+		//Lista de parametros de func y de su lexema
+		ArrayList<String> lexemaParametros=new ArrayList<String>();
+		ArrayList<TiposToken> tiposParametros=new ArrayList<TiposToken>();
+		TablaSimbolos global=new TablaSimbolos();
+		TablaSimbolos actual=global;
+		TiposToken tipoActual=null;
+		TiposToken tipoFuncion=null;
+		String lexema="";
+		//Vamos leyendo todos los tokens uno a uno
+		for (Token token:listaTokens) {
+			
+			if (token.getToken().equals(TiposToken.T_VAR)) {
+				//Se activa la declaracion porque ha leido var
+				declaracion=true;
+			}
+			else if((declaracion) && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
+				//var puesto previamente y se lee int string o boolean
+				tipoActual=token.getToken();
+				declaracion=false;
+				tipo=true;
+			}
+			else if ((tipo) && (token.getToken().equals(TiposToken.T_ID))) {
+				//var + tipo + id que estamos leyendo ahora y se limpia lo que se ha usado
+				//TODO meter en la tabla en la que se define
+				if (actual.existeEnTabla(token.getLexema())) {
+					System.out.println("Error, ya existe una variable con el mismo nombre");
+				}
+				else {
+					actual.meterLexema(token.getLexema());
+					actual.meterTipo(token.getToken());
+				}
+				lexema=token.getLexema();
+				//System.out.println(lexema +" "+tipoActual);
+				lexema="";
+				tipoActual=null;
+				tipo=false;
+			}
+			else if (token.getToken().equals(TiposToken.T_FUNC)) {
+				//Tenemos una funcion en el token, acabamos de leer function
+				//Hasta que no se salga de la func estamos con funcion a true
+				actual=new TablaSimbolos();
+				//TODO:cambiar la actual a la tabla que crea la nueva func
+				System.out.println("ENTRANDO EN FUNCION");
+				
+				antesFunc=true;
+				funcion=true;
+						
+			}
+			else if((antesFunc) && (funcion) && (token.getToken().equals(TiposToken.T_ID))) {
+				//el tipo de funcion es void
+				tipoFuncion=TiposToken.T_VACIO;
+				antesFunc=false;
+				parametros=true;
+				
+			}
+			else if(antesFunc && funcion && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
+				//tipo de func es alguno de los tres de arriba
+				tipoFuncion=token.getToken();
+				antesFunc=false;
+				tipoid=true;
+				//parametros=true;
+			}
+			else if(tipoid && funcion && token.getToken().equals(TiposToken.T_ID)) {
+				tipoFuncion=token.getToken();
+				tipoid=false;
+				parametros=true;
+				
+			}
+			else if (funcion && parametros) {
+				if (token.getToken().equals(TiposToken.T_PARENTESISABRE)) {
+					dentroParentesis=true;
+					continue;
+				}
+				if (dentroParentesis) {
+					if (token.getToken().equals(TiposToken.T_ID)) {
+						actual.meterLexema(token.getLexema());
+					}
+					else if (token.getToken().equals(TiposToken.T_INT)||token.getToken().equals(TiposToken.T_BOOLEAN)||token.getToken().equals(TiposToken.T_STRING)){
+						actual.meterTipo(token.getToken());
+					}
+					else if (token.getToken().equals(TiposToken.T_PARENTESISCIERRA)) {
+						//Ya podemos devolver lo que tengamos en la lista y limpiar la lista para usarla con otras
+						//funciones
+						//return a la Tabla de simbolos de lo que nos hayan metido
+						//return del numero de elementos...
+						System.out.println(token.getToken());
+						System.out.println(actual.lexemaParametros);
+						System.out.println(actual.tiposParametros);
+						lexemaParametros.clear();
+						tiposParametros.clear();
+						parametros=false;
+						dentroParentesis=false;
+						cuerpo=true;
+					}
+				}
+				
+			}
+			else if ((cuerpo) && (token.getToken().equals(TiposToken.T_LLAVEABRE))) {
+				nCorchetes++;
+			}
+			else if ((cuerpo) && (token.getToken().equals(TiposToken.T_LLAVECIERRA))) {
+				nCorchetes--;
+				if (nCorchetes==0) {
+					System.out.println("FIN DE LA FUNCION");
+					funcion=false;
+					cuerpo=false;
+				}
+			}
+		}
+		for (TablaSimbolos tabla:TablaSimbolos.listaTablas) {
+			System.out.println(tabla.getIdTabla());
+			System.out.println(tabla.lexemaParametros);
+			System.out.println(tabla.tiposParametros);
+			System.out.println();
+		}
 		
 	}
 
