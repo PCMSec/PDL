@@ -1,6 +1,7 @@
 package tabla;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import token.TiposToken;
 
@@ -10,15 +11,19 @@ public class TablaSimbolos {
 	//Id de la tabla que incrementa cada vez que se instancia una diferente
 	private static int inicial=0;
 	public int idTabla;
+	private int desplazamiento=0;
 	//ArrayList de entradas de la tabla
-	private ArrayList<EntradaTS> entradas=new ArrayList<EntradaTS>();
+	//private ArrayList<EntradaTS> entradas=new ArrayList<EntradaTS>();
 	//lexemas y tipos de los tokens de la TS
+	public ArrayList<String> lexemaParametrosFuncion;
+	public ArrayList<TiposToken> tiposParametrosFuncion;
 	public ArrayList<String> lexemaParametros;
 	public ArrayList<TiposToken> tiposParametros;
-
 	public TablaSimbolos() {
 		lexemaParametros=new ArrayList<String>();
 		tiposParametros=new ArrayList<TiposToken>();
+		lexemaParametrosFuncion=new ArrayList<String>();
+		tiposParametrosFuncion=new ArrayList<TiposToken>();
 		this.idTabla=inicial;
 		inicial++;
 		listaTablas.add(this);
@@ -52,9 +57,30 @@ public class TablaSimbolos {
 	//Metodo para imprimir la tabla
 	@Override
 	public String toString() {
-		for (EntradaTS entrada:entradas) {
-
+		String cabecera="CONTENIDO DE LA TABLA # " + idTabla+"\n"+"\n";
+		String cuerpo="";
+		//System.out.println(listaTablas.get(idTabla).lexemaParametrosFuncion);
+		//Iteramos en cada 
+		Collections.reverse(lexemaParametros);
+		for (String lexema:lexemaParametros) {
+			cuerpo+="* LEXEMA : "+"'"+lexema+"'"+"\n";
+			cuerpo+="\t "+"ATRIBUTOS :"+"\n";
+			cuerpo+="\t "+"+ tipo : "+tipoLexema(lexema)+"\n";
+			if (tipoLexema(lexema).equals(TiposToken.T_STRING)) {
+				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
+				desplazamiento+=4;
+			}
+			else if (tipoLexema(lexema).equals(TiposToken.T_INT)) {
+				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
+				desplazamiento+=2;
+			}
+			else if (tipoLexema(lexema).equals(TiposToken.T_BOOLEAN)) {
+				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
+				desplazamiento+=1;
+				
+			}
+			cuerpo+="--------- ----------"+"\n";
 		}
-		return "";
+		return cabecera+cuerpo;
 	}
 }

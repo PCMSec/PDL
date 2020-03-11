@@ -161,16 +161,16 @@ public class Principal {
 			}
 			writer.close();
 		} catch (FileNotFoundException e) {
-			
+
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			
+
 			e.printStackTrace();
 		}
 		//INICIO TABLA SIMBOLOS
 		//Var o no var indica cambio entre definicion y uso.
 		//Declaracion, tabla global y tabla actual con la que se esta trabajando
-		
+
 		//declaracion para obtener var int s etc...
 		boolean declaracion=false;
 		//Tenemos ya el tipo del var?
@@ -185,6 +185,7 @@ public class Principal {
 		boolean cuerpo=false;
 		//leyendo elementos denro del parentesis
 		boolean dentroParentesis=false;
+		boolean decGlobal=false;
 		boolean tipoid=false;
 		int nCorchetes=0;
 		//Lista de parametros de func y de su lexema
@@ -197,10 +198,20 @@ public class Principal {
 		String lexema="";
 		//Vamos leyendo todos los tokens uno a uno
 		for (Token token:listaTokens) {
-			
+			//System.out.println(token.getToken());
+			//System.out.println(token.getLexema());
 			if (token.getToken().equals(TiposToken.T_VAR)) {
 				//Se activa la declaracion porque ha leido var
 				declaracion=true;
+			}
+			else if(!(antesFunc)&&!(dentroParentesis)&&!(declaracion) && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
+				tipoActual=token.getToken();
+				decGlobal=true;
+			}
+			else if ((decGlobal) && (token.getToken().equals(TiposToken.T_ID))) {
+				decGlobal=false;
+				global.meterLexema(token.getLexema());
+				global.meterTipo(tipoActual);
 			}
 			else if((declaracion) && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
 				//var puesto previamente y se lee int string o boolean
@@ -216,7 +227,8 @@ public class Principal {
 				}
 				else {
 					actual.meterLexema(token.getLexema());
-					actual.meterTipo(token.getToken());
+					actual.meterTipo(tipoActual);
+					tipoActual=null;
 				}
 				lexema=token.getLexema();
 				//System.out.println(lexema +" "+tipoActual);
@@ -227,33 +239,39 @@ public class Principal {
 			else if (token.getToken().equals(TiposToken.T_FUNC)) {
 				//Tenemos una funcion en el token, acabamos de leer function
 				//Hasta que no se salga de la func estamos con funcion a true
-				actual=new TablaSimbolos();
 				//TODO:cambiar la actual a la tabla que crea la nueva func
-				System.out.println("ENTRANDO EN FUNCION");
-				
+				actual=new TablaSimbolos();
+				//System.out.println("ENTRANDO EN FUNCION");
 				antesFunc=true;
 				funcion=true;
-						
+
 			}
 			else if((antesFunc) && (funcion) && (token.getToken().equals(TiposToken.T_ID))) {
 				//el tipo de funcion es void
 				tipoFuncion=TiposToken.T_VACIO;
+				global.lexemaParametros.add(token.getLexema());
+				global.tiposParametros.add(tipoFuncion);
+				//System.out.println(tipoFuncion);
+				tipoFuncion=null;
 				antesFunc=false;
 				parametros=true;
-				
+
 			}
-			else if(antesFunc && funcion && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
+			else if((antesFunc) && (funcion) && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
 				//tipo de func es alguno de los tres de arriba
 				tipoFuncion=token.getToken();
+				//System.out.println(tipoFuncion);
 				antesFunc=false;
 				tipoid=true;
 				//parametros=true;
 			}
 			else if(tipoid && funcion && token.getToken().equals(TiposToken.T_ID)) {
+				global.lexemaParametros.add(token.getLexema());
+				global.tiposParametros.add(tipoFuncion);
 				tipoFuncion=token.getToken();
 				tipoid=false;
 				parametros=true;
-				
+
 			}
 			else if (funcion && parametros) {
 				if (token.getToken().equals(TiposToken.T_PARENTESISABRE)) {
@@ -262,19 +280,21 @@ public class Principal {
 				}
 				if (dentroParentesis) {
 					if (token.getToken().equals(TiposToken.T_ID)) {
-						actual.meterLexema(token.getLexema());
+						//actual.meterLexema(token.getLexema());
+						actual.lexemaParametrosFuncion.add(token.getLexema());
 					}
 					else if (token.getToken().equals(TiposToken.T_INT)||token.getToken().equals(TiposToken.T_BOOLEAN)||token.getToken().equals(TiposToken.T_STRING)){
-						actual.meterTipo(token.getToken());
+						//actual.meterTipo(token.getToken());
+						actual.tiposParametrosFuncion.add(token.getToken());
 					}
 					else if (token.getToken().equals(TiposToken.T_PARENTESISCIERRA)) {
 						//Ya podemos devolver lo que tengamos en la lista y limpiar la lista para usarla con otras
 						//funciones
 						//return a la Tabla de simbolos de lo que nos hayan metido
 						//return del numero de elementos...
-						System.out.println(token.getToken());
-						System.out.println(actual.lexemaParametros);
-						System.out.println(actual.tiposParametros);
+						//System.out.println(token.getToken());
+						//System.out.println(actual.lexemaParametros);
+						//System.out.println(actual.tiposParametros);
 						lexemaParametros.clear();
 						tiposParametros.clear();
 						parametros=false;
@@ -282,7 +302,7 @@ public class Principal {
 						cuerpo=true;
 					}
 				}
-				
+
 			}
 			else if ((cuerpo) && (token.getToken().equals(TiposToken.T_LLAVEABRE))) {
 				nCorchetes++;
@@ -290,19 +310,26 @@ public class Principal {
 			else if ((cuerpo) && (token.getToken().equals(TiposToken.T_LLAVECIERRA))) {
 				nCorchetes--;
 				if (nCorchetes==0) {
-					System.out.println("FIN DE LA FUNCION");
+					//System.out.println("FIN DE LA FUNCION");
+					actual=global;
 					funcion=false;
 					cuerpo=false;
 				}
 			}
+			/*else {
+				System.out.println("REVISAR");
+				System.out.println(token.getToken());
+				System.out.println(token.getLexema());
+			}*/
 		}
 		for (TablaSimbolos tabla:TablaSimbolos.listaTablas) {
 			System.out.println(tabla.getIdTabla());
 			System.out.println(tabla.lexemaParametros);
 			System.out.println(tabla.tiposParametros);
-			System.out.println();
+			System.out.println(tabla.lexemaParametrosFuncion);
+			System.out.println(tabla.tiposParametrosFuncion);
+			//System.out.println(tabla.toString());
 		}
-		
 	}
 
 }
