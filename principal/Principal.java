@@ -259,7 +259,15 @@ public class Principal {
 			}
 			else if((antesFunc) && (funcion) && ((token.getToken().equals(TiposToken.T_INT))||(token.getToken().equals(TiposToken.T_BOOLEAN))||(token.getToken().equals(TiposToken.T_STRING)))) {
 				//tipo de func es alguno de los tres de arriba
-				tipoFuncion=token.getToken();
+				if (token.getToken().equals(TiposToken.T_INT)){
+					tipoFuncion=TiposToken.T_FUNCINT;
+				}
+				if (token.getToken().equals(TiposToken.T_STRING)){
+					tipoFuncion=TiposToken.T_FUNCSTRING;
+				}
+				if (token.getToken().equals(TiposToken.T_BOOLEAN)){
+					tipoFuncion=TiposToken.T_FUNCBOOLEAN;
+				}
 				//System.out.println(tipoFuncion);
 				antesFunc=false;
 				tipoid=true;
@@ -322,13 +330,19 @@ public class Principal {
 				System.out.println(token.getLexema());
 			}*/
 		}
+		//Añadir a cada TS de funcion los parametro que tiene la global
+		if (TablaSimbolos.listaTablas.size()>1) {
+			for (TablaSimbolos tabla:TablaSimbolos.listaTablas) {
+				if (!tabla.lexemaParametrosFuncion.isEmpty()) {
+					tabla.lexemaParametros.addAll(0,tabla.lexemaParametrosFuncion);
+					tabla.tiposParametros.addAll(0,tabla.tiposParametrosFuncion);
+				}
+			}
+		}
+
 		for (TablaSimbolos tabla:TablaSimbolos.listaTablas) {
-			System.out.println(tabla.getIdTabla());
-			System.out.println(tabla.lexemaParametros);
-			System.out.println(tabla.tiposParametros);
-			System.out.println(tabla.lexemaParametrosFuncion);
-			System.out.println(tabla.tiposParametrosFuncion);
-			//System.out.println(tabla.toString());
+			//System.out.println(tabla.getIdTabla()); System.out.println(tabla.lexemaParametros); System.out.println(tabla.tiposParametros); System.out.println(tabla.lexemaParametrosFuncion); System.out.println(tabla.tiposParametrosFuncion);
+			System.out.println(tabla.toString());
 		}
 	}
 
