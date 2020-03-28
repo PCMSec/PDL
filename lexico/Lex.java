@@ -21,7 +21,7 @@ import token.Token;
 
 //{"function","return","switch","case","default","var","int","boolean","true","false","break","print","input"};
 public class Lex {
-	public static final ArrayList<String> palabrasReservadas=new ArrayList<String>(Arrays.asList("function","return","switch","case","default","var","int","boolean","true","false","break","print","input","string"));
+	public static final ArrayList<String> palabrasReservadas=new ArrayList<String>(Arrays.asList("function","return","switch","case","default","var","int","boolean","true","false","break","print","input","string","if","prompt"));
 	public static boolean noContar;
 
 	public Lex() {
@@ -57,8 +57,13 @@ public class Lex {
 			return TiposToken.T_INPUT;
 		case 13:
 			return TiposToken.T_STRING;
+		case 14:
+			return TiposToken.T_IF;
+		case 15:
+			return TiposToken.T_PROMPT;
 
 		}
+		
 
 		return TiposToken.T_ERROR;
 	}

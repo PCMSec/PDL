@@ -8,14 +8,14 @@ public class Token {
 	private int valor=-1;
 	//Valor para cadenas
 	private String lexema="";
-	
-	
+
+
 	//Constructores por defecto, tipo de token y su valor
 	public Token(TiposToken token, int valor) {
 		this.token=token;
 		this.valor=valor;
 	}
-	
+
 	//Constructor por defecto, tipo de token y el lexema que posee
 	public Token(TiposToken token, String lexema) {
 		this.token=token;
@@ -41,7 +41,7 @@ public class Token {
 	public void setValor(int valor) {
 		this.valor = valor;
 	}
-	
+
 	public String getLexema() {
 		return lexema;
 	}
@@ -49,6 +49,7 @@ public class Token {
 	public void setLexema(String lexema) {
 		this.lexema = lexema;
 	}
+
 
 
 	//Imprimir estructura pedida

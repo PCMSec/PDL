@@ -70,8 +70,7 @@ public class TablaSimbolos {
 	//Metodo para imprimir la tabla
 	@Override
 	public String toString() {
-		String cabecera="CONTENIDO DE LA TABLA # " + idTabla;
-
+		String cabecera="CONTENIDO DE LA TABLA #" + idTabla;
 		String cuerpo="";
 		//System.out.println(listaTablas.get(idTabla).lexemaParametrosFuncion);
 		//Iteramos en cada
@@ -86,7 +85,7 @@ public class TablaSimbolos {
 
 			if (tipoLexema(lexema).equals(TiposToken.T_VACIO)) {
 				tablaActual++;
-				//cabecera+="(funcion "+lexema+" )";
+				//opcional+="(funcion "+lexema+")"+"\n";
 				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
 				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
 				//System.out.println(tiposParametrosFuncion);
@@ -99,7 +98,7 @@ public class TablaSimbolos {
 			}
 			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCBOOLEAN)) {
 				tablaActual++;
-				//cabecera+="(funcion "+lexema+" )";
+				//opcional+="(funcion "+lexema+")"+"\n";
 				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
 				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
 				//System.out.println(tiposParametrosFuncion);
@@ -112,7 +111,7 @@ public class TablaSimbolos {
 			}
 			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCINT)) {
 				tablaActual++;
-				//cabecera+="(funcion "+lexema+" )";
+				//opcional+="(funcion "+lexema+")"+"\n";
 				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
 				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
 				//System.out.println(tiposParametrosFuncion);
@@ -125,7 +124,7 @@ public class TablaSimbolos {
 			}
 			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCSTRING)) {
 				tablaActual++;
-				//cabecera+="(funcion "+lexema+" )";
+				//opcional+="(funcion "+lexema+")"+"\n";
 				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
 				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
 				//System.out.println(tiposParametrosFuncion);
@@ -138,23 +137,24 @@ public class TablaSimbolos {
 
 
 			else if (tipoLexema(lexema).equals(TiposToken.T_STRING)) {
-				cuerpo+="\t "+"+ tipo : "+TiposToken.T_STRING+"\n";
+				cuerpo+="\t "+"+ tipo : "+"'cadena'"+"\n";
 				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
 				desplazamiento+=4;
 			}
 			else if (tipoLexema(lexema).equals(TiposToken.T_INT)) {
-				cuerpo+="\t "+"+ tipo : "+TiposToken.T_INT+"\n";
+				cuerpo+="\t "+"+ tipo : "+"'entero'"+"\n";
 				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
 				desplazamiento+=2;
 			}
 			else if (tipoLexema(lexema).equals(TiposToken.T_BOOLEAN)) {
-				cuerpo+="\t "+"+ tipo : "+TiposToken.T_BOOLEAN+"\n";
+				cuerpo+="\t "+"+ tipo : "+"'logico'"+"\n";
 				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
 				desplazamiento+=1;
 
 			}
-			cuerpo+="--------- ----------"+"\n";
+			
 		}
+		cuerpo+="\n"+"--------- ----------"+"\n";
 		return cabecera+cuerpo;
 	}
 }
