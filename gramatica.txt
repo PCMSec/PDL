@@ -1,0 +1,92 @@
+Terminales = { 
+
+eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print prompt postDecre function menor mas menos entero cadena true false break
+
+}
+NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 W W2 }
+Axioma = P
+Producciones = {
+	
+	P -> B P //1
+	P -> F P //2
+	P -> eof. //3
+
+	B -> var T id B2 ; //4
+	B -> if abreParentesis  E  cierraParentesis S //5
+	B -> S //6
+	B -> switch abreParentesis  E  cierraParentesis abreCorchete W cierraCorchete. //7
+
+	B2 -> igual E //8
+	B2 -> . //9
+
+	T -> int //10
+	T -> string //11
+	T -> boolean. //12
+
+	C -> B C //13
+	C -> . //14
+	
+	S -> id S2 ; //15
+	S -> return X ; //16
+	S -> print abreParentesis  E  cierraParentesis ; //17
+	S -> prompt abreParentesis  id  cierraParentesis ;. //18
+	
+	S2 -> postDecre //19
+	S2 -> igual E //20
+	S2 -> abreParentesis L cierraParentesis. //21
+	
+	X -> E //22
+	X -> . //23
+	
+	F -> function H id abreParentesis  A  cierraParentesis abreCorchete C cierraCorchete. //24
+	
+	A -> T id K //25
+	A -> . //26
+	
+	K -> coma T id K //27
+	K -> . //28
+	
+	H -> T //29
+	H -> . //30
+	
+	L -> E Q //31
+	L -> . //32
+	
+	Q -> coma E Q //33
+	Q -> . //34
+	
+	E -> Y E2. //35
+	
+	E2 -> and Y E2 //36
+	E2 -> . //37
+	
+	Y -> D Y2. //38
+	
+	Y2 -> menor D Y2 //39
+	Y2 -> . //40
+	
+	D -> V D2. //41
+	
+	D2 -> menos V D2 //42
+	D2 -> mas V D2 //43
+	D2 -> . //44
+	
+	V -> id V2 //45
+	V -> abreParentesis  E  cierraParentesis //46
+	V -> entero //47
+	V -> cadena //48
+	V -> true //49
+	V -> false. //50
+	
+	V2 -> postDecre //51
+	V2 -> abreParentesis  L  cierraParentesis //52
+	V2 -> . //53
+	
+	W -> case E : W2 W //54
+	W -> . //55
+	
+	W2 -> S W2 //56
+	W2 -> break ; //57
+	W2 -> . //58
+	
+}
