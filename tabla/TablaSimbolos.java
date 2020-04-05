@@ -1,160 +1,150 @@
 package tabla;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import token.TiposToken;
 
 public class TablaSimbolos {
-	//Lista con todas las clases que se crean 
+	//Lista ESTATICA con todas las tablas de simbolos a lo largo del programa
 	public static ArrayList<TablaSimbolos> listaTablas=new ArrayList<TablaSimbolos>();
-	//Id de la tabla que incrementa cada vez que se instancia una diferente
+	//Si es funcion tiene aqui el nombre de funcion
+	private String nombreFuncion;
+	//Numero de la tabla
+	private int idTabla;
+	//contador general para todas las tablas, para poner el ID actual
 	private static int inicial=0;
-	public int idTabla;
-	private int desplazamiento=0;
-	//ArrayList de entradas de la tabla
-	//private ArrayList<EntradaTS> entradas=new ArrayList<EntradaTS>();
-	//lexemas y tipos de los tokens de la TS
-	public ArrayList<String> lexemaParametrosFuncion;
-	public ArrayList<TiposToken> tiposParametrosFuncion;
-	public ArrayList<String> lexemaParametros;
-	public ArrayList<TiposToken> tiposParametros;
-	public static int tablaActual=0;
-	public TablaSimbolos() {
-		lexemaParametros=new ArrayList<String>();
-		tiposParametros=new ArrayList<TiposToken>();
-		lexemaParametrosFuncion=new ArrayList<String>();
-		tiposParametrosFuncion=new ArrayList<TiposToken>();
-		this.idTabla=inicial;
-		inicial++;
-		listaTablas.add(this);
+	//Conjunto de lexemas de la tabla actual
+	private ArrayList<String> lexemas;
+	//Tipos de lexema en la TS
+	private ArrayList<TiposToken> tiposLexemas;
+	//Conjunto de desplazamiento asociado a los tipos de los lexemas
+	private ArrayList<Integer> desplazamientos;
+	//booleano para saber si es TS Global o TS de func
+	public boolean esFuncion;
+	
+	public boolean esFuncion() {
+		return esFuncion;
+	}
+
+	public void setEsFuncion(boolean esFuncion) {
+		this.esFuncion = esFuncion;
+	}
+
+	public static ArrayList<TablaSimbolos> getListaTablas() {
+		return listaTablas;
+	}
+
+	public static void setListaTablas(ArrayList<TablaSimbolos> listaTablas) {
+		TablaSimbolos.listaTablas = listaTablas;
+	}
+
+	public String getNombreFuncion() {
+		return nombreFuncion;
+	}
+
+	public void setNombreFuncion(String nombreFuncion) {
+		this.nombreFuncion = nombreFuncion;
 	}
 
 	public int getIdTabla() {
-		return this.idTabla;
+		return idTabla;
 	}
 
-	//Existe lexema en tabla?
-	public boolean existeEnTabla(String lexema) {
-		if (lexemaParametros.contains(lexema)) {
-			return true;
-		}
-		else return false;
-	}
-	//TiposToken del lexema de la tabla
-	public TiposToken tipoLexema(String lexema) {
-		int i=lexemaParametros.indexOf(lexema);
-		return tiposParametros.get(i);
+	public void setIdTabla(int idTabla) {
+		this.idTabla = idTabla;
 	}
 
-	public void meterLexema(String lexema) {
-		lexemaParametros.add(lexema);
+	public static int getInicial() {
+		return inicial;
 	}
 
-	public void meterTipo(TiposToken tipoToken) {
-		tiposParametros.add(tipoToken);
+	public static void setInicial(int inicial) {
+		TablaSimbolos.inicial = inicial;
 	}
 
-	private ArrayList<String> getFunciones(TablaSimbolos global){
-		ArrayList<String> aux=new ArrayList<String>();
-		for (int i=0;i<global.tiposParametros.size();i++) {
-			if (global.tiposParametros.get(i).equals(TiposToken.T_VACIO)||global.tiposParametros.get(i).equals(TiposToken.T_FUNCBOOLEAN)||global.tiposParametros.get(i).equals(TiposToken.T_FUNCINT)||global.tiposParametros.get(i).equals(TiposToken.T_FUNCSTRING)) {
-				aux.add(lexemaParametros.get(i));
-			}	
+	public ArrayList<String> getLexemas() {
+		return lexemas;
+	}
+
+	public void setLexemas(ArrayList<String> lexemas) {
+		this.lexemas = lexemas;
+	}
+
+	public ArrayList<TiposToken> getTiposLexemas() {
+		return tiposLexemas;
+	}
+
+	public void setTiposLexemas(ArrayList<TiposToken> tiposLexemas) {
+		this.tiposLexemas = tiposLexemas;
+	}
+
+	public ArrayList<Integer> getDesplazamientos() {
+		return desplazamientos;
+	}
+
+	public void setDesplazamientos(ArrayList<Integer> desplazamientos) {
+		this.desplazamientos = desplazamientos;
+	}
+	
+	public TablaSimbolos() {
+		lexemas=new ArrayList<String>();
+		tiposLexemas=new ArrayList<TiposToken>();
+		desplazamientos=new ArrayList<Integer>();
+		this.idTabla=inicial;
+		inicial++;
+	}
+	
+	//Devuelve true si el lexema esta en TS o false si no
+	public boolean lexemaExiste(String lexema) {
+		boolean aux=false;
+		for (int i=0;i<lexemas.size();i++) {
+			if (lexemas.get(i).equals(lexema) && (!aux)) {
+				aux = true;
+				break;
+			}
 		}
 		return aux;
 	}
-
-	//private ArrayList<String> auxFunciones=getFunciones(listaTablas.get(0));
-
-	//Metodo para imprimir la tabla
-	@Override
-	public String toString() {
-		String cabecera="CONTENIDO DE LA TABLA #" + idTabla;
-		String cuerpo="";
-		//System.out.println(listaTablas.get(idTabla).lexemaParametrosFuncion);
-		//Iteramos en cada
-
-		cuerpo+="\n\n";
-		for (String lexema:lexemaParametros) {
-			//if (this.)
-
-			cuerpo+="* LEXEMA : "+"'"+lexema+"'"+"\n";
-			cuerpo+="\t "+"ATRIBUTOS :"+"\n";
-
-
-			if (tipoLexema(lexema).equals(TiposToken.T_VACIO)) {
-				tablaActual++;
-				//opcional+="(funcion "+lexema+")"+"\n";
-				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
-				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
-				//System.out.println(tiposParametrosFuncion);
-				for (int i=0;i<listaTablas.get(tablaActual).lexemaParametrosFuncion.size();i++) {
-
-					cuerpo+="\t "+"+ tipoParam" + i + " : "+listaTablas.get(tablaActual).tiposParametrosFuncion.get(i)+"\n";
-				}
-				cuerpo+="\t "+"+ tipoRetorno : "+TiposToken.T_VACIO+"\n";
-				cuerpo+="\t "+"+ etiqFuncion : "+ "ET" +lexema +"\n";
-			}
-			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCBOOLEAN)) {
-				tablaActual++;
-				//opcional+="(funcion "+lexema+")"+"\n";
-				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
-				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
-				//System.out.println(tiposParametrosFuncion);
-				for (int i=0;i<listaTablas.get(tablaActual).lexemaParametrosFuncion.size();i++) {
-
-					cuerpo+="\t "+"+ tipoParam" + i + " : "+listaTablas.get(tablaActual).tiposParametrosFuncion.get(i)+"\n";
-				}
-				cuerpo+="\t "+"+ tipoRetorno : "+TiposToken.T_FUNCBOOLEAN+"\n";
-				cuerpo+="\t "+"+ etiqFuncion : "+ "ET" +lexema +"\n";
-			}
-			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCINT)) {
-				tablaActual++;
-				//opcional+="(funcion "+lexema+")"+"\n";
-				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
-				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
-				//System.out.println(tiposParametrosFuncion);
-				for (int i=0;i<listaTablas.get(tablaActual).lexemaParametrosFuncion.size();i++) {
-
-					cuerpo+="\t "+"+ tipoParam" + i + " : "+listaTablas.get(tablaActual).tiposParametrosFuncion.get(i)+"\n";
-				}
-				cuerpo+="\t "+"+ tipoRetorno : "+TiposToken.T_FUNCINT+"\n";
-				cuerpo+="\t "+"+ etiqFuncion : "+ "ET" +lexema +"\n";
-			}
-			else if (tipoLexema(lexema).equals(TiposToken.T_FUNCSTRING)) {
-				tablaActual++;
-				//opcional+="(funcion "+lexema+")"+"\n";
-				cuerpo+="\t "+"+ tipo : "+ "funcion" +"\n";
-				cuerpo+="\t "+"+ numparam : "+listaTablas.get(tablaActual).lexemaParametrosFuncion.size()+"\n";
-				//System.out.println(tiposParametrosFuncion);
-				for (int i=0;i<listaTablas.get(tablaActual).lexemaParametrosFuncion.size();i++) {	
-					cuerpo+="\t "+"+ tipoParam" + i + " : "+listaTablas.get(tablaActual).tiposParametrosFuncion.get(i)+"\n";
-				}
-				cuerpo+="\t "+"+ tipoRetorno : "+TiposToken.T_FUNCSTRING+"\n";
-				cuerpo+="\t "+"+ etiqFuncion : "+ "ET" +lexema +"\n";
-			}
-
-
-			else if (tipoLexema(lexema).equals(TiposToken.T_STRING)) {
-				cuerpo+="\t "+"+ tipo : "+"'cadena'"+"\n";
-				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
-				desplazamiento+=4;
-			}
-			else if (tipoLexema(lexema).equals(TiposToken.T_INT)) {
-				cuerpo+="\t "+"+ tipo : "+"'entero'"+"\n";
-				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
-				desplazamiento+=2;
-			}
-			else if (tipoLexema(lexema).equals(TiposToken.T_BOOLEAN)) {
-				cuerpo+="\t "+"+ tipo : "+"'logico'"+"\n";
-				cuerpo+="\t "+"+ despl : "+desplazamiento+"\n";
-				desplazamiento+=1;
-
-			}
-			
-		}
-		cuerpo+="\n"+"--------- ----------"+"\n";
-		return cabecera+cuerpo;
+	
+	//Devuelve la posicion del lexema en Arraylist lexemas
+	public int posicionLexema(String lexema) {
+		return (lexemas.indexOf(lexema));
 	}
+	
+	
+	//Devuelve el tipo que tenga el lexema
+	public TiposToken getTipoLexema(String lexema) {
+		return (tiposLexemas.get(this.posicionLexema(lexema)));
+	}
+	
+	//Devuelve el desplazamiento asociado a cada tipo de lexema
+	public static int getDesplazamientoTipo(TiposToken Tipo) {
+		int aux=-1;
+		if (Tipo.equals(TiposToken.T_INT)) {
+			aux = 2;
+		}
+		else if (Tipo.equals(TiposToken.T_STRING)) {
+			aux=128;
+		}
+		else if (Tipo.equals(TiposToken.T_BOOLEAN)) {
+			aux=2;
+		}
+		return aux;
+	}
+	
+	//Mete el lexema en la tabla de lexemas de la TS
+	public void meterLexema(String lexema) {
+		lexemas.add(0, lexema);
+	}
+	
+	//Mete el tipo del lexema en la tabla de tipos de la TS
+	public void meterTipo(TiposToken tipo) {
+		tiposLexemas.add(0, tipo);
+	}
+	
+	//Mete el desplazamiento del tipo en la lista de desplazamientos de la TS
+	public void meterDesplazamiento(int desplazamiento) {
+		desplazamientos.add(0, desplazamiento);
+	}
+	
 }

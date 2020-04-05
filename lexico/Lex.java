@@ -59,8 +59,6 @@ public class Lex {
 			return TiposToken.T_STRING;
 		case 14:
 			return TiposToken.T_IF;
-		case 15:
-			return TiposToken.T_PROMPT;
 
 		}
 		

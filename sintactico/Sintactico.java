@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import tabla.TablaSimbolos;
 import token.TiposToken;
 
 
@@ -16,6 +18,8 @@ public class Sintactico {
 	private static Token aux;
 	private ArrayList<Token> listaTokens;
 	private ArrayList<Token> listaTokensSinEol;
+	public TablaSimbolos global;
+	public TablaSimbolos actual;
 	String filename="/home/pablo/eclipse-workspace/PDL/docs/sintactico.txt";
 	public static PrintWriter writer;
 	public Sintactico(ArrayList<Token> listaTokens) {
@@ -32,7 +36,11 @@ public class Sintactico {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		//leo el primer token a la entrada
 		aux=leerToken();
+		//Tabla global
+		global= new TablaSimbolos();
+		actual=global;
 	}
 
 
@@ -96,7 +104,7 @@ public class Sintactico {
 			P();
 			return;
 		}
-		else if (tokenIgual(TiposToken.T_PROMPT)) {
+		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(1);
 			B();
 			P();
@@ -190,7 +198,7 @@ public class Sintactico {
 			S();
 			return;
 		}
-		else if (tokenIgual(TiposToken.T_PROMPT)) {
+		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(6);
 			S();
 			return;
@@ -279,7 +287,7 @@ public class Sintactico {
 			C();
 			return;
 		}
-		else if (tokenIgual(TiposToken.T_PROMPT)) {
+		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(13);
 			B();
 			C();
@@ -330,7 +338,7 @@ public class Sintactico {
 			}
 			return;
 		}
-		else if (tokenIgual(TiposToken.T_PROMPT)) {
+		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(18);
 			aux=leerToken();
 			if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
@@ -979,7 +987,7 @@ public class Sintactico {
 			S();
 			W2();
 		}
-		else if (tokenIgual(TiposToken.T_PROMPT)) {
+		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(56);
 			S();
 			W2();

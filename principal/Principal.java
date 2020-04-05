@@ -7,17 +7,18 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList; 
 import lexico.Lex;
-import tabla.TablaSimbolos;
 import token.*;
 import tabla.*;
 import sintactico.*;
-
+import errores.*;
+import errores.Error;
 public class Principal {
 
 	public static void main(String[] args) {
 
 		String texto=lexico.Lex.leerArchivo("/home/pablo/eclipse-workspace/PDL/docs/sencillo.txt");
 		//Se deja preparado el texto con el que se va a trabajar
+		Error error=new Error();
 		texto=texto.replace(";", " ; ");
 		texto=texto.replace(",", " , ");
 		texto=texto.replace(":", " : ");
@@ -56,7 +57,12 @@ public class Principal {
 			}
 			else if (token.matches(entero)) {
 				Token aux=new Token(TiposToken.T_ENTERO, Integer.parseInt(token));
-				listaTokens.add(aux);
+				if (Integer.parseInt(token)>32767) {
+					error.escribirError("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
+				}
+				else {
+					listaTokens.add(aux);
+				}
 			}
 			else if ((encadenado) && !(token.equals("\""))) {
 				concatenado+=" "+token;
@@ -142,8 +148,6 @@ public class Principal {
 				Token aux=new Token(TiposToken.T_MENOR);
 				listaTokens.add(aux);
 			}
-			
-
 			else if (token.equals("\"")) {
 				if (encadenado) {//Hay que dejar de concatenar
 					concatenado+=" "+token;
@@ -159,6 +163,10 @@ public class Principal {
 					concatenado+=token;
 					encadenado=true;
 				}
+			}
+			//no se reconoce el token leido
+			else {
+				error.escribirError("LEXICO: Token \"" + token + "\" no reconocido por la gramática");
 			}
 		}
 		//anyade al final de la lista el token de fin de fichero
@@ -183,7 +191,8 @@ public class Principal {
 		Sintactico sin = new Sintactico(listaTokens);
 		//numero de linea en el que nos encontramos
 		sin.P();
-
+		
+		error.cerrarArchivo();
 	}
 
 }
