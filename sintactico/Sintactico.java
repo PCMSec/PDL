@@ -6,28 +6,44 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
+import tabla.Tipo;
 import tabla.TablaSimbolos;
 import token.TiposToken;
 
 
 public class Sintactico {
-
+	//linea en la que nos encontramos
 	public int linea;
+	//posicion de los tokens en la lista
 	private int posicion;
+	//auxiliar de token para empezar a leer
 	private static Token aux;
+	//booleano para ver si estamos o no DENTRO en una funcion
+	public boolean dentroFuncion=false;
+	//string global con el nombre de la funcion
+	public String nombreFuncion=null;
+	//lista de tokens normal y lista de tokens sin tokens de end of line
 	private ArrayList<Token> listaTokens;
 	private ArrayList<Token> listaTokensSinEol;
+	//una tabla global y otra actual que al inicio apuntan al mismo sitio porque no hay locales
 	public TablaSimbolos global;
 	public TablaSimbolos actual;
+	//nombre de archivo donde guardar el sintactico
 	String filename="/home/pablo/eclipse-workspace/PDL/docs/sintactico.txt";
+	//Objeto para escribir en archivo
 	public static PrintWriter writer;
+	//Constructor del sintactico
 	public Sintactico(ArrayList<Token> listaTokens) {
+		//Se empieza en la linea 1 del archivo
 		this.linea=1;
+		//empezamos en la primera posicion de los tokens
 		this.posicion=0;
+		//inicializar normal
 		this.listaTokens = listaTokens;
+		//iniciar la que no tiene end of line
 		this.listaTokensSinEol=quitarEOL();
 		try {
+			//se intenta escribir, si no se puede dará error en el catch
 			writer = new PrintWriter(filename, "UTF-8");
 			writer.print("D ");
 
@@ -36,11 +52,11 @@ public class Sintactico {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		//leo el primer token a la entrada
+		//leo el primer token a la entrada para iniciar P
 		aux=leerToken();
-		//Tabla global
-		global= new TablaSimbolos();
-		actual=global;
+		//Tabla global y actual apuntando a lo mismo, cambiará más adelante para reflejar las TS de funciones
+		global = new TablaSimbolos();
+		actual = global;
 	}
 
 
@@ -48,22 +64,18 @@ public class Sintactico {
 		return linea;
 	}
 
-
 	public void setLinea(int linea) {
 		this.linea = linea;
 	}
-
 
 	public int getPosicion() {
 		return posicion;
 	}
 
-
 	public void setPosicion(int posicion) {
 		this.posicion = posicion;
 	}
 	//Gramatica propiamente dicha
-	//TODO hacer los parses para escribir en fichero
 	public void P() {
 
 		//B

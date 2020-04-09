@@ -19,16 +19,6 @@ public class TablaSimbolos {
 	private ArrayList<TiposToken> tiposLexemas;
 	//Conjunto de desplazamiento asociado a los tipos de los lexemas
 	private ArrayList<Integer> desplazamientos;
-	//booleano para saber si es TS Global o TS de func
-	public boolean esFuncion;
-	
-	public boolean esFuncion() {
-		return esFuncion;
-	}
-
-	public void setEsFuncion(boolean esFuncion) {
-		this.esFuncion = esFuncion;
-	}
 
 	public static ArrayList<TablaSimbolos> getListaTablas() {
 		return listaTablas;
@@ -87,12 +77,21 @@ public class TablaSimbolos {
 	}
 	
 	public TablaSimbolos() {
+		//lista de lexemas que se encuentran en la TS
 		lexemas=new ArrayList<String>();
+		//lista de tipos ordenados de los lexemas en TS
 		tiposLexemas=new ArrayList<TiposToken>();
+		//lo mismo pero con los desplazamientos
 		desplazamientos=new ArrayList<Integer>();
+		//meter la TablaSimbolos actual en la lista con todas las tablas
+		listaTablas.add(this);
+		//id de la tabla es el que apunte inicial
 		this.idTabla=inicial;
+		//aumentar numero de la tabla
 		inicial++;
 	}
+	
+	
 	
 	//Devuelve true si el lexema esta en TS o false si no
 	public boolean lexemaExiste(String lexema) {
