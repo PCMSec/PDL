@@ -191,7 +191,7 @@ public class Principal {
 		Sintactico sin = new Sintactico(listaTokens);
 		//numero de linea en el que nos encontramos
 		sin.P();
-		
+		TablaSimbolos.imprimirTablas();
 		error.cerrarArchivo();
 	}
 
