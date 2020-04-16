@@ -234,7 +234,6 @@ public class Sintactico {
 				aux=leerToken();
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_INT)) {
-					System.out.println("NO ES ENTERO");
 					//no es entero y por tanto es error en el switch y fin
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
@@ -771,8 +770,7 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
+			
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
@@ -787,8 +785,6 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_ENTERO)) {
@@ -803,8 +799,6 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_CADENA)) {
@@ -819,8 +813,6 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_TRUE)) {
@@ -835,8 +827,6 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_FALSE)) {
@@ -851,8 +841,6 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			System.out.println("OJOOOOOOOOOOOOOOOO");
-			System.out.println(devolver.getTipoToken());
 			return devolver;
 		}
 		else {
@@ -1230,8 +1218,11 @@ public class Sintactico {
 			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && V2.getTipoToken().equals(TiposToken.T_OK)) {
 				//devolver es igual al tipo devuelto por la funcion
 			}
+			//TODO TODO TODO OJO QUE AQUI PUEDE HABER CAGADA, esto hay que cambiar para que busque por
+			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.T_OK)) {
-				devolver=new Tipo(TiposToken.T_OK);
+				//devolver=new Tipo(TiposToken.T_OK);
+				devolver=new Tipo(actual.getTipoLexema(id));
 			}
 			//esto va para el final del punto y coma
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
