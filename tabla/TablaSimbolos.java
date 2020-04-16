@@ -218,7 +218,14 @@ public class TablaSimbolos {
 			for (int i=0;i<tabla.getLexemas().size();i++) {
 				System.out.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
 				System.out.println("ATRIBUTOS");
-				System.out.println("+ tipo : " + auxTipos.get(i));
+				System.out.println("+ tipo: " + auxTipos.get(i));
+				/*if (auxTipos.get(i).equals(TiposToken.T_FUNC)) {
+					//TODO esta mal porque tengo que buscar la tabla primero y luego acceder con esa tabla de funcion
+					System.out.println("  + numParam: " + tabla.lexemasFuncion.size());
+					for (int j=0;i<tabla.lexemasFuncion.size();i++) {
+						System.out.println("   TipoParam"+i+": " +tabla.);
+					}
+				}TODO poner el else el desp porque las funciones no tienen desp: else{}*/
 				System.out.println("+ despl : " + auxDesp.get(i));
 				System.out.println("--------- ----------");
 			}

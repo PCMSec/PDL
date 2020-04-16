@@ -3,10 +3,11 @@ Terminales = {
 eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print prompt postDecre function menor mas menos entero cadena true false break
 
 }
-NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 W W2 }
+NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }
 Axioma = P
 Producciones = {
-	
+	P' -> P //0
+
 	P -> B P //1
 	P -> F P //2
 	P -> eof. //3
@@ -14,7 +15,7 @@ Producciones = {
 	B -> var T id B2 ; //4
 	B -> if abreParentesis  E  cierraParentesis S //5
 	B -> S //6
-	B -> switch abreParentesis  E  cierraParentesis abreCorchete W cierraCorchete. //7
+	B -> switch abreParentesis  E  cierraParentesis abreCorchete CASE cierraCorchete. //7
 
 	B2 -> igual E //8
 	B2 -> . //9
@@ -62,7 +63,7 @@ Producciones = {
 	
 	Y -> D Y2. //38
 	
-	Y2 -> menor D Y2 //39
+	Y2 -> menor D //39
 	Y2 -> . //40
 	
 	D -> V D2. //41
@@ -73,8 +74,8 @@ Producciones = {
 	
 	V -> id V2 //45
 	V -> abreParentesis  E  cierraParentesis //46
-	V -> entero //47
-	V -> cadena //48
+	V -> cte_entero //47
+	V -> cte_cadena //48
 	V -> true //49
 	V -> false. //50
 	
@@ -82,11 +83,11 @@ Producciones = {
 	V2 -> abreParentesis  L  cierraParentesis //52
 	V2 -> . //53
 	
-	W -> case E : W2 W //54
-	W -> . //55
+	CASE -> case E : CASE2 CASE //54
+	CASE -> . //55
 	
-	W2 -> S W2 //56
-	W2 -> break ; //57
-	W2 -> . //58
+	CASE2 -> S CASE2 //56
+	CASE2 -> break ; //57
+	CASE2 -> . //58
 	
 }
