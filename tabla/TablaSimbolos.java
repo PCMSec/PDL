@@ -1,6 +1,7 @@
 package tabla;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import token.TiposToken;
 
@@ -154,31 +155,31 @@ public class TablaSimbolos {
 
 	//Mete el lexema en la tabla de lexemas de la TS
 	public void meterLexema(String lexema) {
-		lexemas.add(0, lexema);
+		lexemas.add(lexema);
 	}
 
 	//Mete el tipo del lexema en la tabla de tipos de la TS
 	public void meterTipo(TiposToken tipo) {
-		tiposLexemas.add(0, tipo);
+		tiposLexemas.add(tipo);
 	}
 
 	//Mete el desplazamiento del tipo en la lista de desplazamientos de la TS
 	public void meterDesplazamiento(int desplazamiento) {
-		desplazamientos.add(0, desplazamiento);
+		desplazamientos.add(desplazamiento);
 	}
 	//Meter el lexema que sea como entrada de la funcion
 	public void meterLexemaFuncion(String lexema) {
-		lexemasFuncion.add(0, lexema);
+		lexemasFuncion.add(lexema);
 	}
 
 	//Mete el tipo del lexema en la tabla de tipos de la TS de la funcion
 	public void meterTipoFuncion(TiposToken tipo) {
-		tiposLexemasFuncion.add(0, tipo);
+		tiposLexemasFuncion.add(tipo);
 	}
 
 	//Mete el desplazamiento del tipo en la lista de desplazamientos de la TS de la funcion
 	public void meterDesplazamientoFuncion(int desplazamiento) {
-		desplazamientosFuncion.add(0, desplazamiento);
+		desplazamientosFuncion.add(desplazamiento);
 	}
 	//ve si el elemento i de entrada a funcion es de igual tipo
 	public boolean igualParametro(TiposToken tipo, int i) {
@@ -197,15 +198,28 @@ public class TablaSimbolos {
 			System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
 			System.out.println();
 			int desp=0;
+			ArrayList<String> auxLexemas=new ArrayList<String>();
+			ArrayList<TiposToken> auxTipos=new ArrayList<TiposToken>();
+			ArrayList<Integer> auxDesp=new ArrayList<Integer>();
 			for (int i=0;i<tabla.getLexemas().size();i++) {
-				//TODO guardar orden de forma inversa y luego calcular el DESP, por ejemplo
-				System.out.println("* LEXEMA: '"+tabla.getLexemas().get(i)+"'");
+				String lexema=tabla.getLexemas().get(i);
+				auxLexemas.add(lexema);
+				
+				TiposToken tipoLexema=tabla.getTipoLexema(tabla.getLexemas().get(i));
+				auxTipos.add(tipoLexema);
+			}
+			for (int i=auxTipos.size()-1;i>=0;i--) {
+				auxDesp.add(desp);
+				desp+=TablaSimbolos.getDesplazamientoTipo(auxTipos.get(i));
+			}
+			Collections.reverse(auxLexemas);
+			Collections.reverse(auxTipos);
+			Collections.reverse(auxDesp);
+			for (int i=0;i<tabla.getLexemas().size();i++) {
+				System.out.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
 				System.out.println("ATRIBUTOS");
-				System.out.println("+ tipo : " + tabla.getTipoLexema(tabla.getLexemas().get(i)));
-				TiposToken aux=tabla.getTipoLexema(tabla.getLexemas().get(i));
-				System.out.println(aux);
-				//System.out.println("+ despl : " + desp);
-				//desp+=TablaSimbolos.getDesplazamientoTipo(aux);
+				System.out.println("+ tipo : " + auxTipos.get(i));
+				System.out.println("+ despl : " + auxDesp.get(i));
 				System.out.println("--------- ----------");
 			}
 		}

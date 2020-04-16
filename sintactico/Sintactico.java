@@ -145,7 +145,7 @@ public class Sintactico {
 		}
 	}
 
-	public void B() {
+	public Tipo B() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//leo var
 		if (tokenIgual(TiposToken.T_VAR)) {
@@ -180,14 +180,18 @@ public class Sintactico {
 					actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				}
 				else {
-					//error
+					//error, ninguno de los dos
 				}
 				//fin de VAR TIPO ID ; O DE VAR TIPO ID = E ;
 				if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
+					devolver=new Tipo(TiposToken.T_OK);
 					aux=leerToken();
 				}
+				else {
+					//falta el punto y coma del final
+				}
 			}
-			return;
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_IF)) {
 			aux=leerToken();
@@ -200,11 +204,18 @@ public class Sintactico {
 					//error porque E no es un booleano
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
+					devolver=new Tipo(TiposToken.T_OK);
 					aux=leerToken();
 					S();
 				}
+				else {
+					//error
+				}
 			}
-			return;
+			else {
+				//no abre parentesis despues del if
+			}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_SWITCH)) {
 			aux=leerToken();
@@ -222,41 +233,54 @@ public class Sintactico {
 						aux=leerToken();
 						CASE();	
 						if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
+							devolver=new Tipo(TiposToken.T_OK);
 							aux=leerToken();
 						}
+						else {
+							//error sin llave cierra al final
+						}
+					}
+					else {
+						//error no abre llave al principio
 					}
 				}
+				else {
+					//error
+				}
 			}
-			return;
+			else {
+				//no abre parentesis despues del switch
+			}
+			return devolver;
 		}
 		//S
 		else if (tokenIgual(TiposToken.T_ID)) {
 			escribirFichero(6);
 			S();
-			return;
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
 			escribirFichero(6);
 			S();
-			return;
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
 			escribirFichero(6);
 			S();
-			return;
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(6);
 			S();
-			return;
-		}//TODO: caso especial al leer end of line
-		/*else if (tokenIgual(TiposToken.EOL)) {
-			aux=leerToken();
-			return;
-		}*/
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
+		}
 		else {
 			//error
-			return;
+			return devolver;
 		}
 	}
 	public Tipo B2() {
@@ -307,7 +331,6 @@ public class Sintactico {
 		}
 	}
 	public void C() {
-		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_VAR)) {
 			escribirFichero(13);
 			B();
@@ -360,25 +383,58 @@ public class Sintactico {
 			return;
 		}
 	}
-	public void S() {
+	public Tipo S() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_ID)) {
+			//Tenemos el string id para mas adelante
+			String id=aux.getLexema();
+			if (!actual.lexemaExiste(id)) {
+				//LEXEMA NO EXISTE EN TS
+				actual.meterLexema(id);
+				actual.meterTipo(TiposToken.T_INT);
+				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
+			}
+			//a partir de aqui el lexema existe, ya sea global o local
 			aux=leerToken();
 			escribirFichero(15);
-			S2();
+			Tipo S2=S2();
+			if (S2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(id).equals(TiposToken.T_INT)) {
+				devolver=new Tipo(TiposToken.T_INT);
+			}
+			else if (S2.getTipoToken().equals(TiposToken.T_VACIO)) {
+				devolver=new Tipo(TiposToken.T_OK);
+			}
+			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && S2.getTipoToken().equals(TiposToken.T_OK)) {
+				//devolver es igual al tipo devuelto por la funcion
+			}
+			//esto va para el final del punto y coma
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 				aux=leerToken();
 			}
-			return;
+			else {
+				//no termina en punto y coma y hay lio
+			}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
+			if (!dentroFuncion) {
+				//no estamo dentro de func por lo que dara un error
+			}
 			aux=leerToken();
 			escribirFichero(16);
-			X();
+			Tipo X=X();
+			//TODO revisar esto que tiene mala pinta
+			if (!X.getTipoToken().equals(global.getTipoLexema(nombreFuncion))) {
+				//error tipos diferentes el devuelto y el dicho al principio
+			}
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
+				devolver=new Tipo(X.getTipoToken());
 				aux=leerToken();
 			}
-			return;
+			//salimos de la funcion
+			dentroFuncion=false;
+			
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
 			aux=leerToken();
@@ -395,7 +451,7 @@ public class Sintactico {
 					}
 				}
 			}
-			return;
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(18);
@@ -412,26 +468,28 @@ public class Sintactico {
 					}
 				}
 			}
-			return;
+			return devolver;
 		}
 		else {
-			return;
+			return devolver;
 		}
 
 	}
-	public void S2() {
+	public Tipo S2() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_POSTDECREMENTO)) {
 			aux=leerToken();
 			escribirFichero(19);
-			return;
+			devolver=new Tipo(TiposToken.T_INT);
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_IGUAL)) {
 			aux=leerToken();
 			escribirFichero(20);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 			aux=leerToken();
@@ -440,51 +498,58 @@ public class Sintactico {
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 				aux=leerToken();
 			}
-			return;
+			//TODO no se hacer esto
+			return devolver;
 		}
 		else {
-			return;
+			return devolver;
 		}
 	}
-	public void X() {
+	public Tipo X() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_ID)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_ENTERO)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_CADENA)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_TRUE)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_FALSE)) {
 			escribirFichero(22);
-			E();
-			return;
+			Tipo E=E();
+			devolver=new Tipo(E.getTipoToken());
+			return devolver;
 		}
 		//follow
 		else if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 			escribirFichero(23);
-			return;
+			return devolver;
 		}
 		else {
-			return;
+			return devolver;
 		}
 
 	}
