@@ -111,7 +111,7 @@ public class TablaSimbolos {
 	}
 
 
-
+	//TODO mejorar para ver si esta primero en local y luego en la global
 	//Devuelve TRUE si el lexema esta en TS o FALSE si no
 	public boolean lexemaExiste(String lexema) {
 		boolean aux=false;
@@ -145,10 +145,10 @@ public class TablaSimbolos {
 			aux = 2;
 		}
 		else if (Tipo.equals(TiposToken.T_STRING)) {
-			aux=128;
+			aux=32;
 		}
 		else if (Tipo.equals(TiposToken.T_BOOLEAN)) {
-			aux=2;
+			aux=1;
 		}
 		return aux;
 	}
@@ -192,7 +192,7 @@ public class TablaSimbolos {
 	public int numeroParametrosEntrada() {
 		return tiposLexemasFuncion.size();
 	}
-	
+
 	public static void imprimirTablas() {
 		for (TablaSimbolos tabla:listaTablas) {
 			System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
@@ -204,7 +204,7 @@ public class TablaSimbolos {
 			for (int i=0;i<tabla.getLexemas().size();i++) {
 				String lexema=tabla.getLexemas().get(i);
 				auxLexemas.add(lexema);
-				
+
 				TiposToken tipoLexema=tabla.getTipoLexema(tabla.getLexemas().get(i));
 				auxTipos.add(tipoLexema);
 			}

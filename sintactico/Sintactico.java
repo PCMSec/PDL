@@ -997,6 +997,7 @@ public class Sintactico {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//leo un MENOR 
 		if (tokenIgual(TiposToken.T_MENOR)) {
+			//TODO ojo esto esta bien?
 			aux=leerToken();
 			escribirFichero(39);
 			Tipo D=D();
@@ -1131,7 +1132,7 @@ public class Sintactico {
 	public Tipo D2() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//leemos un MENOS
-		if (tokenIgual(TiposToken.T_MENOS)) {
+		/*if (tokenIgual(TiposToken.T_MENOS)) {
 			aux=leerToken();
 			escribirFichero(42);
 			Tipo V=V();
@@ -1144,9 +1145,9 @@ public class Sintactico {
 				//ERROR COMO TAL DEVUELVE VACIO
 			}
 			return devolver;
-		}
+		}*/
 		//leemos un MAS
-		else if (tokenIgual(TiposToken.T_SUMA)) {
+		if (tokenIgual(TiposToken.T_SUMA)) {
 			aux=leerToken();
 			escribirFichero(43);
 			Tipo V=V();
@@ -1294,11 +1295,11 @@ public class Sintactico {
 			}
 			return devolver;
 		}
-		else if (tokenIgual(TiposToken.T_MENOS)) {
+		/*else if (tokenIgual(TiposToken.T_MENOS)) {
 			escribirFichero(53);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
-		}
+		}*/
 		else if (tokenIgual(TiposToken.T_SUMA)) {
 			escribirFichero(53);
 			devolver=new Tipo(TiposToken.T_OK);
