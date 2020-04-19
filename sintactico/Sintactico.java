@@ -481,9 +481,7 @@ public class Sintactico {
 				//error falta el punto y coma del final
 			}
 			//salimos de la funcion
-			dentroFuncion=false;
-			nombreFuncion=null;
-			actual=global;
+			
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
@@ -629,6 +627,7 @@ public class Sintactico {
 
 	}
 	public void F() {
+		//tipo a devolver si se quiere
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_FUNC)) {
 			//estamos dentro de una funcion a partir de ahora
@@ -641,10 +640,12 @@ public class Sintactico {
 			if (!(H.getTipoToken().equals(TiposToken.T_BOOLEAN) || H.getTipoToken().equals(TiposToken.T_INT) || H.getTipoToken().equals(TiposToken.T_STRING) || H.getTipoToken().equals(TiposToken.T_VACIO))) {
 				//error no es un tipo valido
 			}
+			
 			if (tokenIgual(TiposToken.T_ID)) {
 				nombreFuncion=aux.getLexema();
 				//ver en global
 				if (global.lexemaExiste(nombreFuncion)) {
+					System.out.println("ERROR MAL FUNC YA DECLARADA");
 					//error porque ya esta definido de antes la funcion en zona global
 				}
 				global.meterLexema(nombreFuncion);
@@ -654,7 +655,7 @@ public class Sintactico {
 				TablaSimbolos local=new TablaSimbolos(nombreFuncion);
 				//ponemos en el local el tipo de retorno de la funcion
 				//TODO esto se ha retocado
-				//local.setTipoDevuelto(H.getTipoToken());
+				
 				actual=local;
 				actual.setTipoDevuelto(H.getTipoToken());
 				//System.out.println(actual.getIdTabla());
@@ -662,15 +663,21 @@ public class Sintactico {
 				if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 					aux=leerToken();
 					A();
+					
 					//NO BORRAR
 					//aqui es donde se meten los tipos de la func, en tabla local SIEMPRE
 					//System.out.println(actual.getTiposLexemasFuncion());
 					if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 						aux=leerToken();
+						
 						if (tokenIgual(TiposToken.T_LLAVEABRE)) {
 							aux=leerToken();
+							//aqui cambia el estado de denntroFuncion
 							C();
 							if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
+								dentroFuncion=false;
+								nombreFuncion=null;
+								actual=global;
 								aux=leerToken();
 							}
 							else {
@@ -691,6 +698,7 @@ public class Sintactico {
 			else {
 				//error no leemos id
 			}
+
 			return;
 		}
 		else {
@@ -809,6 +817,7 @@ public class Sintactico {
 		}
 	}
 	public Tipo H() {
+		
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_INT)) {
@@ -1460,15 +1469,16 @@ public class Sintactico {
 			//se viene L, que tiene dentro (E,E,E...etc)
 			
 			//tabla aux para coger el tipo de ret
-			TablaSimbolos auxaux=null;
+			TablaSimbolos comparator=null;
 			for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
 				if (tabla.getNombreFuncion().equals(auxV2)){
-					auxaux=tabla;
+					comparator=tabla;
 				}
 			}
+			
 			//TODO casos de si esta una func dentro de otra y tal
 			//la func no existe y no se puede hacer nada con ella
-			if (auxaux==null) {
+			if (comparator==null) {
 				System.out.println("LA FUNCION NO EXISTE");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
@@ -1478,12 +1488,32 @@ public class Sintactico {
 			escribirFichero(52);
 			//TODO si L distinto a tipo Ok, error
 			Tipo L=L();
+			//System.out.println("SE VIENE PAPA:"+tiposFuncion);
+			//System.out.println(comparator.getTiposLexemasFuncion());
 			//si dentro de func pero recursivo bien, else error
 			//TODO comprobar tema de parametros
+			if (dentroFuncion) {
+				if (nombreFuncion.equals(auxV2)) {
+					System.out.println("PERFE BRO");
+				}
+				else {
+					System.out.println(dentroFuncion);
+					System.out.println("MAL CRACK");
+				}
+			}
+			
+			System.out.println("FUNCION TODO OK");
+			if(comparator.compararFuncion(tiposFuncion)) {
+				System.out.println("SUUUUU TIPOS IGUALES");
+			}
+			else {
+				System.out.println("NEIIII TIPOS DIFERENTES");
+			}
+			
 			
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 				//tipo de la funcion devuelto
-				devolver.setTipoToken(auxaux.getTipoDevuelto());
+				devolver.setTipoToken(comparator.getTipoDevuelto());
 				aux=leerToken();
 			}
 			else {
