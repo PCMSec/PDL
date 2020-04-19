@@ -26,10 +26,36 @@ public class TablaSimbolos {
 	private ArrayList<TiposToken> tiposLexemasFuncion;
 	//Conjunto de desplazamiento asociado a los tipos de los lexemas de la funcion
 	private ArrayList<Integer> desplazamientosFuncion;
+	//tipo devuelto por la funcion
+	private TiposToken tipoDevuelto;
 
 
 
 
+	public ArrayList<String> getLexemasFuncion() {
+		return lexemasFuncion;
+	}
+	public void setLexemasFuncion(ArrayList<String> lexemasFuncion) {
+		this.lexemasFuncion = lexemasFuncion;
+	}
+	public ArrayList<TiposToken> getTiposLexemasFuncion() {
+		return tiposLexemasFuncion;
+	}
+	public void setTiposLexemasFuncion(ArrayList<TiposToken> tiposLexemasFuncion) {
+		this.tiposLexemasFuncion = tiposLexemasFuncion;
+	}
+	public ArrayList<Integer> getDesplazamientosFuncion() {
+		return desplazamientosFuncion;
+	}
+	public void setDesplazamientosFuncion(ArrayList<Integer> desplazamientosFuncion) {
+		this.desplazamientosFuncion = desplazamientosFuncion;
+	}
+	public TiposToken getTipoDevuelto() {
+		return tipoDevuelto;
+	}
+	public void setTipoDevuelto(TiposToken tipoDevuelto) {
+		this.tipoDevuelto = tipoDevuelto;
+	}
 	//getter para obtener lista de las tablas de simbolos
 	public static ArrayList<TablaSimbolos> getListaTablas() {
 		return listaTablas;
@@ -111,31 +137,100 @@ public class TablaSimbolos {
 	}
 
 
-	//TODO mejorar para ver si esta primero en local y luego en la global
+	//Mejorado para que si global, solo mire la suya, y si no, mire la suya y luego la global
 	//Devuelve TRUE si el lexema esta en TS o FALSE si no
 	public boolean lexemaExiste(String lexema) {
-		boolean aux=false;
-		if (lexemas.size()<=0) {
-			return false;
+		//auxiliar para ver si existe
+		boolean existe=false;
+		//si la tabla no tiene nada aun pues es falso
+		int idTabla=this.getIdTabla();
+		//GLOBAL
+		if (idTabla==0) {
+			if (this.getLexemas().size()<=0) {
+				return false;
+			}
+			for (int i=0;i<this.getLexemas().size();i++) {
+				if (this.getLexemas().get(i).equals(lexema) && (!existe)) {
+					existe = true;
+					return existe;
+				}
+			}
+			return existe;
+		}//FIN DE GLOBAL
+		//ESTAMOS EN TABLA LOCAL
+		else {
+			//si el tamaño de los lexemas es positivo puedo iterar sobre ellos
+			if (this.getLexemas().size()>=0) {
+				//itero para ver si esta el lexema dentro
+				for (int i=0;i<this.getLexemas().size();i++) {
+					if (lexemas.get(i).equals(lexema) && (!existe)) {
+						existe = true;
+						return existe;
+					}
+				}
+			}
+			//si no se encuentra o no tiene nada en la local, miramos la global
+			TablaSimbolos global=listaTablas.get(0);
+			for (int i=0;i<global.getLexemas().size();i++) {
+				if (global.getLexemas().get(i).equals(lexema) && (!existe)) {
+					existe = true;
+					return existe;
+				}
+			}
+			//no existe
+			return existe;
 		}
-		for (int i=0;i<lexemas.size();i++) {
-			if (lexemas.get(i).equals(lexema) && (!aux)) {
-				aux = true;
-				break;
+		//FIN DE LOCAL
+	}
+	public boolean lexemaExisteLocal(String lexema) {
+		boolean existe=false;
+		if (this.getLexemas().size()>=0) {
+			//itero para ver si esta el lexema dentro
+			for (int i=0;i<this.getLexemas().size();i++) {
+				if (lexemas.get(i).equals(lexema) && (!existe)) {
+					existe = true;
+					return existe;
+				}
 			}
 		}
-		return aux;
+		return existe;
 	}
 
 	//Devuelve la posicion del lexema en Arraylist lexemas
 	public int posicionLexema(String lexema) {
-		return (lexemas.indexOf(lexema));
+		int idTabla=this.getIdTabla();
+		if (idTabla==0) {
+			return (this.getLexemas().indexOf(lexema));
+		}
+		else {
+			int aux=this.getLexemas().indexOf(lexema);
+			if (aux==-1) {
+				TablaSimbolos global=listaTablas.get(0);
+				aux=global.getLexemas().indexOf(lexema);
+			}
+			return aux;
+		}
 	}
 
 
 	//Devuelve el tipo que tenga el lexema
 	public TiposToken getTipoLexema(String lexema) {
-		return (tiposLexemas.get(this.posicionLexema(lexema)));
+		//return (tiposLexemas.get(this.posicionLexema(lexema)));
+		int idTabla=this.getIdTabla();
+		if (idTabla==0) {
+			return (this.getTiposLexemas().get(this.posicionLexema(lexema)));
+		}
+		else {
+			int aux=this.getLexemas().indexOf(lexema);
+			if (aux==-1) {
+				TablaSimbolos global=listaTablas.get(0);
+				return global.getTiposLexemas().get(global.posicionLexema(lexema));
+			}
+			else {
+				return (this.getTiposLexemas().get(this.posicionLexema(lexema)));
+			}
+			
+		}
 	}
 
 	//Devuelve el desplazamiento asociado a cada tipo de lexema
@@ -150,22 +245,25 @@ public class TablaSimbolos {
 		else if (Tipo.equals(TiposToken.T_BOOLEAN)) {
 			aux=1;
 		}
+		else if (Tipo.equals(TiposToken.T_FUNC)) {
+			aux=0;
+		}
 		return aux;
 	}
 
 	//Mete el lexema en la tabla de lexemas de la TS
 	public void meterLexema(String lexema) {
-		lexemas.add(lexema);
+		this.getLexemas().add(lexema);
 	}
 
 	//Mete el tipo del lexema en la tabla de tipos de la TS
 	public void meterTipo(TiposToken tipo) {
-		tiposLexemas.add(tipo);
+		this.getTiposLexemas().add(tipo);
 	}
 
 	//Mete el desplazamiento del tipo en la lista de desplazamientos de la TS
 	public void meterDesplazamiento(int desplazamiento) {
-		desplazamientos.add(desplazamiento);
+		this.getDesplazamientos().add(desplazamiento);
 	}
 	//Meter el lexema que sea como entrada de la funcion
 	public void meterLexemaFuncion(String lexema) {
@@ -195,7 +293,12 @@ public class TablaSimbolos {
 
 	public static void imprimirTablas() {
 		for (TablaSimbolos tabla:listaTablas) {
-			System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
+			if (tabla.getNombreFuncion().equals(null)) {
+				System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
+			}
+			else {
+				System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + " (de funcion "+ tabla.getNombreFuncion()+") :");
+			}
 			System.out.println();
 			int desp=0;
 			ArrayList<String> auxLexemas=new ArrayList<String>();
@@ -208,27 +311,66 @@ public class TablaSimbolos {
 				TiposToken tipoLexema=tabla.getTipoLexema(tabla.getLexemas().get(i));
 				auxTipos.add(tipoLexema);
 			}
-			for (int i=auxTipos.size()-1;i>=0;i--) {
+			//for (int i=auxTipos.size()-1;i>=0;i--) {
+			for (int i=0;i<auxTipos.size();i++) {
 				auxDesp.add(desp);
 				desp+=TablaSimbolos.getDesplazamientoTipo(auxTipos.get(i));
+				
 			}
 			Collections.reverse(auxLexemas);
 			Collections.reverse(auxTipos);
 			Collections.reverse(auxDesp);
 			for (int i=0;i<tabla.getLexemas().size();i++) {
 				System.out.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
-				System.out.println("ATRIBUTOS");
-				System.out.println("+ tipo: " + auxTipos.get(i));
-				/*if (auxTipos.get(i).equals(TiposToken.T_FUNC)) {
-					//TODO esta mal porque tengo que buscar la tabla primero y luego acceder con esa tabla de funcion
-					System.out.println("  + numParam: " + tabla.lexemasFuncion.size());
-					for (int j=0;i<tabla.lexemasFuncion.size();i++) {
-						System.out.println("   TipoParam"+i+": " +tabla.);
+				System.out.println("ATRIBUTOS:");
+				System.out.println("+ tipo: '" + auxTipos.get(i) +"'");
+				//si no es funcion, imprime normal
+				if (!auxTipos.get(i).equals(TiposToken.T_FUNC)) {
+					System.out.println("+ despl : " + auxDesp.get(i));
+				}
+				//es funcion lo que tengo y tengo que acceder a los parametros de la TFUNC
+				else {
+					TablaSimbolos aux=null;;
+					for (int j=0;j<listaTablas.size();j++) {
+						if (listaTablas.get(j).getNombreFuncion().equals(auxLexemas.get(i))){
+							aux=listaTablas.get(j);
+						}
 					}
-				}TODO poner el else el desp porque las funciones no tienen desp: else{}*/
-				System.out.println("+ despl : " + auxDesp.get(i));
-				System.out.println("--------- ----------");
+					System.out.println(" +NumParam: " + aux.getTiposLexemasFuncion().size());
+					String espaciado="  ";
+					for (int k=0;k<aux.getTiposLexemasFuncion().size();k++) {
+						int auxSuma=k+1;
+						System.out.println(espaciado+"+TipoParam"+auxSuma+": "+aux.getTiposLexemasFuncion().get(k));
+						System.out.println(espaciado+"+ModoParam"+auxSuma+": "+"1     (es por valor)");
+						espaciado+=" ";
+					}
+					System.out.println(espaciado+"+TipoRetorno: "+aux.getTipoDevuelto());
+					System.out.println(espaciado+" +EtiqFuncion: Et"+aux.getNombreFuncion());
+				}
+				System.out.println();
 			}
+			System.out.println("--------- ----------");
+			System.out.println();
 		}
+	}
+	//puede comparar en global o en local si es recursiva
+	public boolean compararFuncion(ArrayList<TiposToken> tiposFuncion) {
+		if (tiposFuncion.equals(null)&&this.getTiposLexemasFuncion().equals(null)) {
+			return false;
+		}
+		boolean aux=false;
+		if (tiposFuncion.size()==this.getTiposLexemasFuncion().size()) {
+			for (int i=0;i<tiposFuncion.size();i++) {
+				if (!tiposFuncion.get(i).equals(this.getTiposLexemasFuncion().get(i))) {
+					return false;
+				}	
+			}
+			aux=true;
+		}
+		//distinto tamano, error como una casa
+		else {
+			return false;
+		}
+		return aux;
 	}
 }

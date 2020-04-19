@@ -6,12 +6,19 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import javax.swing.plaf.TabbedPaneUI;
+
 import tabla.Tipo;
 import tabla.TablaSimbolos;
 import token.TiposToken;
 
 
 public class Sintactico {
+	//
+	private String auxV2;
+	//NO BORRAR NO OLVIDAR IMPORTANTEtipos locales para comparar con la funcion en si
+	private ArrayList<TiposToken> tiposFuncion;
 	//linea en la que nos encontramos
 	public int linea;
 	//posicion de los tokens en la lista
@@ -58,6 +65,16 @@ public class Sintactico {
 		global = new TablaSimbolos("");
 		actual = global;
 		global.setNombreFuncion("GLOBAL");
+		tiposFuncion=new ArrayList<TiposToken>();
+	}
+
+	public ArrayList<TiposToken> getTiposFuncion() {
+		return tiposFuncion;
+	}
+
+
+	public void setTiposFuncion(ArrayList<TiposToken> tiposFuncion) {
+		this.tiposFuncion = tiposFuncion;
 	}
 
 
@@ -144,7 +161,7 @@ public class Sintactico {
 			return;
 		}
 	}
-	
+
 	public Tipo B() {
 		//Tipo a devolver por el procedure B
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
@@ -152,7 +169,7 @@ public class Sintactico {
 		if (tokenIgual(TiposToken.T_VAR)) {
 			aux=leerToken();
 			escribirFichero(4);
-			//obtengo tipo de var
+			//obtengo tipo de variable
 			Tipo T=T();
 			//Tipo no compatible con los 3 soportados, int boolean o string
 			if (!(T.getTipoToken().equals(TiposToken.T_INT)) && !(T.getTipoToken().equals(TiposToken.T_STRING)) && !(T.getTipoToken().equals(TiposToken.T_BOOLEAN))){
@@ -162,27 +179,34 @@ public class Sintactico {
 			//LEO VAR TIPO ID...
 			if (tokenIgual(TiposToken.T_ID)) {
 				//leo hasta: var ENTERO|CADENA|BOOLEAN ID
-				if (actual.lexemaExiste(aux.getLexema())) {
-					//ERROR si ya existe en la TS ACTUAL ya esta declarada de antes	
+				if (actual.lexemaExisteLocal(aux.getLexema())) {
+					//System.out.println("Var ya declarada anteriormente");
+					//Si existe ya en la local, error
 				}
-				//NO EXISTE, seguimos y obtenemos el string con nombre de ID
+				//No existe en local, o ya esta en global y podemos hacerla local
+				//esto es solo declaracion, por lo que no hay que usar nada
 				String id=aux.getLexema();
 				aux=leerToken();
 				Tipo B2=B2();
 				//var TIPO id
 				if (B2.getTipoToken().equals(TiposToken.T_VACIO)) {
+					//System.out.println("OJOOOOOO1: "+B2.getTipoToken());
+					//System.out.println("OJOOOOOO1: "+T.getTipoToken());
 					actual.meterLexema(id);
 					actual.meterTipo(T.getTipoToken());
 					actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				}
 				//var TIPO id = COMPATIBLE CON TIPO
 				else if (B2.getTipoToken().equals(T.getTipoToken())) {
+					//System.out.println("OJOOOOOO2: "+B2.getTipoToken());
+					//System.out.println("OJOOOOOO2: "+T.getTipoToken());
 					actual.meterLexema(id);
 					actual.meterTipo(T.getTipoToken());
 					actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				}
 				else {
-					//error, ninguno de los dos
+					//error, ninguno de los dos formas de meterlo bien
+					System.out.println("ERROR EN TIPOS DE VAR");
 				}
 				//fin de VAR TIPO ID ; O DE VAR TIPO ID = E ;
 				if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
@@ -399,11 +423,11 @@ public class Sintactico {
 			String id=aux.getLexema();
 			if (!actual.lexemaExiste(id)) {
 				//LEXEMA NO EXISTE EN TS
-				actual.meterLexema(id);
-				actual.meterTipo(TiposToken.T_INT);
-				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
+				global.meterLexema(id);
+				global.meterTipo(TiposToken.T_INT);
+				global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
 			}
-			//a partir de aqui el lexema existe, ya sea global o local
+			//a partir de aqui el lexema existe, ya sea GLOBAL o LOCAL
 			aux=leerToken();
 			escribirFichero(15);
 			Tipo S2=S2();
@@ -416,6 +440,8 @@ public class Sintactico {
 			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && S2.getTipoToken().equals(TiposToken.T_OK)) {
 				//devolver es igual al tipo devuelto por la funcion
 			}
+			//TODO poner aqui un caso de error?
+			//rollo else{}
 			//esto va para el final del punto y coma
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 				aux=leerToken();
@@ -427,22 +453,37 @@ public class Sintactico {
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
 			if (!dentroFuncion) {
-				//no estamo dentro de func por lo que dara un error
+				//no estamos dentro de func por lo que dara un error
 			}
 			aux=leerToken();
 			escribirFichero(16);
 			Tipo X=X();
 			//TODO revisar esto que tiene mala pinta
-			if (!X.getTipoToken().equals(global.getTipoLexema(nombreFuncion))) {
-				//error tipos diferentes el devuelto y el dicho al principio
+			
+			TablaSimbolos auxaux=null;
+			for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
+				if (tabla.getNombreFuncion().equals(nombreFuncion)){
+					auxaux=tabla;
+				}
+			}
+			//si no son iguales los tipos devueltos error
+			if (!X.getTipoToken().equals(auxaux.getTipoDevuelto())) {
+				//System.out.println("ojooo1 "+X.getTipoToken());
+				//System.out.println("ojooo2 "+auxaux.getTipoDevuelto());
+				System.out.println("TIPOS MAL DE FUNC");
+				//error tipos diferentes el devuelto y el dicho al principio de la func
 			}
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 				devolver=new Tipo(X.getTipoToken());
 				aux=leerToken();
 			}
+			else {
+				//error falta el punto y coma del final
+			}
 			//salimos de la funcion
 			dentroFuncion=false;
-			
+			nombreFuncion=null;
+			actual=global;
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
@@ -451,7 +492,7 @@ public class Sintactico {
 
 			if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 				aux=leerToken();
-				E();
+				Tipo E=E();
 
 				if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					aux=leerToken();
@@ -468,18 +509,43 @@ public class Sintactico {
 			if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 				aux=leerToken();
 				if (tokenIgual(TiposToken.T_ID)) {
+					//ya tenemos el id
+					String id=aux.getLexema();
+					//si no existe, es entera
+
+					if (!actual.lexemaExiste(id)) {
+						global.meterLexema(id);
+						global.meterTipo(TiposToken.T_INT);
+						global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
+					}
+					if (actual.getTipoLexema(id).equals(TiposToken.T_BOOLEAN)) {
+						//error no puede ser boolean
+					}
 					aux=leerToken();
 					if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 						aux=leerToken();
 						if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 							aux=leerToken();
 						}
+						else {
+							//error no hay punto y coma
+						}
+					}
+					else {
+						//erro no hay parentesis cierra
 					}
 				}
+				else {
+					//error no hay id
+				}
+			}
+			else {
+				//error no abre parentesis
 			}
 			return devolver;
 		}
 		else {
+			//error no es ninguno de estos casos
 			return devolver;
 		}
 
@@ -565,15 +631,40 @@ public class Sintactico {
 	public void F() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_FUNC)) {
+			//estamos dentro de una funcion a partir de ahora
+			dentroFuncion=true;
 			escribirFichero(24);
 			aux=leerToken();
-			H();
+			//tipo a devolver
+			Tipo H=H();
+			//tipo devuelto valido?
+			if (!(H.getTipoToken().equals(TiposToken.T_BOOLEAN) || H.getTipoToken().equals(TiposToken.T_INT) || H.getTipoToken().equals(TiposToken.T_STRING) || H.getTipoToken().equals(TiposToken.T_VACIO))) {
+				//error no es un tipo valido
+			}
 			if (tokenIgual(TiposToken.T_ID)) {
+				nombreFuncion=aux.getLexema();
+				//ver en global
+				if (global.lexemaExiste(nombreFuncion)) {
+					//error porque ya esta definido de antes la funcion en zona global
+				}
+				global.meterLexema(nombreFuncion);
+				global.meterTipo(TiposToken.T_FUNC);
+				global.meterDesplazamiento(0);
+				//hacemos la local, hacemos que la actual sea la local
+				TablaSimbolos local=new TablaSimbolos(nombreFuncion);
+				//ponemos en el local el tipo de retorno de la funcion
+				//TODO esto se ha retocado
+				//local.setTipoDevuelto(H.getTipoToken());
+				actual=local;
+				actual.setTipoDevuelto(H.getTipoToken());
+				//System.out.println(actual.getIdTabla());
 				aux=leerToken();
 				if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 					aux=leerToken();
 					A();
-
+					//NO BORRAR
+					//aqui es donde se meten los tipos de la func, en tabla local SIEMPRE
+					//System.out.println(actual.getTiposLexemasFuncion());
 					if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 						aux=leerToken();
 						if (tokenIgual(TiposToken.T_LLAVEABRE)) {
@@ -582,76 +673,139 @@ public class Sintactico {
 							if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
 								aux=leerToken();
 							}
+							else {
+								//error no llave cierra
+							}
 						}
+						else {
+							//error no abre llave
+						}
+					}else {
+						//error no cierra parentesis
 					}
 				}
+				else {
+					//error no abre parentesis
+				}
+			}
+			else {
+				//error no leemos id
 			}
 			return;
 		}
 		else {
+			//error porque no es funcion el token
 			return;
 		}
 	}
-	public void A() {
+	public Tipo A() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_INT)) {
 			escribirFichero(25);
-			T();
+			Tipo T=T();
 			if (tokenIgual(TiposToken.T_ID)) {
+				String id=aux.getLexema();
+				//actual.meterLexemaFuncion(id);
+				//metemos lexema en tabla local
+				actual.meterLexema(id);
+				//y el tipo
+				actual.meterTipo(T.getTipoToken());
+				//metemos el tipo que queremos que el bicho compare luego uno a uno
+				actual.meterTipoFuncion(T.getTipoToken());
+				//actual.meterDesplazamientoFuncion(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
+				//desp de la tabla normal
+				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				aux=leerToken();
-				K();
+				Tipo K=K();
 			}
-			return;
+			else {
+				//error se esperaba un id
+			}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_STRING)) {
 			escribirFichero(25);
-			T();
+			Tipo T=T();
 			if (tokenIgual(TiposToken.T_ID)) {
+				String id=aux.getLexema();
+				//actual.meterLexemaFuncion(id);
+				actual.meterLexema(id);
+				actual.meterTipo(T.getTipoToken());
+				actual.meterTipoFuncion(T.getTipoToken());
+				//actual.meterDesplazamientoFuncion(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
+				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				aux=leerToken();
-				K();
+				Tipo K=K();
 			}
-			return;
+			else {
+				//error se esperaba un id
+			}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_BOOLEAN)) {
 			escribirFichero(25);
-			T();
+			Tipo T=T();
 			if (tokenIgual(TiposToken.T_ID)) {
+				String id=aux.getLexema();
+				//actual.meterLexemaFuncion(id);
+				actual.meterLexema(id);
+				actual.meterTipo(T.getTipoToken());
+				actual.meterTipoFuncion(T.getTipoToken());
+				//actual.meterDesplazamientoFuncion(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
+				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				aux=leerToken();
-				K();
+				Tipo K=K();
 			}
-			return;
+			else {
+				//error se esperaba un id
+			}
+			return devolver;
 		}//follow
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
+			//TODO la lista sera null si no tiene parametros
+			devolver=new Tipo(TiposToken.T_OK);
 			escribirFichero(26);
-			return;
+			return devolver;
 		}
 		else {
-			return;
+			//error
+			return devolver;
 		}
 
 	}
-	public void K() {
+	public Tipo K() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_COMA)) {
 			aux=leerToken();
 			escribirFichero(27);
-			T();
+			Tipo T=T();
 
 			if (tokenIgual(TiposToken.T_ID)) {
+				String id=aux.getLexema();
+				//actual.meterLexemaFuncion(id);
+				actual.meterLexema(id);
+				actual.meterTipo(T.getTipoToken());
+				actual.meterTipoFuncion(T.getTipoToken());
+				//actual.meterDesplazamientoFuncion(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
+				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				aux=leerToken();
-				K();
+				Tipo K=K();
 			}
-			return;
+			else {
+				//error se esperaba un id
+			}
+			return devolver;
 		}//follow
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 			escribirFichero(28);
-			return;
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
 		}
-		//error
+		//error ninguno de los validos
 		else {
-			return;
+			return devolver;
 		}
 	}
 	public Tipo H() {
@@ -688,70 +842,80 @@ public class Sintactico {
 		}
 	}
 
-	public void L() {
+	public Tipo L() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_ID)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_ENTERO)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_CADENA)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_TRUE)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_FALSE)) {
 			escribirFichero(31);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
+		//follow
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 			escribirFichero(32);
-			return;
+			return devolver;
 		}
 		//error
 		else {
-			return;
+			return devolver;
 		}
 	}
-	public void Q() {
+
+	public Tipo Q() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_COMA)) {
 			aux=leerToken();
 			escribirFichero(33);
-			E();
-			Q();
-			return;
+			Tipo E=E();
+			tiposFuncion.add(E.getTipoToken());
+			Tipo Q=Q();
+			return devolver;
 		}
+		//follow
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 			escribirFichero(34);
-			return;
+			return devolver;
 		}
 		else {
-			return;
+			return devolver;
 		}
 
 	}
@@ -770,7 +934,7 @@ public class Sintactico {
 				//error
 			}
 			//TODO debug
-			
+
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
@@ -997,7 +1161,6 @@ public class Sintactico {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//leo un MENOR 
 		if (tokenIgual(TiposToken.T_MENOR)) {
-			//TODO ojo esto esta bien?
 			aux=leerToken();
 			escribirFichero(39);
 			Tipo D=D();
@@ -1044,17 +1207,21 @@ public class Sintactico {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//TODO ESTO ES V D2
 		if (tokenIgual(TiposToken.T_ID)) {
+			//se mete aqui para la funcion o =id existente
 			escribirFichero(41);
 			Tipo V=V();
+			//System.out.println("AQUI TENEMOS "+V.getTipoToken());
 			Tipo D2=D2();
+			//System.out.println("DESPUES TENEMOS "+D2.getTipoToken());
 			if ( V.getTipoToken().equals(D2.getTipoToken()) || D2.getTipoToken().equals(TiposToken.T_OK) ) {
 				TiposToken aux2=V.getTipoToken();
 				devolver=new Tipo(aux2);
 			}
-			
+
 			else {
 				//error
 			}
+			
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
@@ -1131,21 +1298,6 @@ public class Sintactico {
 	}
 	public Tipo D2() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
-		//leemos un MENOS
-		/*if (tokenIgual(TiposToken.T_MENOS)) {
-			aux=leerToken();
-			escribirFichero(42);
-			Tipo V=V();
-			Tipo D2=D2();
-			if ((V.getTipoToken().equals(TiposToken.T_INT))&&( D2.getTipoToken().equals(TiposToken.T_INT) || (D2.getTipoToken().equals(TiposToken.T_OK)))) {
-				TiposToken aux2=V.getTipoToken();
-				devolver=new Tipo(aux2);
-			}
-			else {
-				//ERROR COMO TAL DEVUELVE VACIO
-			}
-			return devolver;
-		}*/
 		//leemos un MAS
 		if (tokenIgual(TiposToken.T_SUMA)) {
 			aux=leerToken();
@@ -1198,32 +1350,49 @@ public class Sintactico {
 		}
 	}
 	public Tipo V() {
+		//aux que devolveremos luego
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
-		//Token
+		//Token ID leido
 		if (tokenIgual(TiposToken.T_ID)) {
-			//Tenemos el string id para mas adelante
+			//System.out.println("LEEMOS UN ID QUE SERA LO QUE SEA");
+			//TODO puede ser int --, puede ser func
+			//Tenemos el string id para mas adelante en id y en auxV2
+			auxV2=aux.getLexema();
 			String id=aux.getLexema();
+
 			if (!actual.lexemaExiste(id)) {
-				//LEXEMA NO EXISTE EN TS
-				actual.meterLexema(id);
-				actual.meterTipo(TiposToken.T_INT);
-				actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
+				//LEXEMA NO EXISTE EN TS LOCAL
+				global.meterLexema(id);
+				global.meterTipo(TiposToken.T_INT);
+				global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
 			}
 			//a partir de aqui el lexema existe, ya sea global o local
 			aux=leerToken();
 			escribirFichero(15);
+			//Tenemos tipo de func en V2
 			Tipo V2=V2();
+			//System.out.println("TIPO DE LA VAINA: "+actual.getTipoLexema(id));
+			//System.out.println("AL SALIR DE V2 TENEMOS: "+V2.getTipoToken());
+			//System.out.println("TEST DE ESTO: "+V2.getTipoToken());
+			//para post decremento
 			if (V2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(id).equals(TiposToken.T_INT)) {
 				devolver=new Tipo(TiposToken.T_INT);
+				//poner tipo de error que puede ser
 			}
-			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && V2.getTipoToken().equals(TiposToken.T_OK)) {
-				//devolver es igual al tipo devuelto por la funcion
+			
+			//funcion con igual 
+			else if (V2.getTipoToken().equals(TiposToken.T_INT)||V2.getTipoToken().equals(TiposToken.T_STRING)||V2.getTipoToken().equals(TiposToken.T_VACIO)||V2.getTipoToken().equals(TiposToken.T_BOOLEAN)) {
+				//System.out.println("ESTAMOS EN ESTE CASO");
+				devolver=new Tipo(V2.getTipoToken());
+				return devolver;
 			}
 			//TODO TODO TODO OJO QUE AQUI PUEDE HABER CAGADA, esto hay que cambiar para que busque por
 			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.T_OK)) {
 				//devolver=new Tipo(TiposToken.T_OK);
 				devolver=new Tipo(actual.getTipoLexema(id));
+				//probnado este return BORRAR SI NO
+				return devolver;
 			}
 			//esto va para el final del punto y coma
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
@@ -1232,6 +1401,8 @@ public class Sintactico {
 			else {
 				//no termina en punto y coma y hay lio
 			}
+			auxV2=null;
+			tiposFuncion=null;
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
@@ -1275,31 +1446,53 @@ public class Sintactico {
 		}
 	}
 	public Tipo V2() {
-		//TODO error da vacio, acierto da ok
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
-		//Token 
+		//leemos un postdecremento y por tanto el tipo de v2 sera entero
 		if (tokenIgual(TiposToken.T_POSTDECREMENTO)) {
 			aux=leerToken();
 			escribirFichero(51);
 			devolver=new Tipo(TiposToken.T_INT);
 			return devolver;
 		}
-		//TODO para las funciones
+		//TODO para las funciones, tener cuidado
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
+			//ES UNA FUNC y tenemos que mirar y meter los parametros con los que la invocamos
+			//se viene L, que tiene dentro (E,E,E...etc)
+			
+			//tabla aux para coger el tipo de ret
+			TablaSimbolos auxaux=null;
+			for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
+				if (tabla.getNombreFuncion().equals(auxV2)){
+					auxaux=tabla;
+				}
+			}
+			//TODO casos de si esta una func dentro de otra y tal
+			//la func no existe y no se puede hacer nada con ella
+			if (auxaux==null) {
+				System.out.println("LA FUNCION NO EXISTE");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
+			//Ahora tenemos de arriba la tabla que tiene el tipo devuelto PORQUE EXISTE
 			aux=leerToken();
 			escribirFichero(52);
-			L();
-
+			//TODO si L distinto a tipo Ok, error
+			Tipo L=L();
+			//si dentro de func pero recursivo bien, else error
+			//TODO comprobar tema de parametros
+			
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
+				//tipo de la funcion devuelto
+				devolver.setTipoToken(auxaux.getTipoDevuelto());
 				aux=leerToken();
 			}
+			else {
+				//error porque no hay fin parentesis
+			}
+			//por aqui sigue como si nada o esta bien
 			return devolver;
 		}
-		/*else if (tokenIgual(TiposToken.T_MENOS)) {
-			escribirFichero(53);
-			devolver=new Tipo(TiposToken.T_OK);
-			return devolver;
-		}*/
+		//el follow da OK
 		else if (tokenIgual(TiposToken.T_SUMA)) {
 			escribirFichero(53);
 			devolver=new Tipo(TiposToken.T_OK);
@@ -1393,7 +1586,7 @@ public class Sintactico {
 			S();
 			CASE2();
 			return devolver;
-			
+
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
 			escribirFichero(56);
@@ -1436,7 +1629,7 @@ public class Sintactico {
 	}
 
 	//F estatica que lee de la lista de tokens segun la posicion que sea
-	//TODO se puede cambiar la lista por la que no tiene tokens para ver que pasa
+	//se cambió la lista por la que no tiene tokens para ver que pasa, va mejor, pero no cuenta lineas
 	public Token leerToken() {
 		if (posicion<listaTokensSinEol.size()) {
 			if (listaTokensSinEol.get(posicion).getToken().equals(TiposToken.EOL)) {
