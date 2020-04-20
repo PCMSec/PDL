@@ -16,6 +16,8 @@ import token.TiposToken;
 
 public class Sintactico {
 	//
+	private int contador=0;
+	
 	private String auxV2;
 	//NO BORRAR NO OLVIDAR IMPORTANTEtipos locales para comparar con la funcion en si
 	private ArrayList<TiposToken> tiposFuncion;
@@ -42,6 +44,7 @@ public class Sintactico {
 	//Constructor del sintactico
 	public Sintactico(ArrayList<Token> listaTokens) {
 		//Se empieza en la linea 1 del archivo
+		this.contador=0;
 		this.linea=1;
 		//empezamos en la primera posicion de los tokens
 		this.posicion=0;
@@ -1662,9 +1665,8 @@ public class Sintactico {
 	//se cambió la lista por la que no tiene tokens para ver que pasa, va mejor, pero no cuenta lineas
 	public Token leerToken() {
 		if (posicion<listaTokensSinEol.size()) {
-			if (listaTokensSinEol.get(posicion).getToken().equals(TiposToken.EOL)) {
-				linea++;
-			}
+			contadorLineas();
+			System.out.println("ESTAMOS EN LINEA: "+linea);
 			System.out.println(listaTokensSinEol.get(posicion).tokenizar());
 			return listaTokensSinEol.get(posicion++);
 
@@ -1673,6 +1675,13 @@ public class Sintactico {
 			return null;
 		}
 
+	}
+	
+	private void contadorLineas() {
+		if (listaTokens.get(contador).getToken().equals(TiposToken.EOL)) {
+			linea=linea+1;
+		}
+		contador=contador+1;
 	}
 
 	private ArrayList<Token> quitarEOL() {
