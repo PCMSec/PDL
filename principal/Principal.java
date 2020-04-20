@@ -77,6 +77,7 @@ public class Principal {
 				Token aux=new Token(TiposToken.T_ENTERO, Integer.parseInt(token));
 				if (Integer.parseInt(token)>32767) {
 					error.escribirError("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
+					return;
 				}
 				else {
 					listaTokens.add(aux);
@@ -185,6 +186,7 @@ public class Principal {
 			//no se reconoce el token leido
 			else {
 				error.escribirError("LEXICO: Token \"" + token + "\" no reconocido por la gramática");
+				return;
 			}
 		}
 		//anyade al final de la lista el token de fin de fichero
@@ -286,8 +288,8 @@ public class Principal {
 					"	\n" + 
 					"	V -> id V2 //45\n" + 
 					"	V -> abreParentesis  E  cierraParentesis //46\n" + 
-					"	V -> entero //47\n" + 
-					"	V -> cadena //48\n" + 
+					"	V -> cte_entero //47\n" + 
+					"	V -> cte_cadena //48\n" + 
 					"	V -> true //49\n" + 
 					"	V -> false //50\n" + 
 					"	\n" + 
