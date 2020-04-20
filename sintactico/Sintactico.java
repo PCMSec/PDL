@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.plaf.TabbedPaneUI;
 
+import principal.Principal;
 import tabla.Tipo;
 import tabla.TablaSimbolos;
 import token.TiposToken;
@@ -54,7 +55,7 @@ public class Sintactico {
 		this.listaTokensSinEol=quitarEOL();
 		try {
 			//se intenta escribir, si no se puede dará error en el catch
-			writer = new PrintWriter(filename, "UTF-8");
+			writer = new PrintWriter(Principal.directorioADevolver+"/ResultadoSintactico.txt", "UTF-8");
 			writer.print("D ");
 
 		} catch (FileNotFoundException e) {
@@ -176,7 +177,7 @@ public class Sintactico {
 			Tipo T=T();
 			//Tipo no compatible con los 3 soportados, int boolean o string
 			if (!(T.getTipoToken().equals(TiposToken.T_INT)) && !(T.getTipoToken().equals(TiposToken.T_STRING)) && !(T.getTipoToken().equals(TiposToken.T_BOOLEAN))){
-				//error porque el tipo no es compatible con una variable
+				
 			}
 			//continuo sin error
 			//LEO VAR TIPO ID...
@@ -185,6 +186,7 @@ public class Sintactico {
 				if (actual.lexemaExisteLocal(aux.getLexema())) {
 					//System.out.println("Var ya declarada anteriormente");
 					//Si existe ya en la local, error
+					System.out.println("SEMANTICO: ERROR EN LINEA" +linea+ ", VARIABLE "+aux.getLexema()+" YA DEFINIDA "+linea);
 				}
 				//No existe en local, o ya esta en global y podemos hacerla local
 				//esto es solo declaracion, por lo que no hay que usar nada
@@ -193,23 +195,19 @@ public class Sintactico {
 				Tipo B2=B2();
 				//var TIPO id
 				if (B2.getTipoToken().equals(TiposToken.T_VACIO)) {
-					//System.out.println("OJOOOOOO1: "+B2.getTipoToken());
-					//System.out.println("OJOOOOOO1: "+T.getTipoToken());
 					actual.meterLexema(id);
 					actual.meterTipo(T.getTipoToken());
 					actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				}
 				//var TIPO id = COMPATIBLE CON TIPO
 				else if (B2.getTipoToken().equals(T.getTipoToken())) {
-					//System.out.println("OJOOOOOO2: "+B2.getTipoToken());
-					//System.out.println("OJOOOOOO2: "+T.getTipoToken());
 					actual.meterLexema(id);
 					actual.meterTipo(T.getTipoToken());
 					actual.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(T.getTipoToken()));
 				}
 				else {
 					//error, ninguno de los dos formas de meterlo bien
-					System.out.println("ERROR EN TIPOS DE VAR");
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LOS TIPOS "+B2.getTipoToken()+" Y "+T.getTipoToken()+" NO SON COMPATIBLES");
 				}
 				//fin de VAR TIPO ID ; O DE VAR TIPO ID = E ;
 				if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
@@ -218,11 +216,13 @@ public class Sintactico {
 					aux=leerToken();
 				}
 				else {
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO TERMINA EN PUNTO Y COMA");
 					//falta el punto y coma del final
 				}
 			}
 			else {
 				//lei var tipo pero luego no viene ID
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", "+ "EL TIPO "+T.getTipoToken() +" NO VA ACOMPAÑADO DE NINGÚN ID");
 			}
 			return devolver;
 		}
@@ -236,6 +236,7 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_BOOLEAN)) {
 					//error porque E no es un booleano
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESIÓN DEL IF NO ES DE TIPO BOOLEANO");
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					devolver=new Tipo(TiposToken.T_OK);
@@ -244,11 +245,13 @@ public class Sintactico {
 					Tipo S=S();
 				}
 				else {
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN CIERRE DE PARÉNTESIS EN EL IF");
 					//error, no viene parentesis cierra
 				}
 			}
 			else {
 				//no abre parentesis despues del if, error
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN ABRIR DE PARÉNTESIS EN EL IF");
 			}
 			return devolver;
 		}//FIN DE IF
@@ -262,6 +265,7 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_INT)) {
 					//no es entero y por tanto es error en el switch y fin
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESIÓN DEL SWITCH NO ES UN ENTERO");
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					aux=leerToken();
@@ -274,17 +278,21 @@ public class Sintactico {
 						}
 						else {
 							//error sin llave cierra al final
+							System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR LLAVE EN EL SWITCH");
 						}
 					}
 					else {
+						System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR LLAVE EN EL SWITCH");
 						//error no abre llave al principio
 					}
 				}
 				else {
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR PARÉNTESIS EN EL SWITCH");
 					//error porque no hay parentesis cierra
 				}
 			}
 			else {
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR PARÉNTESIS EN EL SWITCH");
 				//no abre parentesis despues del switch
 			}
 			return devolver;
@@ -315,7 +323,7 @@ public class Sintactico {
 			return devolver;
 		}
 		else {
-			//error
+			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES ENCONTRÓ NINGÚN TOKEN COMPATIBLE");
 			return devolver;
 		}
 	}
@@ -338,6 +346,7 @@ public class Sintactico {
 			return devolver;
 		}//error
 		else {
+			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRÓ NINGÚN TOKEN COMPATIBLE CON B2");
 			return devolver;
 		}
 	}
@@ -363,6 +372,7 @@ public class Sintactico {
 			return devolver;
 		}
 		else {
+			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRÓ NINGÚN TOKEN COMPATIBLE CON EL TIPO");
 			return devolver;
 		}
 	}
@@ -1666,7 +1676,7 @@ public class Sintactico {
 	public Token leerToken() {
 		if (posicion<listaTokensSinEol.size()) {
 			contadorLineas();
-			System.out.println("ESTAMOS EN LINEA: "+linea);
+			//System.out.println("ESTAMOS EN LINEA: "+linea);
 			System.out.println(listaTokensSinEol.get(posicion).tokenizar());
 			return listaTokensSinEol.get(posicion++);
 

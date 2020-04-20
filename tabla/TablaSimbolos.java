@@ -1,8 +1,12 @@
 package tabla;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import principal.Principal;
 import token.TiposToken;
 
 public class TablaSimbolos {
@@ -29,6 +33,7 @@ public class TablaSimbolos {
 	//tipo devuelto por la funcion
 	private TiposToken tipoDevuelto;
 
+	public static PrintWriter writer;
 
 
 
@@ -133,6 +138,15 @@ public class TablaSimbolos {
 		//aumentar numero de la tabla
 		inicial++;
 		//nombre de la tabla
+		
+		try {
+			writer = new PrintWriter(Principal.directorioADevolver+"/ResultadoTablasSimbolos", "UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 		this.setNombreFuncion(nombreTabla);
 	}
 
@@ -294,10 +308,10 @@ public class TablaSimbolos {
 	public static void imprimirTablas() {
 		for (TablaSimbolos tabla:listaTablas) {
 			if (tabla.getNombreFuncion().equals(null)) {
-				System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
+				writer.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
 			}
 			else {
-				System.out.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + " (de funcion "+ tabla.getNombreFuncion()+") :");
+				writer.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + " (de funcion "+ tabla.getNombreFuncion()+") :");
 			}
 			System.out.println();
 			int desp=0;
@@ -321,12 +335,12 @@ public class TablaSimbolos {
 			Collections.reverse(auxTipos);
 			Collections.reverse(auxDesp);
 			for (int i=0;i<tabla.getLexemas().size();i++) {
-				System.out.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
-				System.out.println("ATRIBUTOS:");
-				System.out.println("+ tipo: '" + auxTipos.get(i) +"'");
+				writer.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
+				writer.println("ATRIBUTOS:");
+				writer.println("+ tipo: '" + auxTipos.get(i) +"'");
 				//si no es funcion, imprime normal
 				if (!auxTipos.get(i).equals(TiposToken.T_FUNC)) {
-					System.out.println("+ despl : " + auxDesp.get(i));
+					writer.println("+ despl : " + auxDesp.get(i));
 				}
 				//es funcion lo que tengo y tengo que acceder a los parametros de la TFUNC
 				else {
@@ -336,22 +350,23 @@ public class TablaSimbolos {
 							aux=listaTablas.get(j);
 						}
 					}
-					System.out.println(" +NumParam: " + aux.getTiposLexemasFuncion().size());
+					writer.println(" +NumParam: " + aux.getTiposLexemasFuncion().size());
 					String espaciado="  ";
 					for (int k=0;k<aux.getTiposLexemasFuncion().size();k++) {
 						int auxSuma=k+1;
-						System.out.println(espaciado+"+TipoParam"+auxSuma+": "+aux.getTiposLexemasFuncion().get(k));
-						System.out.println(espaciado+"+ModoParam"+auxSuma+": "+"1     (es por valor)");
+						writer.println(espaciado+"+TipoParam"+auxSuma+": "+aux.getTiposLexemasFuncion().get(k));
+						writer.println(espaciado+"+ModoParam"+auxSuma+": "+"1     (es por valor)");
 						espaciado+=" ";
 					}
-					System.out.println(espaciado+"+TipoRetorno: "+aux.getTipoDevuelto());
-					System.out.println(espaciado+" +EtiqFuncion: Et"+aux.getNombreFuncion());
+					writer.println(espaciado+"+TipoRetorno: "+aux.getTipoDevuelto());
+					writer.println(espaciado+" +EtiqFuncion: Et"+aux.getNombreFuncion());
 				}
-				System.out.println();
+				writer.println();
 			}
-			System.out.println("--------- ----------");
-			System.out.println();
+			writer.println("--------- ----------");
+			writer.println();
 		}
+		writer.close();
 	}
 	//puede comparar en global o en local si es recursiva
 	public boolean compararFuncion(ArrayList<TiposToken> tiposFuncion) {
