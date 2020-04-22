@@ -19,13 +19,13 @@ public class Principal {
 		/home/pablo/eclipse-workspace/PDL/docs/sencillo.txt
 		 */
 		Scanner in = new Scanner(System.in);
-		System.out.print("Introduzca dirección absoluta del fichero a analizar:"); 
+		System.out.print("Introduzca direccion absoluta del fichero a analizar:"); 
 		String filename = in.nextLine();
 		tempFile = new File(filename);
 		boolean exists = tempFile.exists();
 		if (exists==false) {
 			in.close();
-			System.out.println("El nombre de archivo introducido no existe. Compruebe de nuevo el archivo, su extensión y su dirección absoluta al reiniciar el programa");
+			System.out.println("El nombre de archivo introducido no existe. Compruebe de nuevo el archivo, su extension y su direccion absoluta al reiniciar el programa");
 			return;
 		}
 		directorioADevolver=tempFile.getParent();
@@ -74,6 +74,7 @@ public class Principal {
 				Token aux=new Token(TiposToken.T_ENTERO, Integer.parseInt(token));
 				if (Integer.parseInt(token)>32767) {
 					error.escribirError("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
+					Error.writer.close();
 					return;
 				}
 				else {
@@ -182,7 +183,7 @@ public class Principal {
 			}
 			//no se reconoce el token leido
 			else {
-				error.escribirError("LEXICO: Token \"" + token + "\" no reconocido por la gramática");
+				error.escribirError("LEXICO: Token \"" + token + "\" no reconocido por la gramatica");
 				return;
 			}
 		}
@@ -311,6 +312,14 @@ public class Principal {
 		
 		TablaSimbolos.imprimirTablas();
 		error.cerrarArchivo();
+		
+		File tempError=new File(directorioADevolver+File.separator+"ResultadoErrores.txt");
+		if (tempError.length()==0) {
+			System.out.println("EJECUCION COMPLETADA SIN PROBLEMAS");
+		}
+		else {
+			System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
+		}
 	}
 
 }

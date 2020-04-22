@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import errores.*;
+import errores.Error;
 
 import javax.swing.plaf.TabbedPaneUI;
 
@@ -54,8 +56,10 @@ public class Sintactico {
 		this.listaTokens = listaTokens;
 		//iniciar la que no tiene end of line
 		this.listaTokensSinEol=quitarEOL();
+		
+		
 		try {
-			//se intenta escribir, si no se puede dará error en el catch
+			//se intenta escribir, si no se puede dara error en el catch
 			writer = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoSintactico.txt", "UTF-8");
 			writer.print("D ");
 
@@ -66,7 +70,7 @@ public class Sintactico {
 		}
 		//leo el primer token a la entrada para iniciar P
 		aux=leerToken();
-		//Tabla global y actual apuntando a lo mismo, cambiará más adelante para reflejar las TS de funciones
+		//Tabla global y actual apuntando a lo mismo, cambiara mas adelante para reflejar las TS de funciones
 		global = new TablaSimbolos("");
 		actual = global;
 		global.setNombreFuncion("GLOBAL");
@@ -104,44 +108,51 @@ public class Sintactico {
 		//B
 		if (tokenIgual(TiposToken.T_VAR)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		else if (tokenIgual(TiposToken.T_IF)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		else if (tokenIgual(TiposToken.T_SWITCH)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		//S
 		else if (tokenIgual(TiposToken.T_ID)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(1);
-			B();
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
 			P();
 			return;
 		}//F
@@ -177,8 +188,10 @@ public class Sintactico {
 			//obtengo tipo de variable
 			Tipo T=T();
 			//Tipo no compatible con los 3 soportados, int boolean o string
-			if (!(T.getTipoToken().equals(TiposToken.T_INT)) && !(T.getTipoToken().equals(TiposToken.T_STRING)) && !(T.getTipoToken().equals(TiposToken.T_BOOLEAN))){
-				
+			if (T.getTipoToken().equals(TiposToken.T_ERROR)){
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRO NINGUN TOKEN COMPATIBLE");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
 			//continuo sin error
 			//LEO VAR TIPO ID...
@@ -187,7 +200,9 @@ public class Sintactico {
 				if (actual.lexemaExisteLocal(aux.getLexema())) {
 					//System.out.println("Var ya declarada anteriormente");
 					//Si existe ya en la local, error
-					System.out.println("SEMANTICO: ERROR EN LINEA" +linea+ ", VARIABLE "+aux.getLexema()+" YA DEFINIDA "+linea);
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", VARIABLE "+aux.getLexema()+" YA DEFINIDA CON ANTERIORIDAD");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 				}
 				//No existe en local, o ya esta en global y podemos hacerla local
 				//esto es solo declaracion, por lo que no hay que usar nada
@@ -223,7 +238,7 @@ public class Sintactico {
 			}
 			else {
 				//lei var tipo pero luego no viene ID
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", "+ "EL TIPO "+T.getTipoToken() +" NO VA ACOMPAÑADO DE NINGÚN ID");
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", "+ "EL TIPO "+T.getTipoToken() +" NO VA ACOMPAÑADO DE NINGUN ID");
 			}
 			return devolver;
 		}
@@ -237,7 +252,7 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_BOOLEAN)) {
 					//error porque E no es un booleano
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESIÓN DEL IF NO ES DE TIPO BOOLEANO");
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL IF NO ES DE TIPO BOOLEANO");
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					devolver=new Tipo(TiposToken.T_OK);
@@ -246,13 +261,13 @@ public class Sintactico {
 					Tipo S=S();
 				}
 				else {
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN CIERRE DE PARÉNTESIS EN EL IF");
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN CIERRE DE PARENTESIS EN EL IF");
 					//error, no viene parentesis cierra
 				}
 			}
 			else {
 				//no abre parentesis despues del if, error
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN ABRIR DE PARÉNTESIS EN EL IF");
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN ABRIR DE PARENTESIS EN EL IF");
 			}
 			return devolver;
 		}//FIN DE IF
@@ -266,7 +281,7 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_INT)) {
 					//no es entero y por tanto es error en el switch y fin
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESIÓN DEL SWITCH NO ES UN ENTERO");
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL SWITCH NO ES UN ENTERO");
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					aux=leerToken();
@@ -288,12 +303,12 @@ public class Sintactico {
 					}
 				}
 				else {
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR PARÉNTESIS EN EL SWITCH");
+					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR PARENTESIS EN EL SWITCH");
 					//error porque no hay parentesis cierra
 				}
 			}
 			else {
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR PARÉNTESIS EN EL SWITCH");
+				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR PARENTESIS EN EL SWITCH");
 				//no abre parentesis despues del switch
 			}
 			return devolver;
@@ -324,7 +339,7 @@ public class Sintactico {
 			return devolver;
 		}
 		else {
-			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES ENCONTRÓ NINGÚN TOKEN COMPATIBLE");
+			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES ENCONTRO NINGUN TOKEN COMPATIBLE");
 			return devolver;
 		}
 	}
@@ -347,7 +362,7 @@ public class Sintactico {
 			return devolver;
 		}//error
 		else {
-			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRÓ NINGÚN TOKEN COMPATIBLE CON B2");
+			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRO NINGUN TOKEN COMPATIBLE CON B2");
 			return devolver;
 		}
 	}
@@ -373,7 +388,8 @@ public class Sintactico {
 			return devolver;
 		}
 		else {
-			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRÓ NINGÚN TOKEN COMPATIBLE CON EL TIPO");
+			//ninguno de los tipos basicos bro
+			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
 	}
@@ -1494,6 +1510,7 @@ public class Sintactico {
 			//la func no existe y no se puede hacer nada con ella
 			if (comparator==null) {
 				System.out.println("LA FUNCION NO EXISTE");
+				//TODO este error hay que repasarlo
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -1673,7 +1690,7 @@ public class Sintactico {
 	}
 
 	//F estatica que lee de la lista de tokens segun la posicion que sea
-	//se cambió la lista por la que no tiene tokens para ver que pasa, va mejor, pero no cuenta lineas
+	//se cambiO la lista por la que no tiene tokens para ver que pasa, va mejor, pero no cuenta lineas
 	public Token leerToken() {
 		if (posicion<listaTokensSinEol.size()) {
 			contadorLineas();
