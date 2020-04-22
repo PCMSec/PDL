@@ -2,6 +2,7 @@ package sintactico;
 
 import token.Token;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -55,7 +56,7 @@ public class Sintactico {
 		this.listaTokensSinEol=quitarEOL();
 		try {
 			//se intenta escribir, si no se puede dará error en el catch
-			writer = new PrintWriter(Principal.directorioADevolver+"/ResultadoSintactico.txt", "UTF-8");
+			writer = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoSintactico.txt", "UTF-8");
 			writer.print("D ");
 
 		} catch (FileNotFoundException e) {

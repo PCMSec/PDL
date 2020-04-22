@@ -1,5 +1,6 @@
 package tabla;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -140,7 +141,7 @@ public class TablaSimbolos {
 		//nombre de la tabla
 		
 		try {
-			writer = new PrintWriter(Principal.directorioADevolver+"/ResultadoTablasSimbolos", "UTF-8");
+			writer = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoTablasSimbolos", "UTF-8");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {

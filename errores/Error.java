@@ -1,5 +1,6 @@
 package errores;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -11,7 +12,7 @@ public class Error {
 	
 	public Error() {
 		try {
-			writer = new PrintWriter(Principal.directorioADevolver+"/ResultadoErrores.txt", "UTF-8");
+			writer = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoErrores.txt", "UTF-8");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {

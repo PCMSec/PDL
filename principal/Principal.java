@@ -1,10 +1,5 @@
 package principal;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.*;
 import java.io.*;
 import java.util.ArrayList; 
@@ -20,7 +15,9 @@ public class Principal {
 	public static String directorioADevolver;
 	
 	public static void main(String[] args) {
-		///home/pablo/eclipse-workspace/PDL/docs/sencillo.txt
+		/*
+		/home/pablo/eclipse-workspace/PDL/docs/sencillo.txt
+		 */
 		Scanner in = new Scanner(System.in);
 		System.out.print("Introduzca dirección absoluta del fichero a analizar:"); 
 		String filename = in.nextLine();
@@ -193,7 +190,7 @@ public class Principal {
 		Token EOF=new Token(TiposToken.EOF);
 		listaTokens.add(EOF);
 		try {
-			PrintWriter writer = new PrintWriter(directorioADevolver+"tokens.txt", "UTF-8");
+			PrintWriter writer = new PrintWriter(directorioADevolver+File.separator+"tokens.txt", "UTF-8");
 			for (Token token:listaTokens) {
 				//System.out.println(token.tokenizar());
 				writer.println(token.tokenizar());
@@ -212,7 +209,7 @@ public class Principal {
 		//numero de linea en el que nos encontramos
 		sin.P();
 		try {
-			PrintWriter writer2 = new PrintWriter(Principal.directorioADevolver+"/ResultadoGramatica.txt", "UTF-8");
+			PrintWriter writer2 = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoGramatica.txt", "UTF-8");
 			writer2.println("Terminales = { \n" + 
 					"\n" + 
 					"eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print prompt postDecre function menor mas menos entero cadena true false break\n" + 
