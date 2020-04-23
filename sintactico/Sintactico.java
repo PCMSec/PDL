@@ -209,6 +209,11 @@ public class Sintactico {
 				String id=aux.getLexema();
 				aux=leerToken();
 				Tipo B2=B2();
+				if (B2.getTipoToken().equals(TiposToken.T_ERROR)) {
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", TIPO EN B2 NO COMPATIBLE");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
+				}
 				//var TIPO id
 				if (B2.getTipoToken().equals(TiposToken.T_VACIO)) {
 					actual.meterLexema(id);
@@ -223,7 +228,9 @@ public class Sintactico {
 				}
 				else {
 					//error, ninguno de los dos formas de meterlo bien
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LOS TIPOS "+B2.getTipoToken()+" Y "+T.getTipoToken()+" NO SON COMPATIBLES");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LOS TIPOS "+B2.getTipoToken()+" Y "+T.getTipoToken()+" NO SON COMPATIBLES");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 				}
 				//fin de VAR TIPO ID ; O DE VAR TIPO ID = E ;
 				if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
@@ -232,14 +239,19 @@ public class Sintactico {
 					aux=leerToken();
 				}
 				else {
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO TERMINA EN PUNTO Y COMA");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO TERMINA EN PUNTO Y COMA");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 					//falta el punto y coma del final
 				}
 			}
 			else {
 				//lei var tipo pero luego no viene ID
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", "+ "EL TIPO "+T.getTipoToken() +" NO VA ACOMPAÑADO DE NINGUN ID");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", "+ "EL TIPO "+T.getTipoToken() +" NO VA ACOMPAÑADO DE NINGUN ID");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
+			
 			return devolver;
 		}
 		//INICIO IF
@@ -252,23 +264,30 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_BOOLEAN)) {
 					//error porque E no es un booleano
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL IF NO ES DE TIPO BOOLEANO");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL IF NO ES DE TIPO BOOLEANO");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 				}
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					devolver=new Tipo(TiposToken.T_OK);
 					aux=leerToken();
-					//TODO mejorar lo devuelto
+					//TODO mejorar lo devuelto quiza
 					Tipo S=S();
 				}
 				else {
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN CIERRE DE PARENTESIS EN EL IF");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN CIERRE DE PARENTESIS EN EL IF");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 					//error, no viene parentesis cierra
 				}
 			}
 			else {
 				//no abre parentesis despues del if, error
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN ABRIR DE PARENTESIS EN EL IF");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA UN ABRIR DE PARENTESIS EN EL IF");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
+			
 			return devolver;
 		}//FIN DE IF
 		//INICIO SWITCH
@@ -281,8 +300,11 @@ public class Sintactico {
 				Tipo E=E();
 				if (!E.getTipoToken().equals(TiposToken.T_INT)) {
 					//no es entero y por tanto es error en el switch y fin
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL SWITCH NO ES UN ENTERO");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LA EXPRESION DEL SWITCH NO ES UN ENTERO");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 				}
+				
 				else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 					aux=leerToken();
 					if (tokenIgual(TiposToken.T_LLAVEABRE)) {
@@ -294,21 +316,29 @@ public class Sintactico {
 						}
 						else {
 							//error sin llave cierra al final
-							System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR LLAVE EN EL SWITCH");
+							Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR LLAVE EN EL SWITCH");
+							devolver=new Tipo(TiposToken.T_ERROR);
+							return devolver;
 						}
 					}
 					else {
-						System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR LLAVE EN EL SWITCH");
+						Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR LLAVE EN EL SWITCH");
+						devolver=new Tipo(TiposToken.T_ERROR);
+						return devolver;
 						//error no abre llave al principio
 					}
 				}
 				else {
-					System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR PARENTESIS EN EL SWITCH");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA CERRAR PARENTESIS EN EL SWITCH");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 					//error porque no hay parentesis cierra
 				}
 			}
 			else {
-				System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR PARENTESIS EN EL SWITCH");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SE ESPERABA ABRIR PARENTESIS EN EL SWITCH");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 				//no abre parentesis despues del switch
 			}
 			return devolver;
@@ -339,7 +369,8 @@ public class Sintactico {
 			return devolver;
 		}
 		else {
-			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES ENCONTRO NINGUN TOKEN COMPATIBLE");
+			Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES ENCONTRO NINGUN TOKEN COMPATIBLE");
+			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
 	}
@@ -362,7 +393,8 @@ public class Sintactico {
 			return devolver;
 		}//error
 		else {
-			System.out.println("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRO NINGUN TOKEN COMPATIBLE CON B2");
+			Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRO NINGUN TOKEN COMPATIBLE CON B2");
+			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
 	}
@@ -389,10 +421,12 @@ public class Sintactico {
 		}
 		else {
 			//ninguno de los tipos basicos bro
+			Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO ES UN TIPO VALIDO");
 			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
 	}
+	//TODO hacer cosas con el tipo del B para ver si hay error
 	public void C() {
 		if (tokenIgual(TiposToken.T_VAR)) {
 			escribirFichero(13);
@@ -468,7 +502,12 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.T_OK);
 			}
 			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && S2.getTipoToken().equals(TiposToken.T_OK)) {
-				//devolver es igual al tipo devuelto por la funcion
+				//TODO hacer esto: devolver es igual al tipo devuelto por la funcion
+			}
+			else {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SENTENCIA NO VALIDA");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
 			//TODO poner aqui un caso de error?
 			//rollo else{}
@@ -477,14 +516,15 @@ public class Sintactico {
 				aux=leerToken();
 			}
 			else {
-				//no termina en punto y coma y hay lio
+				//TODO esto da error, se comenta y fuera
+				//Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE RECONOCIO NINGUNA SENTENCIA VALIDA");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
-			if (!dentroFuncion) {
-				//no estamos dentro de func por lo que dara un error
-			}
+			
 			aux=leerToken();
 			escribirFichero(16);
 			Tipo X=X();
@@ -497,11 +537,15 @@ public class Sintactico {
 				}
 			}
 			//si no son iguales los tipos devueltos error
+			if (!dentroFuncion) {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", USADO RETURN SIN ESTAR DENTRO DE UNA FUNCION");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
 			if (!X.getTipoToken().equals(auxaux.getTipoDevuelto())) {
-				//System.out.println("ojooo1 "+X.getTipoToken());
-				//System.out.println("ojooo2 "+auxaux.getTipoDevuelto());
-				System.out.println("TIPOS MAL DE FUNC");
-				//error tipos diferentes el devuelto y el dicho al principio de la func
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", TIPO DE FUNCION Y TIPO DEVUELTO SON DISTINTOS");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 				devolver=new Tipo(X.getTipoToken());
@@ -509,6 +553,9 @@ public class Sintactico {
 			}
 			else {
 				//error falta el punto y coma del final
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", FALTA EL PUNTO Y COMA FINAL");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;	
 			}
 			//salimos de la funcion
 			
@@ -547,7 +594,9 @@ public class Sintactico {
 						global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
 					}
 					if (actual.getTipoLexema(id).equals(TiposToken.T_BOOLEAN)) {
-						//error no puede ser boolean
+						Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE PUEDE METER UN BOOLEANO EN EL INPUT");
+						devolver=new Tipo(TiposToken.T_ERROR);
+						return devolver;	
 					}
 					aux=leerToken();
 					if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
@@ -557,26 +606,40 @@ public class Sintactico {
 						}
 						else {
 							//error no hay punto y coma
+							Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", FALTA EL PUNTO Y COMA DEL FINAL");
+							devolver=new Tipo(TiposToken.T_ERROR);
+							return devolver;	
 						}
 					}
 					else {
 						//erro no hay parentesis cierra
+						Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO CIERRA PARENTESIS");
+						devolver=new Tipo(TiposToken.T_ERROR);
+						return devolver;
 					}
 				}
 				else {
 					//error no hay id
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", FALTA EL ID DEL INPUT");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
 				}
 			}
 			else {
 				//error no abre parentesis
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", FALTA EL PARENTESIS ABRE DEL INPUT");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
 			return devolver;
 		}
 		else {
 			//error no es ninguno de estos casos
+			Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE RECONOCE NINGUNA SENTENCIA VALIDA");
+			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
+			
 		}
-
 	}
 	public Tipo S2() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
