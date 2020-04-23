@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import errores.*;
 import errores.Error;
 
-import javax.swing.plaf.TabbedPaneUI;
+
 
 import principal.Principal;
 import tabla.Tipo;
@@ -190,7 +190,6 @@ public class Sintactico {
 			Tipo T=T();
 			//Tipo no compatible con los 3 soportados, int boolean o string
 			if (T.getTipoToken().equals(TiposToken.T_ERROR)){
-				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE ENCONTRO NINGUN TOKEN COMPATIBLE");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -496,14 +495,20 @@ public class Sintactico {
 			aux=leerToken();
 			escribirFichero(15);
 			Tipo S2=S2();
+			//Al llamar a s2 no reconoce cuando es func
+			System.out.println("OJO A ESTO "+actual.getTipoLexema(id));
 			if (S2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(id).equals(TiposToken.T_INT)) {
 				devolver=new Tipo(TiposToken.T_INT);
 			}
+			
+			//cambiado esto revisar bugs
+			else if (actual.getTipoLexema(id).equals(TiposToken.T_INT) && S2.getTipoToken().equals(TiposToken.T_VACIO)) {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LA FUNCION LLAMADA NO EXISTE  \n");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
 			else if (S2.getTipoToken().equals(TiposToken.T_VACIO)) {
 				devolver=new Tipo(TiposToken.T_OK);
-			}
-			else if (actual.getTipoLexema(id).equals(TiposToken.T_FUNC) && S2.getTipoToken().equals(TiposToken.T_OK)) {
-				//TODO hacer esto: devolver es igual al tipo devuelto por la funcion
 			}
 			else {
 				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SENTENCIA NO VALIDA");
@@ -658,7 +663,9 @@ public class Sintactico {
 			devolver=new Tipo(E.getTipoToken());
 			return devolver;
 		}
+		//TODO error cuando lee id del anterior y lo toma como entero y luego llama a esto. comprobar si es func o no
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
+			
 			aux=leerToken();
 			escribirFichero(21);
 			L();	
@@ -1520,10 +1527,7 @@ public class Sintactico {
 			escribirFichero(15);
 			//Tenemos tipo de func en V2
 			Tipo V2=V2();
-			//System.out.println("TIPO DE LA VAINA: "+actual.getTipoLexema(id));
-			//System.out.println("AL SALIR DE V2 TENEMOS: "+V2.getTipoToken());
-			//System.out.println("TEST DE ESTO: "+V2.getTipoToken());
-			//para post decremento
+			
 			if (V2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(id).equals(TiposToken.T_INT)) {
 				devolver=new Tipo(TiposToken.T_INT);
 				//poner tipo de error que puede ser
@@ -1642,12 +1646,10 @@ public class Sintactico {
 			}
 			//TODO tremendo bug aca
 			if(!comparator.compararFuncion(tiposFuncion)) {
-				System.out.println("ERROR EN TIPOS DE COMPARADOR");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", PARAMETROS AL LLAMAR A "+auxV2+" INCORRECTOS\n");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
 			}
-			else {
-				System.out.println("ACIERTO EN TIPOS DE COMPARADOR");
-			}
-			
 			
 			
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
