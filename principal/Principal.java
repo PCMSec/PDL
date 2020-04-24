@@ -320,6 +320,10 @@ public class Principal {
 		else {
 			System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
 		}
+		
+		/*for (TablaSimbolos auxiliar:TablaSimbolos.listaTablas) {
+			System.out.println("ID "+auxiliar.getIdTabla()+" CON PARAMETROS "+auxiliar.getTiposLexemasFuncion()+" DEVULVE "+auxiliar.getTipoDevuelto());
+		}*/
 	}
 
 }

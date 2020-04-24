@@ -21,7 +21,7 @@ import token.TiposToken;
 public class Sintactico {
 	//
 	private int contador=0;
-	
+	private String auxS2;
 	private String auxV2;
 	//NO BORRAR NO OLVIDAR IMPORTANTEtipos locales para comparar con la funcion en si
 	private ArrayList<TiposToken> tiposFuncion;
@@ -483,11 +483,13 @@ public class Sintactico {
 	public Tipo S() {
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		if (tokenIgual(TiposToken.T_ID)) {
-			//Tenemos el string id para mas adelante
-			String id=aux.getLexema();
-			if (!actual.lexemaExiste(id)) {
+			
+			auxS2=aux.getLexema();
+			System.out.println("Estamos en "+auxS2);
+			
+			if (!actual.lexemaExiste(auxS2)) {
 				//LEXEMA NO EXISTE EN TS
-				global.meterLexema(id);
+				global.meterLexema(auxS2);
 				global.meterTipo(TiposToken.T_INT);
 				global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.T_INT));
 			}
@@ -495,14 +497,15 @@ public class Sintactico {
 			aux=leerToken();
 			escribirFichero(15);
 			Tipo S2=S2();
+			System.out.println("Al salir de S2 tenemos "+S2.getTipoToken());
 			//Al llamar a s2 no reconoce cuando es func
-			System.out.println("OJO A ESTO "+actual.getTipoLexema(id));
-			if (S2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(id).equals(TiposToken.T_INT)) {
+			//System.out.println("OJO A ESTO "+actual.getTipoLexema(id));
+			if (S2.getTipoToken().equals(TiposToken.T_INT) && actual.getTipoLexema(auxS2).equals(TiposToken.T_INT)) {
 				devolver=new Tipo(TiposToken.T_INT);
 			}
 			
 			//cambiado esto revisar bugs
-			else if (actual.getTipoLexema(id).equals(TiposToken.T_INT) && S2.getTipoToken().equals(TiposToken.T_VACIO)) {
+			else if (actual.getTipoLexema(auxS2).equals(TiposToken.T_INT) && S2.getTipoToken().equals(TiposToken.T_VACIO)) {
 				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LA FUNCION LLAMADA NO EXISTE  \n");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
@@ -511,7 +514,7 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.T_OK);
 			}
 			else {
-				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SENTENCIA NO VALIDA");
+				//Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", SENTENCIA NO VALIDA");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -527,6 +530,7 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
+			auxS2=null;
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
@@ -648,6 +652,7 @@ public class Sintactico {
 		}
 	}
 	public Tipo S2() {
+		System.out.println("Entrando en S2");
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_POSTDECREMENTO)) {
@@ -665,10 +670,38 @@ public class Sintactico {
 		}
 		//TODO error cuando lee id del anterior y lo toma como entero y luego llama a esto. comprobar si es func o no
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
-			
+			//anyadido nuevo
+			TablaSimbolos comparator=null;
+			for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
+				if (tabla.getNombreFuncion().equals(auxS2)){
+					comparator=tabla;
+				}
+			}
+			if (comparator==null) {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", LA FUNCION " +auxS2 +" NO EXISTE ");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
+			if (dentroFuncion) {
+				if (!nombreFuncion.equals(auxS2)) {
+					Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", NO SE PUEDE LLAMAR A LA FUNCION "+auxS2+" DENTRO DE "+nombreFuncion+"\n");
+					devolver=new Tipo(TiposToken.T_ERROR);
+					return devolver;
+				}
+				
+			}
+			System.out.println("hasta aca bien");
 			aux=leerToken();
 			escribirFichero(21);
-			L();	
+			L();
+			System.out.println(tiposFuncion);
+			System.out.println("OJO "+comparator.getTipoDevuelto());
+			System.out.println("OJO2 "+comparator.getTiposLexemasFuncion());
+			if(!comparator.compararFuncion(tiposFuncion)) {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", PARAMETROS AL LLAMAR A "+auxS2+" INCORRECTOS\n");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
 				aux=leerToken();
 			}
@@ -995,6 +1028,7 @@ public class Sintactico {
 	}
 
 	public Tipo L() {
+		tiposFuncion.clear();
 		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//Token 
 		if (tokenIgual(TiposToken.T_ID)) {
@@ -1644,6 +1678,8 @@ public class Sintactico {
 				}
 				
 			}
+			System.out.println("OJO "+comparator.getTipoDevuelto());
+			System.out.println("OJO2 "+comparator.getTiposLexemasFuncion());
 			//TODO tremendo bug aca
 			if(!comparator.compararFuncion(tiposFuncion)) {
 				Error.writer.write("SEMANTICO: ERROR EN LINEA " +linea+ ", PARAMETROS AL LLAMAR A "+auxV2+" INCORRECTOS\n");
