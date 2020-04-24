@@ -73,7 +73,8 @@ public class Principal {
 			else if (token.matches(entero)) {
 				Token aux=new Token(TiposToken.T_ENTERO, Integer.parseInt(token));
 				if (Integer.parseInt(token)>32767) {
-					error.escribirError("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
+					Error.writer.write("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
+					System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
 					Error.writer.close();
 					return;
 				}
@@ -170,6 +171,12 @@ public class Principal {
 					concatenado+=" "+token;
 					concatenado=concatenado.replaceFirst(" ", "");
 					concatenado=concatenado.replace(" \"", "\"");
+					if (concatenado.length()>64) {
+						Error.writer.write("LEXICO: La cadena " + concatenado + " supera los 64 caracteres maximos");
+						Error.writer.close();
+						System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
+						return;
+					}
 					Token aux=new Token(TiposToken.T_CADENA,concatenado);
 					listaTokens.add(aux);
 
@@ -183,7 +190,9 @@ public class Principal {
 			}
 			//no se reconoce el token leido
 			else {
-				error.escribirError("LEXICO: Token \"" + token + "\" no reconocido por la gramatica");
+				Error.writer.write("LEXICO: Token \"" + token + "\" no reconocido por la gramatica");
+				Error.writer.close();
+				System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
 				return;
 			}
 		}
@@ -191,7 +200,7 @@ public class Principal {
 		Token EOF=new Token(TiposToken.EOF);
 		listaTokens.add(EOF);
 		try {
-			PrintWriter writer = new PrintWriter(directorioADevolver+File.separator+"tokens.txt", "UTF-8");
+			PrintWriter writer = new PrintWriter(directorioADevolver+File.separator+"ResultadoTokens.txt", "UTF-8");
 			for (Token token:listaTokens) {
 				//System.out.println(token.tokenizar());
 				writer.println(token.tokenizar());
@@ -213,7 +222,7 @@ public class Principal {
 			PrintWriter writer2 = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoGramatica.txt", "UTF-8");
 			writer2.println("Terminales = { \n" + 
 					"\n" + 
-					"eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print prompt postDecre function menor mas menos entero cadena true false break\n" + 
+					"eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print input postDecre function menor mas menos entero cadena true false break\n" + 
 					"\n" + 
 					"}\n" + 
 					"NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }\n" + 
@@ -242,7 +251,7 @@ public class Principal {
 					"	S -> id S2 ; //15\n" + 
 					"	S -> return X ; //16\n" + 
 					"	S -> print abreParentesis  E  cierraParentesis ; //17\n" + 
-					"	S -> prompt abreParentesis  id  cierraParentesis ; //18\n" + 
+					"	S -> input abreParentesis  id  cierraParentesis ; //18\n" + 
 					"	\n" + 
 					"	S2 -> postDecre //19\n" + 
 					"	S2 -> igual E //20\n" + 

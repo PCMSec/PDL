@@ -239,7 +239,7 @@ public class Sintactico {
 					aux=leerToken();
 				}
 				else {
-					Error.writer.write("SEMANTICO: ERROR, NO TERMINA EN PUNTO Y COMA");
+					Error.writer.write("SEMANTICO: SENTENCIA NO VALIDA");
 					devolver=new Tipo(TiposToken.T_ERROR);
 					return devolver;
 					//falta el punto y coma del final
