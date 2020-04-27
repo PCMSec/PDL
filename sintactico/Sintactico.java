@@ -1852,9 +1852,20 @@ public class Sintactico {
 	//se cambiO la lista por la que no tiene tokens para ver que pasa, va mejor, pero no cuenta lineas
 	public Token leerToken() {
 		if (posicion<listaTokens.size()) {
-			contadorLineas();
+			//contadorLineas();
+			if (listaTokens.get(posicion).getToken().equals(TiposToken.EOL)) {
+				for (int i=posicion;i<listaTokens.size();i++) {
+					if (listaTokens.get(posicion).getToken().equals(TiposToken.EOL)) {
+						linea++;
+						posicion++;
+					}
+					else break;
+				}
+				//leerToken();
+			}
 			//System.out.println("ESTAMOS EN LINEA: "+linea+" LEYENDO "+listaTokensSinEol.get(posicion).tokenizar());
-			return listaTokensSinEol.get(posicion++);
+			System.out.println(listaTokens.get(posicion).tokenizar());
+			return listaTokens.get(posicion++);
 			
 		}
 		else {
