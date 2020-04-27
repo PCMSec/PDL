@@ -1,0 +1,32 @@
+CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
+* LEXEMA: 'devuelto'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 0
+
+* LEXEMA: 'testSwitch'
+ATRIBUTOS:
++ tipo: 'T_FUNC'
+ +NumParam: 2
+  +TipoParam1: T_INT
+  +ModoParam1: 1     (es por valor)
+   +TipoParam2: T_INT
+   +ModoParam2: 1     (es por valor)
+    +TipoRetorno: T_INT
+     +EtiqFuncion: EttestSwitch
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 1 (de funcion testSwitch) :
+* LEXEMA: 'b'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 2
+
+* LEXEMA: 'a'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 0
+
+--------- ----------
+

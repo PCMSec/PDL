@@ -1,0 +1,6 @@
+function int test(int n,int m){
+	if (n < m && n+2< m+1 && true) return true;
+}
+
+var int devolver=test(5,6);
+print(devolver);

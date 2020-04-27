@@ -1,0 +1,11 @@
+/*
+/home/pablo/eclipse-workspace/PDL/docs/CASOS_OK/caso1/fuente.txt
+*/
+var int n=50;
+function int recursivo(int min, int max){
+	devolver=recursivo(min+5,max);
+	return devolver;
+}
+
+var int g1=10;
+var int resultado=recursivo(g1+4,50);

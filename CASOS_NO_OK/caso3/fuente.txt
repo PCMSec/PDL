@@ -1,0 +1,7 @@
+var string n="string";
+switch(n){
+	case 1:
+	case 2:
+		return 5;
+		break;
+}

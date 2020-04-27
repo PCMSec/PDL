@@ -1,0 +1,5 @@
+var boolean flag=true;
+var int entrada=5;
+input(entrada);
+if (flag) print(entrada);
+entrada=0;

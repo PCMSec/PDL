@@ -1,0 +1,7 @@
+var int n=5;
+switch(n){
+	case 1:
+	case 2:
+		return 5;
+		break;
+}

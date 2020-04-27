@@ -1,0 +1,20 @@
+CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
+* LEXEMA: 'test'
+ATRIBUTOS:
++ tipo: 'T_FUNC'
+ +NumParam: 1
+  +TipoParam1: T_INT
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: T_INT
+    +EtiqFuncion: Ettest
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 1 (de funcion test) :
+* LEXEMA: 'n'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 0
+
+--------- ----------
+

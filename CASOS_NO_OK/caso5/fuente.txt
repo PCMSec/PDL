@@ -1,0 +1,14 @@
+function int test(int n){
+	return n;
+}
+
+
+
+
+
+
+
+
+function string test(int n){
+	return "n";
+}

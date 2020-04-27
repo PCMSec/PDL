@@ -1,0 +1,20 @@
+var boolean test=false;
+
+function string rama(int n, int m){
+	if (n < m && test) return "false";
+	return "true";
+}
+
+var int entrada1;
+var int entrada2;
+var string nombre;
+
+input(entrada1);
+input(entrada2);
+input(nombre);
+
+print(entrada1);
+print(entrada2);
+print(nombre);
+
+rama(entrada1,entrada2);

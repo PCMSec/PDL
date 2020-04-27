@@ -1,0 +1,10 @@
+function int testSwitch(int a, int b){
+	switch(a){
+	case 1: a=a+5; break;
+	case 2: a=10;
+	case 3: a=b;
+	}
+	return a;
+}
+
+var int devuelto=testSwitch(20,30);
