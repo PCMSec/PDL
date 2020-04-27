@@ -103,79 +103,87 @@ public class Sintactico {
 		this.posicion = posicion;
 	}
 	//Gramatica propiamente dicha
-	public void P() {
-
+	public Tipo P() {
+		Tipo devolver=new Tipo(TiposToken.T_VACIO);
 		//B
 		if (tokenIgual(TiposToken.T_VAR)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_IF)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_SWITCH)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		//S
 		else if (tokenIgual(TiposToken.T_ID)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
 			escribirFichero(1);
 			Tipo B=B();
-			if (B.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}//F
 		else if (tokenIgual(TiposToken.T_FUNC)) {
 			escribirFichero(2);
 			Tipo F=F();
-			if (F.getTipoToken().equals(TiposToken.T_ERROR)) return;
-			P();
-			return;
+			if (F.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
 		}//eof
 		else if (tokenIgual(TiposToken.EOF)) {
 			escribirFichero(3);
 			writer.close();
-			return;
+			return devolver;
 		}
 		else if (tokenIgual(TiposToken.EOL)) {
 			aux=leerToken();
 			P();
-			return;
+			return devolver;
 		}
 		else {
 			//error
-			return;
+			return devolver;
 		}
 	}
 
