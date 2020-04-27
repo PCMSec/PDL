@@ -65,6 +65,7 @@ public class Principal {
 		boolean noContar=false;
 		//String para concatenado que hay que limpiar cuando se escriba un string entero
 		String concatenado="";
+		
 		for (String token:tokens) {
 			//System.out.println(token);
 			if ((noContar) && !((token.matches(comentario2)))) {
@@ -87,8 +88,9 @@ public class Principal {
 				continue;
 			}
 			else if (token.matches(identificador)) {
+				
 				boolean reservada=false;
-				//TODO mejorar esta parte para el ID si esta en tabla de simbolos
+				//si es reservada, fin
 				for (String palabraReservada:Lex.palabrasReservadas) {
 					if (palabraReservada.equals(token)) {
 						reservada=true;
@@ -196,6 +198,7 @@ public class Principal {
 				return;
 			}
 		}
+
 		//anyade al final de la lista el token de fin de fichero
 		Token EOF=new Token(TiposToken.EOF);
 		listaTokens.add(EOF);
@@ -222,94 +225,93 @@ public class Principal {
 			PrintWriter writer2 = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoGramatica.txt", "UTF-8");
 			writer2.println("Terminales = { \n" + 
 					"\n" + 
-					"eof var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case , and : ; igual int string boolean return print input postDecre function menor mas menos entero cadena true false break\n" + 
+					"eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas menos cte_entero cte_cadena true false break\n" + 
 					"\n" + 
 					"}\n" + 
 					"NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }\n" + 
 					"Axioma = P\n" + 
 					"Producciones = {\n" + 
 					"	\n" + 
-					"	P -> B P //1\n" + 
-					"	P -> F P //2\n" + 
-					"	P -> eof //3\n" + 
+					"	P -> B P \n" + 
+					"	P -> F P \n" + 
+					"	P -> eof \n" + 
 					"\n" + 
-					"	B -> var T id B2 ; //4\n" + 
-					"	B -> if abreParentesis  E  cierraParentesis S //5\n" + 
-					"	B -> S //6\n" + 
-					"	B -> switch abreParentesis  E  cierraParentesis abreCorchete CASE cierraCorchete //7\n" + 
+					"	B -> var T id B2 ; \n" + 
+					"	B -> if abreParentesis  E  cierraParentesis S \n" + 
+					"	B -> S \n" + 
+					"	B -> switch abreParentesis  E  cierraParentesis abreCorchete CASE cierraCorchete \n" + 
 					"\n" + 
-					"	B2 -> igual E //8\n" + 
-					"	B2 -> lambda //9\n" + 
+					"	B2 -> igual E \n" + 
+					"	B2 -> lambda \n" + 
 					"\n" + 
-					"	T -> int //10\n" + 
-					"	T -> string //11\n" + 
-					"	T -> boolean //12\n" + 
+					"	T -> int \n" + 
+					"	T -> string \n" + 
+					"	T -> boolean \n" + 
 					"\n" + 
-					"	C -> B C //13\n" + 
-					"	C -> lambda //14\n" + 
+					"	C -> B C \n" + 
+					"	C -> lambda \n" + 
 					"	\n" + 
-					"	S -> id S2 ; //15\n" + 
-					"	S -> return X ; //16\n" + 
-					"	S -> print abreParentesis  E  cierraParentesis ; //17\n" + 
-					"	S -> input abreParentesis  id  cierraParentesis ; //18\n" + 
+					"	S -> id S2 ; \n" + 
+					"	S -> return X ; \n" + 
+					"	S -> print abreParentesis  E  cierraParentesis ; \n" + 
+					"	S -> input abreParentesis  id  cierraParentesis ; \n" + 
 					"	\n" + 
-					"	S2 -> postDecre //19\n" + 
-					"	S2 -> igual E //20\n" + 
-					"	S2 -> abreParentesis L cierraParentesis //21\n" + 
+					"	S2 -> postDecre \n" + 
+					"	S2 -> igual E \n" + 
+					"	S2 -> abreParentesis L cierraParentesis \n" + 
 					"	\n" + 
-					"	X -> E //22\n" + 
-					"	X -> lambda //23\n" + 
+					"	X -> E \n" + 
+					"	X -> lambda \n" + 
 					"	\n" + 
-					"	F -> function H id abreParentesis  A  cierraParentesis abreCorchete C cierraCorchete //24\n" + 
+					"	F -> function H id abreParentesis  A  cierraParentesis abreCorchete C cierraCorchete \n" + 
 					"	\n" + 
-					"	A -> T id K //25\n" + 
-					"	A -> lambda  //26\n" + 
+					"	A -> T id K \n" + 
+					"	A -> lambda  \n" + 
 					"	\n" + 
-					"	K -> coma T id K //27\n" + 
-					"	K -> lambda  //28\n" + 
+					"	K -> coma T id K \n" + 
+					"	K -> lambda  \n" + 
 					"	\n" + 
-					"	H -> T //29\n" + 
-					"	H -> lambda //30\n" + 
+					"	H -> T \n" + 
+					"	H -> lambda \n" + 
 					"	\n" + 
-					"	L -> E Q //31\n" + 
-					"	L -> lambda //32\n" + 
+					"	L -> E Q \n" + 
+					"	L -> lambda \n" + 
 					"	\n" + 
-					"	Q -> coma E Q //33\n" + 
-					"	Q -> lambda //34\n" + 
+					"	Q -> coma E Q \n" + 
+					"	Q -> lambda \n" + 
 					"	\n" + 
-					"	E -> Y E2 //35\n" + 
+					"	E -> Y E2 \n" + 
 					"	\n" + 
-					"	E2 -> and Y E2 //36\n" + 
-					"	E2 -> lambda //37\n" + 
+					"	E2 -> and Y E2 \n" + 
+					"	E2 -> lambda \n" + 
 					"	\n" + 
-					"	Y -> D Y2 //38\n" + 
+					"	Y -> D Y2 \n" + 
 					"	\n" + 
-					"	Y2 -> menor D Y2 //39\n" + 
-					"	Y2 -> lambda //40\n" + 
+					"	Y2 -> menor D \n" + 
+					"	Y2 -> lambda \n" + 
 					"	\n" + 
-					"	D -> V D2 //41\n" + 
+					"	D -> V D2 \n" + 
 					"	\n" + 
-					"	D2 -> menos V D2 //42\n" + 
-					"	D2 -> mas V D2 //43\n" + 
-					"	D2 -> lambda //44\n" + 
+					"	D2 -> mas V D2 \n" + 
+					"	D2 -> lambda \n" + 
 					"	\n" + 
-					"	V -> id V2 //45\n" + 
-					"	V -> abreParentesis  E  cierraParentesis //46\n" + 
-					"	V -> cte_entero //47\n" + 
-					"	V -> cte_cadena //48\n" + 
-					"	V -> true //49\n" + 
-					"	V -> false //50\n" + 
+					"	V -> id V2 \n" + 
+					"	V -> abreParentesis  E  cierraParentesis \n" + 
+					"	V -> cte_entero \n" + 
+					"	V -> cte_cadena \n" + 
+					"	V -> true \n" + 
+					"	V -> false \n" + 
 					"	\n" + 
-					"	V2 -> postDecre //51\n" + 
-					"	V2 -> abreParentesis  L  cierraParentesis //52\n" + 
-					"	V2 -> lambda //53\n" + 
+					"	V2 -> postDecre \n" + 
+					"	V2 -> abreParentesis  L  cierraParentesis \n" + 
+					"	V2 -> lambda \n" + 
 					"	\n" + 
-					"	CASE -> case E : CASE2 CASE //54\n" + 
-					"	CASE -> lambda //55\n" + 
+					"	CASE -> case E : CASE2 CASE \n" + 
+					"	CASE -> lambda \n" + 
 					"	\n" + 
-					"	CASE2 -> S CASE2 //56\n" + 
-					"	CASE2 -> break ; //57\n" + 
-					"	CASE2 -> lambda //58\n" + 
+					"	CASE2 -> S CASE2 \n" + 
+					"	CASE2 -> break ; \n" + 
+					"	CASE2 -> lambda \n" + 
 					"	\n" + 
 					"}");
 			writer2.close();

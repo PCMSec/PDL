@@ -546,12 +546,12 @@ public class Sintactico {
 			}
 			//si no son iguales los tipos devueltos error
 			if (!dentroFuncion) {
-				Error.writer.write("SEMANTICO: ERROR , USADO RETURN SIN ESTAR DENTRO DE UNA FUNCION");
+				Error.writer.write("SEMANTICO: ERROR , USADO RETURN SIN ESTAR DENTRO DE UNA FUNCION\n");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
 			if (!X.getTipoToken().equals(auxaux.getTipoDevuelto())) {
-				Error.writer.write("SEMANTICO: ERROR , TIPO DE FUNCION Y TIPO DEVUELTO SON DISTINTOS");
+				Error.writer.write("SEMANTICO: ERROR , TIPO DE FUNCION Y TIPO DEVUELTO SON DISTINTOS\n");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -1489,7 +1489,7 @@ public class Sintactico {
 		//leemos un MAS
 		if (tokenIgual(TiposToken.T_SUMA)) {
 			aux=leerToken();
-			escribirFichero(43);
+			escribirFichero(42);
 			Tipo V=V();
 			Tipo D2=D2();
 			if ((V.getTipoToken().equals(TiposToken.T_INT))&&( D2.getTipoToken().equals(TiposToken.T_INT) || (D2.getTipoToken().equals(TiposToken.T_OK)))) {
@@ -1503,32 +1503,32 @@ public class Sintactico {
 		}
 		//TODO FOLLOW MENOS EL ULTIMO QUE ES ERROR
 		else if (tokenIgual(TiposToken.T_MENOR)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_AND)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_COMA)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_DOSPUNTOS)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
-			escribirFichero(44);
+			escribirFichero(43);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
@@ -1556,7 +1556,7 @@ public class Sintactico {
 			}
 			//a partir de aqui el lexema existe, ya sea global o local
 			aux=leerToken();
-			escribirFichero(15);
+			escribirFichero(44);
 			//Tenemos tipo de func en V2
 			Tipo V2=V2();
 			
@@ -1592,7 +1592,7 @@ public class Sintactico {
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISABRE)) {
 			aux=leerToken();
-			escribirFichero(46);
+			escribirFichero(45);
 			Tipo E=E();
 
 			if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
@@ -1604,25 +1604,25 @@ public class Sintactico {
 		}
 		else if (tokenIgual(TiposToken.T_ENTERO)) {
 			aux=leerToken();
-			escribirFichero(47);
+			escribirFichero(46);
 			devolver=new Tipo(TiposToken.T_INT);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_CADENA)) {
 			aux=leerToken();
-			escribirFichero(48);
+			escribirFichero(47);
 			devolver=new Tipo(TiposToken.T_STRING);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_TRUE)) {
 			aux=leerToken();
-			escribirFichero(49);
+			escribirFichero(48);
 			devolver=new Tipo(TiposToken.T_BOOLEAN);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_FALSE)) {
 			aux=leerToken();
-			escribirFichero(50);
+			escribirFichero(49);
 			devolver=new Tipo(TiposToken.T_BOOLEAN);
 			return devolver;
 		}
@@ -1635,7 +1635,7 @@ public class Sintactico {
 		//leemos un postdecremento y por tanto el tipo de v2 sera entero
 		if (tokenIgual(TiposToken.T_POSTDECREMENTO)) {
 			aux=leerToken();
-			escribirFichero(51);
+			escribirFichero(50);
 			devolver=new Tipo(TiposToken.T_INT);
 			return devolver;
 		}
@@ -1661,18 +1661,18 @@ public class Sintactico {
 			}
 			//Ahora tenemos de arriba la tabla que tiene el tipo devuelto PORQUE EXISTE
 			aux=leerToken();
-			escribirFichero(52);
+			escribirFichero(51);
 			//TODO si L distinto a tipo Ok, error
 			Tipo L=L();
-			//System.out.println("SE VIENE PAPA:"+tiposFuncion);
-			//System.out.println(comparator.getTiposLexemasFuncion());
-			//si dentro de func pero recursivo bien, else error
 			//TODO comprobar tema de parametros
 			if (dentroFuncion) {
 				if (!nombreFuncion.equals(auxV2)) {
+					//comprobar antes si es un tipo y no una funcion
+					if (!actual.lexemaExiste(auxV2)) {
 					Error.writer.write("SEMANTICO: ERROR , NO SE PUEDE LLAMAR A LA FUNCION "+auxV2+" DENTRO DE "+nombreFuncion+"\n");
 					devolver=new Tipo(TiposToken.T_ERROR);
 					return devolver;
+					}
 				}
 				
 			}
@@ -1699,38 +1699,38 @@ public class Sintactico {
 		}
 		//el follow da OK
 		else if (tokenIgual(TiposToken.T_SUMA)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_MENOR)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_AND)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 
 		}
 		else if (tokenIgual(TiposToken.T_COMA)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PARENTESISCIERRA)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_DOSPUNTOS)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
-			escribirFichero(53);
+			escribirFichero(52);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
@@ -1743,11 +1743,11 @@ public class Sintactico {
 		//Token 
 		if (tokenIgual(TiposToken.T_CASE)) {
 			aux=leerToken();
-			escribirFichero(54);
+			escribirFichero(53);
 
 			Tipo E=E();
 			if (!E.getTipoToken().equals(TiposToken.T_INT)) {
-				Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN ID ENTERO O UNA CONSTANTE ENTERA");
+				Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN ID ENTERO O UNA CONSTANTE ENTERA\n");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -1757,7 +1757,7 @@ public class Sintactico {
 				CASE();
 			}
 			else {
-				Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN DOS PUNTOS");
+				Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN DOS PUNTOS\n");
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
@@ -1765,11 +1765,11 @@ public class Sintactico {
 		}
 		//windols, que es windols
 		else if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
-			escribirFichero(55);
+			escribirFichero(54);
 			return devolver;
 		}
 		else {
-			Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN DOS PUNTOS O LLAVE CIERRA");
+			Error.writer.write("SEMANTICO: ERROR , SE ESPERABA UN DOS PUNTOS O LLAVE CIERRA\n");
 			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
@@ -1779,49 +1779,49 @@ public class Sintactico {
 		//Token 
 		if (tokenIgual(TiposToken.T_BREAK)) {
 			aux=leerToken();
-			escribirFichero(57);
+			escribirFichero(56);
 			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
 				aux=leerToken();
 			}
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_ID)) {
-			escribirFichero(56);
+			escribirFichero(55);
 			S();
 			CASE2();
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_RETURN)) {
-			escribirFichero(56);
+			escribirFichero(55);
 			S();
 			CASE2();
 			return devolver;
 
 		}
 		else if (tokenIgual(TiposToken.T_PRINT)) {
-			escribirFichero(56);
+			escribirFichero(55);
 			S();
 			CASE2();
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
-			escribirFichero(56);
+			escribirFichero(55);
 			S();
 			CASE2();
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_CASE)) {
-			escribirFichero(58);
+			escribirFichero(57);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
-			escribirFichero(58);
+			escribirFichero(57);
 			devolver=new Tipo(TiposToken.T_OK);
 			return devolver;
 		}
 		else {
-			Error.writer.write("SEMANTICO: ERROR , CASE INCORRECTO");
+			Error.writer.write("SEMANTICO: ERROR , CASE INCORRECTO\n");
 			devolver=new Tipo(TiposToken.T_ERROR);
 			return devolver;
 		}
