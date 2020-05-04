@@ -30,6 +30,7 @@ Producciones = {
 	S -> return X ; 
 	S -> print abreParentesis  E  cierraParentesis ; 
 	S -> input abreParentesis  id  cierraParentesis ; 
+	S -> break ; 
 	
 	S2 -> postDecre 
 	S2 -> igual E 
@@ -81,11 +82,7 @@ Producciones = {
 	V2 -> abreParentesis  L  cierraParentesis 
 	V2 -> lambda 
 	
-	CASE -> case E : CASE2 CASE 
+	CASE -> case E : C CASE 
 	CASE -> lambda 
-	
-	CASE2 -> S CASE2 
-	CASE2 -> break ; 
-	CASE2 -> lambda 
 	
 }

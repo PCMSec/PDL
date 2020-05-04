@@ -1,4 +1,5 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
+
 * LEXEMA: 'nombre'
 ATRIBUTOS:
 + tipo: 'T_STRING'
@@ -33,6 +34,7 @@ ATRIBUTOS:
 --------- ----------
 
 CONTENIDO DE LA TABLA # 1 (de funcion rama) :
+
 * LEXEMA: 'm'
 ATRIBUTOS:
 + tipo: 'T_INT'

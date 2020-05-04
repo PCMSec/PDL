@@ -1,5 +1,5 @@
 /*
-/home/pablo/eclipse-workspace/PDL/docs/CASOS_OK/caso1/fuente.txt
+/home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
 */
 var int n=50;
 function int recursivo(int min, int max){
