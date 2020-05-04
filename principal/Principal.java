@@ -25,12 +25,12 @@ public class Principal {
 		boolean exists = tempFile.exists();
 		if (exists==false) {
 			in.close();
-			System.out.println("El nombre de archivo introducido no existe. Compruebe de nuevo el archivo, su extension y su direccion absoluta al reiniciar el programa");
+			System.out.println("El nombre de archivo introducido no existe, hubo un problema. Compruebe de nuevo el archivo, su extension y su direccion absoluta al reiniciar el programa");
 			return;
 		}
 		directorioADevolver=tempFile.getParent();
 		in.close();
-		System.out.println("Abriendo"+filename);
+		System.out.println("Abriendo "+filename);
 		String texto=lexico.Lex.leerArchivo(filename);
 		//Se deja preparado el texto con el que se va a trabajar
 		Error error=new Error();

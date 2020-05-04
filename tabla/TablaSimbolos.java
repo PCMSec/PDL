@@ -314,7 +314,7 @@ public class TablaSimbolos {
 			else {
 				writer.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + " (de funcion "+ tabla.getNombreFuncion()+") :");
 			}
-			System.out.println();
+			writer.println();
 			int desp=0;
 			ArrayList<String> auxLexemas=new ArrayList<String>();
 			ArrayList<TiposToken> auxTipos=new ArrayList<TiposToken>();

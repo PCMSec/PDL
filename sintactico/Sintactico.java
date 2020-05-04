@@ -1863,8 +1863,10 @@ public class Sintactico {
 				}
 				//leerToken();
 			}
+		
 			//System.out.println("ESTAMOS EN LINEA: "+linea+" LEYENDO "+listaTokensSinEol.get(posicion).tokenizar());
-			System.out.println(listaTokens.get(posicion).tokenizar());
+			//ESTE ES BUENO PARA DEBUG
+			//System.out.println(listaTokens.get(posicion).tokenizar());
 			return listaTokens.get(posicion++);
 			
 		}
@@ -1875,7 +1877,7 @@ public class Sintactico {
 	}
 	
 	private void contadorLineas() {
-		System.out.println("ESTAMOS EN LINEA: "+linea+" LEYENDO "+listaTokens.get(contador).getToken());
+		//System.out.println("ESTAMOS EN LINEA: "+linea+" LEYENDO "+listaTokens.get(contador).getToken());
 		if (listaTokens.get(contador).getToken().equals(TiposToken.EOL)) {
 			linea++;
 			
