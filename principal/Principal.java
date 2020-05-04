@@ -156,10 +156,10 @@ public class Principal {
 				Token aux=new Token(TiposToken.T_SUMA);
 				listaTokens.add(aux);
 			}
-			else if (token.equals("-")) {
+			/*else if (token.equals("-")) {
 				Token aux=new Token(TiposToken.T_MENOS);
 				listaTokens.add(aux);
-			}
+			}*/
 			else if (token.equals("_EOL_")) {
 				Token aux=new Token(TiposToken.EOL);
 				listaTokens.add(aux);
@@ -255,6 +255,7 @@ public class Principal {
 					"	S -> return X ; \n" + 
 					"	S -> print abreParentesis  E  cierraParentesis ; \n" + 
 					"	S -> input abreParentesis  id  cierraParentesis ; \n" + 
+					"	S -> break ; \n" + 
 					"	\n" + 
 					"	S2 -> postDecre \n" + 
 					"	S2 -> igual E \n" + 
@@ -306,12 +307,8 @@ public class Principal {
 					"	V2 -> abreParentesis  L  cierraParentesis \n" + 
 					"	V2 -> lambda \n" + 
 					"	\n" + 
-					"	CASE -> case E : CASE2 CASE \n" + 
+					"	CASE -> case E : C CASE \n" + 
 					"	CASE -> lambda \n" + 
-					"	\n" + 
-					"	CASE2 -> S CASE2 \n" + 
-					"	CASE2 -> break ; \n" + 
-					"	CASE2 -> lambda \n" + 
 					"	\n" + 
 					"}");
 			writer2.close();

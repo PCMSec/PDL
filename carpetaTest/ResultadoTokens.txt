@@ -1,0 +1,3 @@
+<T_BREAK, -1>
+<T_PUNTOCOMA, -1>
+<EOF, -1>

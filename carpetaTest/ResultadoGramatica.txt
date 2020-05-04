@@ -1,0 +1,88 @@
+Terminales = { 
+
+eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas menos cte_entero cte_cadena true false break
+
+}
+NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }
+Axioma = P
+Producciones = {
+	
+	P -> B P 
+	P -> F P 
+	P -> eof 
+
+	B -> var T id B2 ; 
+	B -> if abreParentesis  E  cierraParentesis S 
+	B -> S 
+	B -> switch abreParentesis  E  cierraParentesis abreCorchete CASE cierraCorchete 
+
+	B2 -> igual E 
+	B2 -> lambda 
+
+	T -> int 
+	T -> string 
+	T -> boolean 
+
+	C -> B C 
+	C -> lambda 
+	
+	S -> id S2 ; 
+	S -> return X ; 
+	S -> print abreParentesis  E  cierraParentesis ; 
+	S -> input abreParentesis  id  cierraParentesis ; 
+	S -> break ; 
+	
+	S2 -> postDecre 
+	S2 -> igual E 
+	S2 -> abreParentesis L cierraParentesis 
+	
+	X -> E 
+	X -> lambda 
+	
+	F -> function H id abreParentesis  A  cierraParentesis abreCorchete C cierraCorchete 
+	
+	A -> T id K 
+	A -> lambda  
+	
+	K -> coma T id K 
+	K -> lambda  
+	
+	H -> T 
+	H -> lambda 
+	
+	L -> E Q 
+	L -> lambda 
+	
+	Q -> coma E Q 
+	Q -> lambda 
+	
+	E -> Y E2 
+	
+	E2 -> and Y E2 
+	E2 -> lambda 
+	
+	Y -> D Y2 
+	
+	Y2 -> menor D 
+	Y2 -> lambda 
+	
+	D -> V D2 
+	
+	D2 -> mas V D2 
+	D2 -> lambda 
+	
+	V -> id V2 
+	V -> abreParentesis  E  cierraParentesis 
+	V -> cte_entero 
+	V -> cte_cadena 
+	V -> true 
+	V -> false 
+	
+	V2 -> postDecre 
+	V2 -> abreParentesis  L  cierraParentesis 
+	V2 -> lambda 
+	
+	CASE -> case E : C CASE 
+	CASE -> lambda 
+	
+}

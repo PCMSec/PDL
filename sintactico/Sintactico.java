@@ -41,6 +41,8 @@ public class Sintactico {
 	//una tabla global y otra actual que al inicio apuntan al mismo sitio porque no hay locales
 	public TablaSimbolos global;
 	public TablaSimbolos actual;
+	//TODO ESTO PARA LUEGO
+	private boolean breakEnSwitch=false;
 	//nombre de archivo donde guardar el sintactico
 	String filename="/home/pablo/eclipse-workspace/PDL/docs/sintactico.txt";
 	//Objeto para escribir en archivo
@@ -123,6 +125,15 @@ public class Sintactico {
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_SWITCH)) {
+			escribirFichero(1);
+			Tipo B=B();
+			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			Tipo P=P();
+			if (P.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
+			return devolver;
+		}
+		//nuevo el de break
+		else if (tokenIgual(TiposToken.T_BREAK)) {
 			escribirFichero(1);
 			Tipo B=B();
 			if (B.getTipoToken().equals(TiposToken.T_ERROR)) {devolver=new Tipo(TiposToken.T_ERROR); return devolver;}
@@ -300,7 +311,9 @@ public class Sintactico {
 			return devolver;
 		}//FIN DE IF
 		//INICIO SWITCH
+		//TODO interesante el breakenswitch
 		else if (tokenIgual(TiposToken.T_SWITCH)) {
+			breakEnSwitch=true;
 			aux=leerToken();
 			escribirFichero(7);
 
@@ -350,6 +363,7 @@ public class Sintactico {
 				return devolver;
 				//no abre parentesis despues del switch
 			}
+			breakEnSwitch=false;
 			return devolver;
 		}//FIM SWITCH
 		//S
@@ -372,6 +386,13 @@ public class Sintactico {
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.T_INPUT)) {
+			escribirFichero(6);
+			S();
+			devolver=new Tipo(TiposToken.T_OK);
+			return devolver;
+		}
+		//nuevo el de break
+		else if (tokenIgual(TiposToken.T_BREAK)) {
 			escribirFichero(6);
 			S();
 			devolver=new Tipo(TiposToken.T_OK);
@@ -479,8 +500,19 @@ public class Sintactico {
 			B();
 			C();
 			return;
+		}
+		else if (tokenIgual(TiposToken.T_BREAK)) {
+			escribirFichero(13);
+			B();
+			C();
+			return;
 		}//follow
 		else if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
+			//escribir en fichero y return
+			escribirFichero(14);
+			return;
+		}
+		else if (tokenIgual(TiposToken.T_CASE)) {
 			//escribir en fichero y return
 			escribirFichero(14);
 			return;
@@ -648,6 +680,28 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
+			return devolver;
+		}
+		//el token
+		else if (tokenIgual(TiposToken.T_BREAK)) {
+			escribirFichero(19);
+			
+			System.out.println(aux.tokenizar());
+			if (!breakEnSwitch) {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , NO SE PUEDE PONER UN BREAK AQUI\n");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
+			aux=leerToken();
+			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
+				aux=leerToken();
+			}
+			else {
+				Error.writer.write("SINTACTICO: ERROR EN LINEA "+ linea +" , SE ESPERABA UN PUNTO Y COMA\n");
+				devolver=new Tipo(TiposToken.T_ERROR);
+				return devolver;
+			}
+			//esperamos el punto y coma
 			return devolver;
 		}
 		else {
@@ -1361,7 +1415,6 @@ public class Sintactico {
 			aux=leerToken();
 			escribirFichero(39);
 			Tipo D=D();
-			//Tipo Y2=Y2();
 			if (D.getTipoToken().equals(TiposToken.T_INT)) {
 				devolver=new Tipo(TiposToken.T_BOOLEAN);
 			}
@@ -1752,7 +1805,7 @@ public class Sintactico {
 		//Token 
 		if (tokenIgual(TiposToken.T_CASE)) {
 			aux=leerToken();
-			escribirFichero(53);
+			escribirFichero(54);
 
 			Tipo E=E();
 			if (!E.getTipoToken().equals(TiposToken.T_INT)) {
@@ -1760,11 +1813,12 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.T_ERROR);
 				return devolver;
 			}
-			else if (tokenIgual(TiposToken.T_DOSPUNTOS)) {
+			if (tokenIgual(TiposToken.T_DOSPUNTOS)) {
 				aux=leerToken();
-				CASE2();
+				C();
 				CASE();
 			}
+			
 			else {
 				Error.writer.write("SINTACTICO: ERROR EN LINEA "+ linea +" , SE ESPERABA UN DOS PUNTOS\n");
 				devolver=new Tipo(TiposToken.T_ERROR);
@@ -1774,7 +1828,7 @@ public class Sintactico {
 		}
 		//windols, que es windols
 		else if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
-			escribirFichero(54);
+			escribirFichero(55);
 			return devolver;
 		}
 		else {
@@ -1783,58 +1837,7 @@ public class Sintactico {
 			return devolver;
 		}
 	}
-	public Tipo CASE2() {
-		Tipo devolver=new Tipo(TiposToken.T_VACIO);
-		//Token 
-		if (tokenIgual(TiposToken.T_BREAK)) {
-			aux=leerToken();
-			escribirFichero(56);
-			if (tokenIgual(TiposToken.T_PUNTOCOMA)) {
-				aux=leerToken();
-			}
-			return devolver;
-		}
-		else if (tokenIgual(TiposToken.T_ID)) {
-			escribirFichero(55);
-			S();
-			CASE2();
-			return devolver;
-		}
-		else if (tokenIgual(TiposToken.T_RETURN)) {
-			escribirFichero(55);
-			S();
-			CASE2();
-			return devolver;
-
-		}
-		else if (tokenIgual(TiposToken.T_PRINT)) {
-			escribirFichero(55);
-			S();
-			CASE2();
-			return devolver;
-		}
-		else if (tokenIgual(TiposToken.T_INPUT)) {
-			escribirFichero(55);
-			S();
-			CASE2();
-			return devolver;
-		}
-		else if (tokenIgual(TiposToken.T_CASE)) {
-			escribirFichero(57);
-			devolver=new Tipo(TiposToken.T_OK);
-			return devolver;
-		}
-		else if (tokenIgual(TiposToken.T_LLAVECIERRA)) {
-			escribirFichero(57);
-			devolver=new Tipo(TiposToken.T_OK);
-			return devolver;
-		}
-		else {
-			Error.writer.write("SINTACTICO: ERROR EN LINEA "+ linea +" , CASE INCORRECTO\n");
-			devolver=new Tipo(TiposToken.T_ERROR);
-			return devolver;
-		}
-	}
+	
 
 	public void escribirFichero(int numeroGramatica) {
 		//System.out.println(numeroGramatica);
