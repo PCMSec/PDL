@@ -22,7 +22,7 @@
 <EOL, -1>
 <T_IF, -1>
 <T_PARENTESISABRE, -1>
-<T_ID, num>
+<T_ID, nu_m>
 <T_MENOR, -1>
 <T_ENTERO, 0>
 <T_PARENTESISCIERRA, -1>
@@ -33,6 +33,17 @@
 <T_PARENTESISCIERRA, -1>
 <T_PUNTOCOMA, -1>
 <EOL, -1>
+<T_CASE, -1>
+<T_ENTERO, 2>
+<T_DOSPUNTOS, -1>
+<T_VAR, -1>
+<T_INT, -1>
+<T_ID, i_a>
+<T_IGUAL, -1>
+<T_ENTERO, 55>
+<T_PUNTOCOMA, -1>
+<T_BREAK, -1>
+<T_PUNTOCOMA, -1>
 <EOL, -1>
 <EOL, -1>
 <EOL, -1>
@@ -45,7 +56,9 @@
 <T_MENOR, -1>
 <T_ENTERO, 55>
 <T_PARENTESISCIERRA, -1>
-<T_BREAK, -1>
+<T_ID, i>
+<T_IGUAL, -1>
+<T_ENTERO, 0>
 <T_PUNTOCOMA, -1>
 <EOL, -1>
 <EOL, -1>

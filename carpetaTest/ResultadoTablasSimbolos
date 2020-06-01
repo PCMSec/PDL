@@ -1,5 +1,20 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
+* LEXEMA: 'i'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 8
+
+* LEXEMA: 'i_a'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 6
+
+* LEXEMA: 'nu_m'
+ATRIBUTOS:
++ tipo: 'T_INT'
++ despl : 4
+
 * LEXEMA: 'n'
 ATRIBUTOS:
 + tipo: 'T_INT'
