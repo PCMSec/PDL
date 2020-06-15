@@ -1,19 +1,43 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'c'
+* LEXEMA: 'textoAux'
 ATRIBUTOS:
-+ tipo: 'TBOOLEAN'
-+ despl : 4
++ tipo: 'TSTRING'
++ despl : 32
 
-* LEXEMA: 'b'
+* LEXEMA: 'pideTexto'
 ATRIBUTOS:
-+ tipo: 'TINT'
-+ despl : 2
++ tipo: 'TFUNC'
+ +NumParam: 0
+  +TipoRetorno: 'TVACIO'
+   +EtiqFuncion: 'EtpideTexto'
 
-* LEXEMA: 'a'
+* LEXEMA: 'imprime'
 ATRIBUTOS:
-+ tipo: 'TINT'
++ tipo: 'TFUNC'
+ +NumParam: 1
+  +TipoParam1: 'TSTRING'
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: 'TVACIO'
+    +EtiqFuncion: 'Etimprime'
+
+* LEXEMA: 'texto'
+ATRIBUTOS:
++ tipo: 'TSTRING'
 + despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 1 (de funcion imprime) :
+
+* LEXEMA: 'msg'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 2 (de funcion pideTexto) :
 
 --------- ----------
 
