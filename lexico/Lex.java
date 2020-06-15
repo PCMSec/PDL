@@ -22,40 +22,40 @@ public class Lex {
 	public static TiposToken decodificar(String palabra) {
 		switch(palabrasReservadas.indexOf(palabra)) {
 		case 0:
-			return TiposToken.T_FUNC;
+			return TiposToken.TFUNC;
 		case 1:
-			return TiposToken.T_RETURN;
+			return TiposToken.TRETURN;
 		case 2:
-			return TiposToken.T_SWITCH;
+			return TiposToken.TSWITCH;
 		case 3:
-			return TiposToken.T_CASE;
+			return TiposToken.TCASE;
 		case 4:
-			return TiposToken.T_DEFAULT;
+			return TiposToken.TDEFAULT;
 		case 5:
-			return TiposToken.T_VAR;
+			return TiposToken.TVAR;
 		case 6:
-			return TiposToken.T_INT;
+			return TiposToken.TINT;
 		case 7:
-			return TiposToken.T_BOOLEAN;
+			return TiposToken.TBOOLEAN;
 		case 8:
-			return TiposToken.T_TRUE;
+			return TiposToken.TTRUE;
 		case 9:
-			return TiposToken.T_FALSE;
+			return TiposToken.TFALSE;
 		case 10:
-			return TiposToken.T_BREAK;
+			return TiposToken.TBREAK;
 		case 11:
-			return TiposToken.T_PRINT;
+			return TiposToken.TPRINT;
 		case 12:
-			return TiposToken.T_INPUT;
+			return TiposToken.TINPUT;
 		case 13:
-			return TiposToken.T_STRING;
+			return TiposToken.TSTRING;
 		case 14:
-			return TiposToken.T_IF;
+			return TiposToken.TIF;
 
 		}
 		
 
-		return TiposToken.T_ERROR;
+		return TiposToken.TERROR;
 	}
 
 	public static String leerArchivo(String filePath) {

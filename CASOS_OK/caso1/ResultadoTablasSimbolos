@@ -1,48 +1,18 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'resultado'
+* LEXEMA: 'c'
 ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 6
-
-* LEXEMA: 'g1'
-ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TBOOLEAN'
 + despl : 4
 
-* LEXEMA: 'devolver'
+* LEXEMA: 'b'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 2
 
-* LEXEMA: 'recursivo'
+* LEXEMA: 'a'
 ATRIBUTOS:
-+ tipo: 'T_FUNC'
- +NumParam: 2
-  +TipoParam1: T_INT
-  +ModoParam1: 1     (es por valor)
-   +TipoParam2: T_INT
-   +ModoParam2: 1     (es por valor)
-    +TipoRetorno: T_INT
-     +EtiqFuncion: Etrecursivo
-
-* LEXEMA: 'n'
-ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 0
-
---------- ----------
-
-CONTENIDO DE LA TABLA # 1 (de funcion recursivo) :
-
-* LEXEMA: 'max'
-ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 2
-
-* LEXEMA: 'min'
-ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------

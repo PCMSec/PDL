@@ -55,7 +55,7 @@ public class Token {
 	//Imprimir estructura pedida
 	public String tokenizar() {
 		if (valor == -1 && lexema =="") {
-			return "<" + token + ", " + valor + ">";
+			return "<" + token + ", >";
 		}
 		else if (valor != -1) {
 			return "<" + token + ", " + valor + ">";
