@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<EOL, >
+>>>>>>> sin_barras
 <TVAR, >
 <TINT, >
 <TID, a>
@@ -26,7 +30,11 @@
 <TID, c>
 <TIGUAL, >
 <TID, a>
+<<<<<<< HEAD
 <TSUMA, >
+=======
+<TMENOR, >
+>>>>>>> sin_barras
 <TID, b>
 <TPUNTOCOMA, >
 <EOL, >
@@ -57,7 +65,13 @@
 <EOL, >
 <TID, a>
 <TIGUAL, >
+<<<<<<< HEAD
 <TFALSE, >
+=======
+<TID, a>
+<TSUMA, >
+<TID, b>
+>>>>>>> sin_barras
 <TPUNTOCOMA, >
 <EOL, >
 <TPRINT, >

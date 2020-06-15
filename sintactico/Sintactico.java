@@ -1661,7 +1661,11 @@ public class Sintactico {
 			//TODO TODO TODO OJO QUE AQUI PUEDE HABER CAGADA, esto hay que cambiar para que busque por
 			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.TOK)) {
+<<<<<<< HEAD
 				//devolver=new Tipo(TiposToken.T_OK);
+=======
+				//devolver=new Tipo(TiposToken.TOK);
+>>>>>>> sin_barras
 				devolver=new Tipo(actual.getTipoLexema(id));
 				//probnado este return BORRAR SI NO
 				return devolver;

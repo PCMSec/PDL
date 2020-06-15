@@ -1,12 +1,26 @@
+<<<<<<< HEAD
+=======
+/*
+/home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
+*/
+>>>>>>> sin_barras
 var int a;
 var int b;
 a = 3;
 b = a;
 var boolean c;
+<<<<<<< HEAD
 c = a + b;
 if (c) b = 1;
 c = b < a;
 if (c) b = 4;
 a = false;
+=======
+c = a < b;
+if (c) b = 1;
+c = b < a;
+if (c) b = 4;
+a = a + b;
+>>>>>>> sin_barras
 print (a);
 print (b);
