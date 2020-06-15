@@ -26,7 +26,7 @@
 <TID, c>
 <TIGUAL, >
 <TID, a>
-<TMENOR, >
+<TSUMA, >
 <TID, b>
 <TPUNTOCOMA, >
 <EOL, >
@@ -57,9 +57,7 @@
 <EOL, >
 <TID, a>
 <TIGUAL, >
-<TID, a>
-<TSUMA, >
-<TID, b>
+<TFALSE, >
 <TPUNTOCOMA, >
 <EOL, >
 <TPRINT, >
