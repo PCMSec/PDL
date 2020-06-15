@@ -72,7 +72,7 @@ public class Principal {
 				continue;
 			}
 			else if (token.matches(entero)) {
-				Token aux=new Token(TiposToken.T_ENTERO, Integer.parseInt(token));
+				Token aux=new Token(TiposToken.TENTERO, Integer.parseInt(token));
 				if (Integer.parseInt(token)>32767) {
 					Error.writer.write("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
 					System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
@@ -102,7 +102,7 @@ public class Principal {
 					continue;
 				}
 				else {
-					Token aux=new Token(TiposToken.T_ID, token);
+					Token aux=new Token(TiposToken.TID, token);
 					listaTokens.add(aux);
 				}
 			}
@@ -113,47 +113,47 @@ public class Principal {
 				noContar=false;
 			}
 			else if (token.equals(";")) {
-				Token aux=new Token(TiposToken.T_PUNTOCOMA);
+				Token aux=new Token(TiposToken.TPUNTOCOMA);
 				listaTokens.add(aux);
 			}
 			else if (token.equals(",")) {
-				Token aux=new Token(TiposToken.T_COMA);
+				Token aux=new Token(TiposToken.TCOMA);
 				listaTokens.add(aux);
 			}
 			else if (token.equals(":")) {
-				Token aux=new Token(TiposToken.T_DOSPUNTOS);
+				Token aux=new Token(TiposToken.TDOSPUNTOS);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("(")) {
-				Token aux=new Token(TiposToken.T_PARENTESISABRE);
+				Token aux=new Token(TiposToken.TPARENTESISABRE);
 				listaTokens.add(aux);
 			}
 			else if (token.equals(")")) {
-				Token aux=new Token(TiposToken.T_PARENTESISCIERRA);
+				Token aux=new Token(TiposToken.TPARENTESISCIERRA);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("{")) {
-				Token aux=new Token(TiposToken.T_LLAVEABRE);
+				Token aux=new Token(TiposToken.TLLAVEABRE);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("}")) {
-				Token aux=new Token(TiposToken.T_LLAVECIERRA);
+				Token aux=new Token(TiposToken.TLLAVECIERRA);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("--")) {
-				Token aux=new Token(TiposToken.T_POSTDECREMENTO);
+				Token aux=new Token(TiposToken.TPOSTDECREMENTO);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("=")) {
-				Token aux=new Token(TiposToken.T_IGUAL);
+				Token aux=new Token(TiposToken.TIGUAL);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("&&")) {
-				Token aux=new Token(TiposToken.T_AND);
+				Token aux=new Token(TiposToken.TAND);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("+")) {
-				Token aux=new Token(TiposToken.T_SUMA);
+				Token aux=new Token(TiposToken.TSUMA);
 				listaTokens.add(aux);
 			}
 			/*else if (token.equals("-")) {
@@ -165,7 +165,7 @@ public class Principal {
 				listaTokens.add(aux);
 			}
 			else if (token.equals("<")) {
-				Token aux=new Token(TiposToken.T_MENOR);
+				Token aux=new Token(TiposToken.TMENOR);
 				listaTokens.add(aux);
 			}
 			else if (token.equals("\"")) {
@@ -179,7 +179,7 @@ public class Principal {
 						System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
 						return;
 					}
-					Token aux=new Token(TiposToken.T_CADENA,concatenado);
+					Token aux=new Token(TiposToken.TCADENA,concatenado);
 					listaTokens.add(aux);
 
 					concatenado="";
@@ -225,7 +225,7 @@ public class Principal {
 			PrintWriter writer2 = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoGramatica.txt", "UTF-8");
 			writer2.println("Terminales = { \n" + 
 					"\n" + 
-					"eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas menos cte_entero cte_cadena true false break\n" + 
+					"eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas cte_entero cte_cadena true false break\n" + 
 					"\n" + 
 					"}\n" + 
 					"NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }\n" + 

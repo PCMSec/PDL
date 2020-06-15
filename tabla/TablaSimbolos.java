@@ -251,16 +251,16 @@ public class TablaSimbolos {
 	//Devuelve el desplazamiento asociado a cada tipo de lexema
 	public static int getDesplazamientoTipo(TiposToken Tipo) {
 		int aux=-1;
-		if (Tipo.equals(TiposToken.T_INT)) {
+		if (Tipo.equals(TiposToken.TINT)) {
 			aux = 2;
 		}
-		else if (Tipo.equals(TiposToken.T_STRING)) {
+		else if (Tipo.equals(TiposToken.TSTRING)) {
 			aux=32;
 		}
-		else if (Tipo.equals(TiposToken.T_BOOLEAN)) {
+		else if (Tipo.equals(TiposToken.TBOOLEAN)) {
 			aux=1;
 		}
-		else if (Tipo.equals(TiposToken.T_FUNC)) {
+		else if (Tipo.equals(TiposToken.TFUNC)) {
 			aux=0;
 		}
 		return aux;
@@ -340,7 +340,7 @@ public class TablaSimbolos {
 				writer.println("ATRIBUTOS:");
 				writer.println("+ tipo: '" + auxTipos.get(i) +"'");
 				//si no es funcion, imprime normal
-				if (!auxTipos.get(i).equals(TiposToken.T_FUNC)) {
+				if (!auxTipos.get(i).equals(TiposToken.TFUNC)) {
 					writer.println("+ despl : " + auxDesp.get(i));
 				}
 				//es funcion lo que tengo y tengo que acceder a los parametros de la TFUNC

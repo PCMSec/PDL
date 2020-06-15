@@ -1,11 +1,15 @@
 /*
 /home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
 */
-var int n=50;
-function int recursivo(int min, int max){
-	devolver=recursivo(min+5,max);
-	return devolver;
-}
-
-var int g1=10;
-var int resultado=recursivo(g1+4,50);
+var int a;
+var int b;
+a = 3;
+b = a;
+var boolean c;
+c = a < b;
+if (c) b = 1;
+c = b < a;
+if (c) b = 4;
+a = a + b;
+print (a);
+print (b);
