@@ -1662,7 +1662,11 @@ public class Sintactico {
 			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.TOK)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				//devolver=new Tipo(TiposToken.T_OK);
+=======
+				//devolver=new Tipo(TiposToken.TOK);
+>>>>>>> sin_barras
 =======
 				//devolver=new Tipo(TiposToken.TOK);
 >>>>>>> sin_barras

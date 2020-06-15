@@ -3,6 +3,9 @@
 /*
 /home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
 */
+<<<<<<< HEAD
+>>>>>>> sin_barras
+=======
 >>>>>>> sin_barras
 var int a;
 var int b;
@@ -10,17 +13,23 @@ a = 3;
 b = a;
 var boolean c;
 <<<<<<< HEAD
+<<<<<<< HEAD
 c = a + b;
 if (c) b = 1;
 c = b < a;
 if (c) b = 4;
 a = false;
 =======
+=======
+>>>>>>> sin_barras
 c = a < b;
 if (c) b = 1;
 c = b < a;
 if (c) b = 4;
 a = a + b;
+<<<<<<< HEAD
+>>>>>>> sin_barras
+=======
 >>>>>>> sin_barras
 print (a);
 print (b);

@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<EOL, >
+>>>>>>> sin_barras
 =======
 <EOL, >
 >>>>>>> sin_barras
@@ -31,7 +35,11 @@
 <TIGUAL, >
 <TID, a>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <TSUMA, >
+=======
+<TMENOR, >
+>>>>>>> sin_barras
 =======
 <TMENOR, >
 >>>>>>> sin_barras
@@ -66,7 +74,13 @@
 <TID, a>
 <TIGUAL, >
 <<<<<<< HEAD
+<<<<<<< HEAD
 <TFALSE, >
+=======
+<TID, a>
+<TSUMA, >
+<TID, b>
+>>>>>>> sin_barras
 =======
 <TID, a>
 <TSUMA, >
