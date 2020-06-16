@@ -11,6 +11,7 @@ import principal.Principal;
 import token.TiposToken;
 
 public class TablaSimbolos {
+
 	//Lista ESTATICA con todas las tablas de simbolos a lo largo del programa
 	public static ArrayList<TablaSimbolos> listaTablas=new ArrayList<TablaSimbolos>();
 	//Si es funcion tiene aqui el nombre de funcion
@@ -36,7 +37,8 @@ public class TablaSimbolos {
 
 	public static PrintWriter writer;
 
-
+	//acceder a estos datos para rehacer todo el tema de los tokens y los ID
+	
 
 	public ArrayList<String> getLexemasFuncion() {
 		return lexemasFuncion;
@@ -120,6 +122,7 @@ public class TablaSimbolos {
 	}
 
 	public TablaSimbolos(String nombreTabla) {
+		
 		//lista de lexemas que se encuentran en la TS
 		lexemas=new ArrayList<String>();
 		//lista de tipos ordenados de los lexemas en TS
@@ -138,8 +141,9 @@ public class TablaSimbolos {
 		this.idTabla=inicial;
 		//aumentar numero de la tabla
 		inicial++;
-		//nombre de la tabla
 		
+		
+
 		try {
 			writer = new PrintWriter(Principal.directorioADevolver+File.separator+"ResultadoTablasSimbolos", "UTF-8");
 		} catch (FileNotFoundException e) {
@@ -147,7 +151,7 @@ public class TablaSimbolos {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.setNombreFuncion(nombreTabla);
 	}
 
@@ -244,7 +248,7 @@ public class TablaSimbolos {
 			else {
 				return (this.getTiposLexemas().get(this.posicionLexema(lexema)));
 			}
-			
+
 		}
 	}
 
@@ -307,6 +311,7 @@ public class TablaSimbolos {
 	}
 
 	public static void imprimirTablas() {
+
 		for (TablaSimbolos tabla:listaTablas) {
 			if (tabla.getNombreFuncion().equals(null)) {
 				writer.println("CONTENIDO DE LA TABLA # " + tabla.getIdTabla() + ":");
@@ -330,18 +335,22 @@ public class TablaSimbolos {
 			for (int i=0;i<auxTipos.size();i++) {
 				auxDesp.add(desp);
 				desp+=TablaSimbolos.getDesplazamientoTipo(auxTipos.get(i));
-				
+
 			}
 			Collections.reverse(auxLexemas);
 			Collections.reverse(auxTipos);
 			Collections.reverse(auxDesp);
+
 			for (int i=0;i<tabla.getLexemas().size();i++) {
 				writer.println("* LEXEMA: '"+auxLexemas.get(i)+"'");
 				writer.println("ATRIBUTOS:");
 				writer.println("+ tipo: '" + auxTipos.get(i) +"'");
+				
+				
 				//si no es funcion, imprime normal
 				if (!auxTipos.get(i).equals(TiposToken.TFUNC)) {
 					writer.println("+ despl : " + auxDesp.get(i));
+					
 				}
 				//es funcion lo que tengo y tengo que acceder a los parametros de la TFUNC
 				else {
@@ -355,12 +364,12 @@ public class TablaSimbolos {
 					String espaciado="  ";
 					for (int k=0;k<aux.getTiposLexemasFuncion().size();k++) {
 						int auxSuma=k+1;
-						writer.println(espaciado+"+TipoParam"+auxSuma+": "+aux.getTiposLexemasFuncion().get(k));
+						writer.println(espaciado+"+TipoParam"+auxSuma+": '"+aux.getTiposLexemasFuncion().get(k)+"'");
 						writer.println(espaciado+"+ModoParam"+auxSuma+": "+"1     (es por valor)");
 						espaciado+=" ";
 					}
-					writer.println(espaciado+"+TipoRetorno: "+aux.getTipoDevuelto());
-					writer.println(espaciado+" +EtiqFuncion: Et"+aux.getNombreFuncion());
+					writer.println(espaciado+"+TipoRetorno: '"+aux.getTipoDevuelto()+"'");
+					writer.println(espaciado+" +EtiqFuncion: 'Et"+aux.getNombreFuncion()+"'");
 				}
 				writer.println();
 			}
@@ -369,6 +378,7 @@ public class TablaSimbolos {
 		}
 		writer.close();
 	}
+	
 	//puede comparar en global o en local si es recursiva
 	public boolean compararFuncion(ArrayList<TiposToken> tiposFuncion) {
 		if (tiposFuncion.equals(null)&&this.getTiposLexemasFuncion().equals(null)) {

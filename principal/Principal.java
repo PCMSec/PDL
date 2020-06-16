@@ -2,7 +2,7 @@ package principal;
 
 import java.util.*;
 import java.io.*;
-import java.util.ArrayList; 
+
 import lexico.Lex;
 import token.*;
 import tabla.*;
@@ -28,6 +28,7 @@ public class Principal {
 			System.out.println("El nombre de archivo introducido no existe, hubo un problema. Compruebe de nuevo el archivo, su extension y su direccion absoluta al reiniciar el programa");
 			return;
 		}
+		
 		directorioADevolver=tempFile.getParent();
 		in.close();
 		System.out.println("Abriendo "+filename);
@@ -102,6 +103,7 @@ public class Principal {
 					continue;
 				}
 				else {
+					
 					Token aux=new Token(TiposToken.TID, token);
 					listaTokens.add(aux);
 				}
@@ -329,9 +331,31 @@ public class Principal {
 			System.out.println("ERROR EN LA EJECUCION; COMPROBAR "+directorioADevolver+File.separator+"ResultadoErrores.txt");
 		}
 		
-		/*for (TablaSimbolos auxiliar:TablaSimbolos.listaTablas) {
-			System.out.println("ID "+auxiliar.getIdTabla()+" CON PARAMETROS "+auxiliar.getTiposLexemasFuncion()+" DEVULVE "+auxiliar.getTipoDevuelto());
-		}*/
+		
+		
+		///home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
+		/*ArrayList<String> nombresTotales=new ArrayList<String>();
+		ArrayList<Integer> desplazamientosTotales=new ArrayList<Integer>();
+		
+		
+		//tengo la global
+		TablaSimbolos finn=TablaSimbolos.getListaTablas().get(0);
+		int contador=0;
+		int tabla=1;
+		for (int i=0;i<finn.getLexemas().size();i++) {
+			nombresTotales.add(finn.getLexemas().get(i));
+			if (finn.getDesplazamientos().get(i).equals(0)) {
+				int contadorlocal=0;
+				for (int j=0;j<TablaSimbolos.getListaTablas().get(tabla).getDesplazamientos().size();j++) {
+					nombresTotales.add(TablaSimbolos.getListaTablas().get(tabla).getLexemas().get(j));
+				}
+				tabla++;
+			}
+			
+			desplazamientosTotales.add(contador);
+			contador+=
+		}
+		System.out.println(nombresTotales);*/
 	}
 
 }

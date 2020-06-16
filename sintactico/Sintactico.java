@@ -19,7 +19,13 @@ import token.TiposToken;
 
 
 public class Sintactico {
-	//
+	//desplazamiento para poner donde los tokens
+	private int desplazamiento;
+	private int desplazamientoGeneral;
+	private int desplazamientoLocal;
+	//parte final ///////////////
+
+	//parte final ///////////////
 	private int contador=0;
 	private String auxS2;
 	private String auxV2;
@@ -49,6 +55,7 @@ public class Sintactico {
 	public static PrintWriter writer;
 	//Constructor del sintactico
 	public Sintactico(ArrayList<Token> listaTokens) {
+		
 		//Se empieza en la linea 1 del archivo
 		this.contador=0;
 		this.linea=1;
@@ -58,7 +65,7 @@ public class Sintactico {
 		this.listaTokens = listaTokens;
 		//iniciar la que no tiene end of line
 		this.listaTokensSinEol=quitarEOL();
-		
+
 		
 		try {
 			//se intenta escribir, si no se puede dara error en el catch
@@ -216,6 +223,10 @@ public class Sintactico {
 			//continuo sin error
 			//LEO VAR TIPO ID...
 			if (tokenIgual(TiposToken.TID)) {
+				
+				//lo de los tamanyos
+				
+				
 				//leo hasta: var ENTERO|CADENA|BOOLEAN ID
 				if (actual.lexemaExisteLocal(aux.getLexema())) {
 					//System.out.println("Var ya declarada anteriormente");
@@ -531,7 +542,8 @@ public class Sintactico {
 		if (tokenIgual(TiposToken.TID)) {
 			
 			auxS2=aux.getLexema();
-		//	System.out.println("Estamos en "+auxS2);
+			
+		
 			
 			if (!actual.lexemaExiste(auxS2)) {
 				//LEXEMA NO EXISTE EN TS
@@ -539,6 +551,7 @@ public class Sintactico {
 				global.meterTipo(TiposToken.TINT);
 				global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.TINT));
 			}
+			
 			//a partir de aqui el lexema existe, ya sea GLOBAL o LOCAL
 			aux=leerToken();
 			escribirFichero(15);
@@ -546,31 +559,44 @@ public class Sintactico {
 			//System.out.println("Al salir de S2 tenemos "+S2.getTipoToken());
 			//Al llamar a s2 no reconoce cuando es func
 			//System.out.println("OJO A ESTO "+actual.getTipoLexema(id));
-			if (S2.getTipoToken().equals(TiposToken.TINT) && actual.getTipoLexema(auxS2).equals(TiposToken.TINT)) {
-				devolver=new Tipo(TiposToken.TINT);
+			
+			//ambos tipos a un lado y a otro están bien?
+			if (actual.getTipoLexema(auxS2).equals(S2.getTipoToken())) {
+				devolver=new Tipo(TiposToken.TOK);
+			}
+			
+			else if (S2.getTipoToken().equals(TiposToken.TVACIO)) {
+				devolver=new Tipo(TiposToken.TOK);
 			}
 			
 			//cambiado esto revisar bugs
 			else if (actual.getTipoLexema(auxS2).equals(TiposToken.TINT) && S2.getTipoToken().equals(TiposToken.TVACIO)) {
-				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , LA FUNCION LLAMADA NO EXISTE\n");
-				devolver=new Tipo(TiposToken.TERROR);
-				return devolver;
-			}
-			else if (S2.getTipoToken().equals(TiposToken.TVACIO)) {
-				devolver=new Tipo(TiposToken.TOK);
+				TablaSimbolos comparator=null;
+				for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
+					if (tabla.getNombreFuncion().equals(auxS2)){
+						comparator=tabla;
+					}
+				}
+				
+				//TODO casos de si esta una func dentro de otra y tal
+				//la func no existe y no se puede hacer nada con ella
+				if (comparator==null) {
+					Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , LA FUNCION NO EXISTE\n");
+					devolver=new Tipo(TiposToken.TERROR);
+					return devolver;
+				}
 			}
 			else {
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , NINGUN TIPO COMPATIBLE\n");
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
 			}
-			//TODO poner aqui un caso de error?
-			//rollo else{}
-			//esto va para el final del punto y coma
+			
 			if (tokenIgual(TiposToken.TPUNTOCOMA)) {
 				aux=leerToken();
 			}
 			else {
-				//TODO esto da error, se comenta y fuera
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , FALTA PUNTO Y COMA\n");
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
 			}
@@ -665,6 +691,7 @@ public class Sintactico {
 						global.meterTipo(TiposToken.TINT);
 						global.meterDesplazamiento(TablaSimbolos.getDesplazamientoTipo(TiposToken.TINT));
 					}
+					
 					if (actual.getTipoLexema(id).equals(TiposToken.TBOOLEAN)) {
 						Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , NO SE PUEDE METER UN BOOLEANO EN EL INPUT\n");
 						devolver=new Tipo(TiposToken.TERROR);
@@ -721,7 +748,6 @@ public class Sintactico {
 				aux=leerToken();
 			}
 			else {
-				
 				Error.writer.write("SINTACTICO: ERROR EN LINEA "+ linea +" , SE ESPERABA UN PUNTO Y COMA\n");
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
@@ -851,6 +877,7 @@ public class Sintactico {
 	}
 	//cambiado tipo de retorno
 	public Tipo F() {
+		desplazamiento=desplazamientoLocal;
 		//tipo a devolver si se quiere
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
 		if (tokenIgual(TiposToken.TFUNC)) {
@@ -867,7 +894,11 @@ public class Sintactico {
 				return devolver;
 			}
 			
+			
+			
 			if (tokenIgual(TiposToken.TID)) {
+				
+				
 				nombreFuncion=aux.getLexema();
 				//ver en global
 				if (global.lexemaExiste(nombreFuncion)) {
@@ -901,6 +932,8 @@ public class Sintactico {
 							//aqui cambia el estado de denntroFuncion
 							C();
 							if (tokenIgual(TiposToken.TLLAVECIERRA)) {
+								desplazamiento=desplazamientoGeneral;
+								desplazamientoLocal=0;
 								dentroFuncion=false;
 								nombreFuncion=null;
 								actual=global;
@@ -958,6 +991,7 @@ public class Sintactico {
 			escribirFichero(26);
 			Tipo T=T();
 			if (tokenIgual(TiposToken.TID)) {
+				
 				String id=aux.getLexema();
 				//actual.meterLexemaFuncion(id);
 				//metemos lexema en tabla local
@@ -984,6 +1018,7 @@ public class Sintactico {
 			escribirFichero(26);
 			Tipo T=T();
 			if (tokenIgual(TiposToken.TID)) {
+				
 				String id=aux.getLexema();
 				//actual.meterLexemaFuncion(id);
 				actual.meterLexema(id);
@@ -1006,6 +1041,7 @@ public class Sintactico {
 			escribirFichero(26);
 			Tipo T=T();
 			if (tokenIgual(TiposToken.TID)) {
+				
 				String id=aux.getLexema();
 				//actual.meterLexemaFuncion(id);
 				actual.meterLexema(id);
@@ -1047,6 +1083,7 @@ public class Sintactico {
 			Tipo T=T();
 
 			if (tokenIgual(TiposToken.TID)) {
+				
 				String id=aux.getLexema();
 				//actual.meterLexemaFuncion(id);
 				actual.meterLexema(id);
@@ -1494,7 +1531,8 @@ public class Sintactico {
 			}
 
 			else {
-				//error
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			
 			return devolver;
@@ -1508,7 +1546,8 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//error
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1521,7 +1560,8 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//error
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1534,7 +1574,8 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//error
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1547,7 +1588,8 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//error
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1560,7 +1602,8 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//ERROR COMO TAL DEVUELVE VACIO
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1584,7 +1627,9 @@ public class Sintactico {
 				devolver=new Tipo(aux2);
 			}
 			else {
-				//ERROR COMO TAL DEVUELVE VACIO
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , LA SUMA NO SE PUEDE REALIZAR CON ESTOS TIPOS\n");
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			return devolver;
 		}
@@ -1621,6 +1666,7 @@ public class Sintactico {
 		}
 		else {
 			//ERROR COMO TAL DEVUELVE VACIO
+			Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , TIPOS INCORRECTOS\n");
 			return devolver;
 		}
 	}
@@ -1629,12 +1675,12 @@ public class Sintactico {
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
 		//Token ID leido
 		if (tokenIgual(TiposToken.TID)) {
-			//System.out.println("LEEMOS UN ID QUE SERA LO QUE SEA");
-			//TODO puede ser int --, puede ser func
-			//Tenemos el string id para mas adelante en id y en auxV2
+			
 			auxV2=aux.getLexema();
 			String id=aux.getLexema();
 
+			
+			
 			if (!actual.lexemaExiste(id)) {
 				//LEXEMA NO EXISTE EN TS LOCAL
 				global.meterLexema(id);
@@ -1661,15 +1707,7 @@ public class Sintactico {
 			//TODO TODO TODO OJO QUE AQUI PUEDE HABER CAGADA, esto hay que cambiar para que busque por
 			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.TOK)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-				//devolver=new Tipo(TiposToken.T_OK);
-=======
 				//devolver=new Tipo(TiposToken.TOK);
->>>>>>> sin_barras
-=======
-				//devolver=new Tipo(TiposToken.TOK);
->>>>>>> sin_barras
 				devolver=new Tipo(actual.getTipoLexema(id));
 				//probnado este return BORRAR SI NO
 				return devolver;

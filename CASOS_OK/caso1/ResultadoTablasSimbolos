@@ -5,13 +5,6 @@ ATRIBUTOS:
 + tipo: 'TSTRING'
 + despl : 32
 
-* LEXEMA: 'pideTexto'
-ATRIBUTOS:
-+ tipo: 'TFUNC'
- +NumParam: 0
-  +TipoRetorno: 'TVACIO'
-   +EtiqFuncion: 'EtpideTexto'
-
 * LEXEMA: 'imprime'
 ATRIBUTOS:
 + tipo: 'TFUNC'
@@ -21,6 +14,13 @@ ATRIBUTOS:
    +TipoRetorno: 'TVACIO'
     +EtiqFuncion: 'Etimprime'
 
+* LEXEMA: 'pideTexto'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 0
+  +TipoRetorno: 'TVACIO'
+   +EtiqFuncion: 'EtpideTexto'
+
 * LEXEMA: 'texto'
 ATRIBUTOS:
 + tipo: 'TSTRING'
@@ -28,16 +28,16 @@ ATRIBUTOS:
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 1 (de funcion imprime) :
+CONTENIDO DE LA TABLA # 1 (de funcion pideTexto) :
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 2 (de funcion imprime) :
 
 * LEXEMA: 'msg'
 ATRIBUTOS:
 + tipo: 'TSTRING'
 + despl : 0
-
---------- ----------
-
-CONTENIDO DE LA TABLA # 2 (de funcion pideTexto) :
 
 --------- ----------
 
