@@ -1,15 +1,12 @@
-var string texto;
-function pideTexto ()
-{
-	print ("Introduce un texto");
-	input (texto);
+/*
+/home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
+*/
+
+var int n=50;
+function int recursivo(int min, int max){
+	devolver=recursivo(min+5,max);
+	return devolver;
 }
-function imprime (string msg)
-{
-	print ("Mensage introducido:");
-	print (msg);
-}
-pideTexto();
-var string textoAux;
-textoAux = texto;
-imprime (textoAux);
+
+var int g1=10;
+var int resultado=recursivo(g1+4,50);

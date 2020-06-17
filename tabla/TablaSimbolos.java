@@ -256,13 +256,13 @@ public class TablaSimbolos {
 	public static int getDesplazamientoTipo(TiposToken Tipo) {
 		int aux=-1;
 		if (Tipo.equals(TiposToken.TINT)) {
-			aux = 2;
+			aux = 1; //1 palabra
 		}
 		else if (Tipo.equals(TiposToken.TSTRING)) {
-			aux=32;
+			aux=64; //64 palabras
 		}
 		else if (Tipo.equals(TiposToken.TBOOLEAN)) {
-			aux=1;
+			aux=1; //1 palabra
 		}
 		else if (Tipo.equals(TiposToken.TFUNC)) {
 			aux=0;

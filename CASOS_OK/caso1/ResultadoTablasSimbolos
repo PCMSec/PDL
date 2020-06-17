@@ -1,42 +1,48 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'textoAux'
+* LEXEMA: 'resultado'
 ATRIBUTOS:
-+ tipo: 'TSTRING'
-+ despl : 32
++ tipo: 'TINT'
++ despl : 3
 
-* LEXEMA: 'imprime'
+* LEXEMA: 'g1'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 2
+
+* LEXEMA: 'devolver'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 1
+
+* LEXEMA: 'recursivo'
 ATRIBUTOS:
 + tipo: 'TFUNC'
- +NumParam: 1
-  +TipoParam1: 'TSTRING'
+ +NumParam: 2
+  +TipoParam1: 'TINT'
   +ModoParam1: 1     (es por valor)
-   +TipoRetorno: 'TVACIO'
-    +EtiqFuncion: 'Etimprime'
+   +TipoParam2: 'TINT'
+   +ModoParam2: 1     (es por valor)
+    +TipoRetorno: 'TINT'
+     +EtiqFuncion: 'Etrecursivo'
 
-* LEXEMA: 'pideTexto'
+* LEXEMA: 'n'
 ATRIBUTOS:
-+ tipo: 'TFUNC'
- +NumParam: 0
-  +TipoRetorno: 'TVACIO'
-   +EtiqFuncion: 'EtpideTexto'
-
-* LEXEMA: 'texto'
-ATRIBUTOS:
-+ tipo: 'TSTRING'
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 1 (de funcion pideTexto) :
+CONTENIDO DE LA TABLA # 1 (de funcion recursivo) :
 
---------- ----------
-
-CONTENIDO DE LA TABLA # 2 (de funcion imprime) :
-
-* LEXEMA: 'msg'
+* LEXEMA: 'max'
 ATRIBUTOS:
-+ tipo: 'TSTRING'
++ tipo: 'TINT'
++ despl : 1
+
+* LEXEMA: 'min'
+ATRIBUTOS:
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------
