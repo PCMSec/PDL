@@ -3,12 +3,12 @@ CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 * LEXEMA: 'booleano'
 ATRIBUTOS:
 + tipo: 'TBOOLEAN'
-+ despl : 71
++ despl : 70
 
 * LEXEMA: 'num'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 70
++ despl : 69
 
 * LEXEMA: 'cadena'
 ATRIBUTOS:
@@ -35,19 +35,14 @@ ATRIBUTOS:
 * LEXEMA: 'While'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 69
++ despl : 68
 
 * LEXEMA: 'functional'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 68
-
-* LEXEMA: 'For'
-ATRIBUTOS:
-+ tipo: 'TINT'
 + despl : 67
 
-* LEXEMA: 't'
+* LEXEMA: 'For'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 66
@@ -60,17 +55,6 @@ ATRIBUTOS:
   +ModoParam1: 1     (es por valor)
    +TipoRetorno: 'TINT'
     +EtiqFuncion: 'EtFactorial'
-
-* LEXEMA: 'suma'
-ATRIBUTOS:
-+ tipo: 'TFUNC'
- +NumParam: 2
-  +TipoParam1: 'TINT'
-  +ModoParam1: 1     (es por valor)
-   +TipoParam2: 'TINT'
-   +ModoParam2: 1     (es por valor)
-    +TipoRetorno: 'TINT'
-     +EtiqFuncion: 'Etsuma'
 
 * LEXEMA: 'UNO'
 ATRIBUTOS:
@@ -89,12 +73,7 @@ ATRIBUTOS:
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 1 (de funcion suma) :
-
-* LEXEMA: 'm'
-ATRIBUTOS:
-+ tipo: 'TINT'
-+ despl : 1
+CONTENIDO DE LA TABLA # 1 (de funcion Factorial) :
 
 * LEXEMA: 'n'
 ATRIBUTOS:
@@ -103,16 +82,7 @@ ATRIBUTOS:
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 2 (de funcion Factorial) :
-
-* LEXEMA: 'n'
-ATRIBUTOS:
-+ tipo: 'TINT'
-+ despl : 0
-
---------- ----------
-
-CONTENIDO DE LA TABLA # 3 (de funcion imprime) :
+CONTENIDO DE LA TABLA # 2 (de funcion imprime) :
 
 * LEXEMA: 'f'
 ATRIBUTOS:
@@ -131,7 +101,7 @@ ATRIBUTOS:
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 4 (de funcion cadena) :
+CONTENIDO DE LA TABLA # 3 (de funcion cadena) :
 
 * LEXEMA: 'log'
 ATRIBUTOS:
