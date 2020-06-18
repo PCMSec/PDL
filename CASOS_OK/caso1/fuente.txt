@@ -1,12 +1,44 @@
-/*
-/home/pablo/eclipse-workspace/PDL/src/CASOS_OK/caso1/fuente.txt
-*/
+var string s;	
+var int    uno;
+var int    UNO;
 
-var int n=50;
-function int recursivo(int min, int max){
-	devolver=recursivo(min+5,max);
-	return devolver;
+function int suma (int n,int m){
+	return n+m;
 }
 
-var int g1=10;
-var int resultado=recursivo(g1+4,50);
+function int Factorial (int n)	
+{
+	if (n < 0)	return 1;
+	t = Factorial(n+1);
+	return n + t;	
+}
+var int For;
+var int functional;
+var int While;	
+
+function imprime (string s, string msg, int f)	
+{
+	print (s); print (msg); print (f);
+	return;	
+}
+function string cadena (boolean log)
+{
+switch (UNO)
+  {
+	case 99:	if (uno < UNO)	return s;
+	case 88: return ("entero");
+	case 0:  imprime (s, "adios", 33);
+
+  }
+}
+s = "El factorial ";	
+
+print (s);
+print ("Introduce un numero.");
+input (num);
+var 
+boolean 
+booleano;
+if (num < 0)		print ("No existe el factorial de un negativo.");
+/* imprime (cadena (true), "recursivo es: ", Factorial (num));
+*/

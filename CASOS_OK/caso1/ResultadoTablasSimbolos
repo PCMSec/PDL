@@ -1,21 +1,67 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'resultado'
+* LEXEMA: 'booleano'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
++ despl : 71
+
+* LEXEMA: 'num'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 3
++ despl : 70
 
-* LEXEMA: 'g1'
+* LEXEMA: 'cadena'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 1
+  +TipoParam1: 'TBOOLEAN'
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: 'TSTRING'
+    +EtiqFuncion: 'Etcadena'
+
+* LEXEMA: 'imprime'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 3
+  +TipoParam1: 'TSTRING'
+  +ModoParam1: 1     (es por valor)
+   +TipoParam2: 'TSTRING'
+   +ModoParam2: 1     (es por valor)
+    +TipoParam3: 'TINT'
+    +ModoParam3: 1     (es por valor)
+     +TipoRetorno: 'TVACIO'
+      +EtiqFuncion: 'Etimprime'
+
+* LEXEMA: 'While'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 2
++ despl : 69
 
-* LEXEMA: 'devolver'
+* LEXEMA: 'functional'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 1
++ despl : 68
 
-* LEXEMA: 'recursivo'
+* LEXEMA: 'For'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 67
+
+* LEXEMA: 't'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 66
+
+* LEXEMA: 'Factorial'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 1
+  +TipoParam1: 'TINT'
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: 'TINT'
+    +EtiqFuncion: 'EtFactorial'
+
+* LEXEMA: 'suma'
 ATRIBUTOS:
 + tipo: 'TFUNC'
  +NumParam: 2
@@ -24,7 +70,31 @@ ATRIBUTOS:
    +TipoParam2: 'TINT'
    +ModoParam2: 1     (es por valor)
     +TipoRetorno: 'TINT'
-     +EtiqFuncion: 'Etrecursivo'
+     +EtiqFuncion: 'Etsuma'
+
+* LEXEMA: 'UNO'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 65
+
+* LEXEMA: 'uno'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 64
+
+* LEXEMA: 's'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 1 (de funcion suma) :
+
+* LEXEMA: 'm'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 1
 
 * LEXEMA: 'n'
 ATRIBUTOS:
@@ -33,16 +103,39 @@ ATRIBUTOS:
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 1 (de funcion recursivo) :
+CONTENIDO DE LA TABLA # 2 (de funcion Factorial) :
 
-* LEXEMA: 'max'
+* LEXEMA: 'n'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 1
++ despl : 0
 
-* LEXEMA: 'min'
+--------- ----------
+
+CONTENIDO DE LA TABLA # 3 (de funcion imprime) :
+
+* LEXEMA: 'f'
 ATRIBUTOS:
 + tipo: 'TINT'
++ despl : 128
+
+* LEXEMA: 'msg'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 64
+
+* LEXEMA: 's'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 4 (de funcion cadena) :
+
+* LEXEMA: 'log'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
 + despl : 0
 
 --------- ----------
