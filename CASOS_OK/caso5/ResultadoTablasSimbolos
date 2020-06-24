@@ -2,33 +2,33 @@ CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
 * LEXEMA: 'nombre'
 ATRIBUTOS:
-+ tipo: 'T_STRING'
-+ despl : 5
++ tipo: 'TSTRING'
++ despl : 3
 
 * LEXEMA: 'entrada2'
 ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 3
++ tipo: 'TINT'
++ despl : 2
 
 * LEXEMA: 'entrada1'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 1
 
 * LEXEMA: 'rama'
 ATRIBUTOS:
-+ tipo: 'T_FUNC'
++ tipo: 'TFUNC'
  +NumParam: 2
-  +TipoParam1: T_INT
+  +TipoParam1: 'TINT'
   +ModoParam1: 1     (es por valor)
-   +TipoParam2: T_INT
+   +TipoParam2: 'TINT'
    +ModoParam2: 1     (es por valor)
-    +TipoRetorno: T_STRING
-     +EtiqFuncion: Etrama
+    +TipoRetorno: 'TSTRING'
+     +EtiqFuncion: 'Etrama'
 
 * LEXEMA: 'test'
 ATRIBUTOS:
-+ tipo: 'T_BOOLEAN'
++ tipo: 'TBOOLEAN'
 + despl : 0
 
 --------- ----------
@@ -37,12 +37,12 @@ CONTENIDO DE LA TABLA # 1 (de funcion rama) :
 
 * LEXEMA: 'm'
 ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 2
++ tipo: 'TINT'
++ despl : 1
 
 * LEXEMA: 'n'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------

@@ -2,12 +2,12 @@ CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
 * LEXEMA: 'entrada'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 1
 
 * LEXEMA: 'flag'
 ATRIBUTOS:
-+ tipo: 'T_BOOLEAN'
++ tipo: 'TBOOLEAN'
 + despl : 0
 
 --------- ----------

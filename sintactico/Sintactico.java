@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import errores.*;
 import errores.Error;
 
 
@@ -20,12 +19,6 @@ import token.TiposToken;
 
 public class Sintactico {
 	//desplazamiento para poner donde los tokens
-	private int desplazamiento;
-	private int desplazamientoGeneral;
-	private int desplazamientoLocal;
-	//parte final ///////////////
-
-	//parte final ///////////////
 	private int contador=0;
 	private String auxS2;
 	private String auxV2;
@@ -302,7 +295,6 @@ public class Sintactico {
 				else if (tokenIgual(TiposToken.TPARENTESISCIERRA)) {
 					devolver=new Tipo(TiposToken.TOK);
 					aux=leerToken();
-					//TODO mejorar lo devuelto quiza
 					Tipo S=S();
 				}
 				else {
@@ -322,7 +314,6 @@ public class Sintactico {
 			return devolver;
 		}//FIN DE IF
 		//INICIO SWITCH
-		//TODO interesante el breakenswitch
 		else if (tokenIgual(TiposToken.TSWITCH)) {
 			breakEnSwitch=true;
 			aux=leerToken();
@@ -472,7 +463,6 @@ public class Sintactico {
 			return devolver;
 		}
 	}
-	//TODO hacer cosas con el tipo del B para ver si hay error
 	public void C() {
 		if (tokenIgual(TiposToken.TVAR)) {
 			escribirFichero(13);
@@ -576,9 +566,7 @@ public class Sintactico {
 					if (tabla.getNombreFuncion().equals(auxS2)){
 						comparator=tabla;
 					}
-				}
-				
-				//TODO casos de si esta una func dentro de otra y tal
+				}				
 				//la func no existe y no se puede hacer nada con ella
 				if (comparator==null) {
 					Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , LA FUNCION NO EXISTE\n");
@@ -608,7 +596,6 @@ public class Sintactico {
 			aux=leerToken();
 			escribirFichero(16);
 			Tipo X=X();
-			//TODO revisar esto que tiene mala pinta
 			
 			TablaSimbolos auxaux=null;
 			for (TablaSimbolos tabla : TablaSimbolos.getListaTablas()) {
@@ -780,7 +767,6 @@ public class Sintactico {
 			devolver=new Tipo(E.getTipoToken());
 			return devolver;
 		}
-		//TODO error cuando lee id del anterior y lo toma como entero y luego llama a esto. comprobar si es func o no
 		else if (tokenIgual(TiposToken.TPARENTESISABRE)) {
 			//anyadido nuevo
 			TablaSimbolos comparator=null;
@@ -794,23 +780,21 @@ public class Sintactico {
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
 			}
-			if (dentroFuncion) {
+			//SI NO TIRA QUITAR ESTO
+			/*if (dentroFuncion) {
 				if (!nombreFuncion.equals(auxS2)) {
-					Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , NO SE PUEDE LLAMAR A LA FUNCION "+auxS2+" DENTRO DE "+nombreFuncion+"\n");
+					Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , NO SE1111 PUEDE LLAMAR A LA FUNCION "+auxS2+" DENTRO DE "+nombreFuncion+"\n");
 					devolver=new Tipo(TiposToken.TERROR);
 					return devolver;
 				}
 				
-			}
+			}*/
 		//	System.out.println("hasta aca bien");
 			aux=leerToken();
 			escribirFichero(22);
 			L();
-			//System.out.println(tiposFuncion);
-			//System.out.println("OJO "+comparator.getTipoDevuelto());
-			//System.out.println("OJO2 "+comparator.getTiposLexemasFuncion());
 			if(!comparator.compararFuncion(tiposFuncion)) {
-				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , PARAMETROS AL LLAMAR A "+auxS2+" INCORRECTOS\n");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , PARAMETROS AL LLAMAR A FUNCION1 INCORRECTOS\n");
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
 			}
@@ -877,7 +861,6 @@ public class Sintactico {
 	}
 	//cambiado tipo de retorno
 	public Tipo F() {
-		desplazamiento=desplazamientoLocal;
 		//tipo a devolver si se quiere
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
 		if (tokenIgual(TiposToken.TFUNC)) {
@@ -932,8 +915,6 @@ public class Sintactico {
 							//aqui cambia el estado de denntroFuncion
 							C();
 							if (tokenIgual(TiposToken.TLLAVECIERRA)) {
-								desplazamiento=desplazamientoGeneral;
-								desplazamientoLocal=0;
 								dentroFuncion=false;
 								nombreFuncion=null;
 								actual=global;
@@ -1233,6 +1214,7 @@ public class Sintactico {
 
 	}
 	public Tipo E() {
+		
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
 		//Token 
 		if (tokenIgual(TiposToken.TID)) {
@@ -1241,13 +1223,15 @@ public class Sintactico {
 			Tipo E2=E2();
 			if (Y.getTipoToken().equals(E2.getTipoToken()) || (E2.getTipoToken().equals(TiposToken.TOK))) {
 				TiposToken aux2=Y.getTipoToken();
+				
 				devolver=new Tipo(aux2);
+				
 			}
 			else {
 				//error
 			}
 			//TODO debug
-
+			//System.out.println("Salimos de E con "+ devolver.getTipoToken());
 			return devolver;
 		}
 		else if (tokenIgual(TiposToken.TPARENTESISABRE)) {
@@ -1517,11 +1501,11 @@ public class Sintactico {
 	}
 	public Tipo D() {
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
-		//TODO ESTO ES V D2
 		if (tokenIgual(TiposToken.TID)) {
 			//se mete aqui para la funcion o =id existente
 			escribirFichero(42);
 			Tipo V=V();
+
 			//System.out.println("AQUI TENEMOS "+V.getTipoToken());
 			Tipo D2=D2();
 			//System.out.println("DESPUES TENEMOS "+D2.getTipoToken());
@@ -1671,15 +1655,13 @@ public class Sintactico {
 		}
 	}
 	public Tipo V() {
+		
 		//aux que devolveremos luego
 		Tipo devolver=new Tipo(TiposToken.TVACIO);
 		//Token ID leido
 		if (tokenIgual(TiposToken.TID)) {
-			
 			auxV2=aux.getLexema();
 			String id=aux.getLexema();
-
-			
 			
 			if (!actual.lexemaExiste(id)) {
 				//LEXEMA NO EXISTE EN TS LOCAL
@@ -1692,7 +1674,7 @@ public class Sintactico {
 			escribirFichero(45);
 			//Tenemos tipo de func en V2
 			Tipo V2=V2();
-			
+			//es correcto el tipo devuelto
 			if (V2.getTipoToken().equals(TiposToken.TINT) && actual.getTipoLexema(id).equals(TiposToken.TINT)) {
 				devolver=new Tipo(TiposToken.TINT);
 				//poner tipo de error que puede ser
@@ -1704,7 +1686,6 @@ public class Sintactico {
 				devolver=new Tipo(V2.getTipoToken());
 				return devolver;
 			}
-			//TODO TODO TODO OJO QUE AQUI PUEDE HABER CAGADA, esto hay que cambiar para que busque por
 			//locales y luego globales, asi siempre
 			else if (V2.getTipoToken().equals(TiposToken.TOK)) {
 				//devolver=new Tipo(TiposToken.TOK);
@@ -1772,7 +1753,6 @@ public class Sintactico {
 			devolver=new Tipo(TiposToken.TINT);
 			return devolver;
 		}
-		//TODO para las funciones, tener cuidado
 		else if (tokenIgual(TiposToken.TPARENTESISABRE)) {
 			//ES UNA FUNC y tenemos que mirar y meter los parametros con los que la invocamos
 			//se viene L, que tiene dentro (E,E,E...etc)
@@ -1796,9 +1776,11 @@ public class Sintactico {
 			aux=leerToken();
 			escribirFichero(52);
 			//TODO si L distinto a tipo Ok, error
+			//posible bug que dentro se cambia
+			
 			Tipo L=L();
 			//TODO comprobar tema de parametros
-			if (dentroFuncion) {
+			/*if (dentroFuncion) {
 				if (!nombreFuncion.equals(auxV2)) {
 					//comprobar antes si es un tipo y no una funcion
 					if (!actual.lexemaExiste(auxV2)) {
@@ -1808,12 +1790,11 @@ public class Sintactico {
 					}
 				}
 				
-			}
+			}*/
 			//System.out.println("OJO "+comparator.getTipoDevuelto());
 			//System.out.println("OJO2 "+comparator.getTiposLexemasFuncion());
-			//TODO tremendo bug aca
 			if(!comparator.compararFuncion(tiposFuncion)) {
-				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , PARAMETROS AL LLAMAR A "+auxV2+" INCORRECTOS\n");
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , PARAMETROS AL LLAMAR A FUNCION INCORRECTOS\n");
 				devolver=new Tipo(TiposToken.TERROR);
 				return devolver;
 			}
@@ -1826,6 +1807,9 @@ public class Sintactico {
 			}
 			else {
 				//error porque no hay fin parentesis
+				Error.writer.write("SEMANTICO: ERROR EN LINEA "+ linea +" , SE ESPERABA CERRAR PARENTESIS\n");
+				devolver=new Tipo(TiposToken.TERROR);
+				return devolver;
 			}
 			//por aqui sigue como si nada o esta bien
 			return devolver;

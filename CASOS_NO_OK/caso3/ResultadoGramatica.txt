@@ -1,6 +1,6 @@
 Terminales = { 
 
-eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas menos cte_entero cte_cadena true false break
+eof lambda var id if abreParentesis cierraParentesis abreCorchete cierraCorchete switch case coma and : ; igual int string boolean return print input postDecre function menor mas cte_entero cte_cadena true false break
 
 }
 NoTerminales = { P B B2 T C S S2 X F A K H L Q E E2 Y Y2 D D2 V V2 CASE CASE2 }

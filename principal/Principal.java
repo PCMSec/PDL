@@ -18,6 +18,7 @@ public class Principal {
 		/*
 		/home/pablo/eclipse-workspace/PDL/docs/sencillo.txt
 		 */
+		
 		Scanner in = new Scanner(System.in);
 		System.out.print("Introduzca direccion absoluta del fichero a analizar:"); 
 		String filename = in.nextLine();
@@ -204,9 +205,21 @@ public class Principal {
 		//anyade al final de la lista el token de fin de fichero
 		Token EOF=new Token(TiposToken.EOF);
 		listaTokens.add(EOF);
+		
+		////////////////
+		
+		ArrayList<Token> listaTokensAux=new ArrayList<Token>();
+		for (Token token: listaTokens) {
+			if (!token.getToken().equals(TiposToken.EOL)) {
+				listaTokensAux.add(token);
+			}
+		}
+		
+		///////////////
+		
 		try {
 			PrintWriter writer = new PrintWriter(directorioADevolver+File.separator+"ResultadoTokens.txt", "UTF-8");
-			for (Token token:listaTokens) {
+			for (Token token:listaTokensAux) {
 				//System.out.println(token.tokenizar());
 				writer.println(token.tokenizar());
 			}

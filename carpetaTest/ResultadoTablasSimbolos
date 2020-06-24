@@ -3,14 +3,9 @@ CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 * LEXEMA: 'booleano'
 ATRIBUTOS:
 + tipo: 'TBOOLEAN'
-+ despl : 72
-
-* LEXEMA: 'num'
-ATRIBUTOS:
-+ tipo: 'TINT'
 + despl : 71
 
-* LEXEMA: 'True'
+* LEXEMA: 'num'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 70

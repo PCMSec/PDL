@@ -2,12 +2,12 @@ CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
 * LEXEMA: 'test'
 ATRIBUTOS:
-+ tipo: 'T_FUNC'
++ tipo: 'TFUNC'
  +NumParam: 1
-  +TipoParam1: T_INT
+  +TipoParam1: 'TINT'
   +ModoParam1: 1     (es por valor)
-   +TipoRetorno: T_INT
-    +EtiqFuncion: Ettest
+   +TipoRetorno: 'TINT'
+    +EtiqFuncion: 'Ettest'
 
 --------- ----------
 
@@ -15,7 +15,7 @@ CONTENIDO DE LA TABLA # 1 (de funcion test) :
 
 * LEXEMA: 'n'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------
