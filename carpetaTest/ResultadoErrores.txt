@@ -1,0 +1,1 @@
+LEXICO: La cadena "Introduce un numero. ) ; _EOL_ input ( num ) ; _EOL_ var _EOL_ boolean _EOL_ booleano ; _EOL_ if ( num < ) print (" supera los 64 caracteres maximos

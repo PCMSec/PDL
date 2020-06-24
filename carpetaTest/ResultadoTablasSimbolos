@@ -1,28 +1,121 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'i'
+* LEXEMA: 'booleano'
 ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 8
-
-* LEXEMA: 'i_a'
-ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 6
-
-* LEXEMA: 'nu_m'
-ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 4
-
-* LEXEMA: 'n'
-ATRIBUTOS:
-+ tipo: 'T_INT'
-+ despl : 2
++ tipo: 'TBOOLEAN'
++ despl : 72
 
 * LEXEMA: 'num'
 ATRIBUTOS:
-+ tipo: 'T_INT'
++ tipo: 'TINT'
++ despl : 71
+
+* LEXEMA: 'True'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 70
+
+* LEXEMA: 'test'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 69
+
+* LEXEMA: 'cadena'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 1
+  +TipoParam1: 'TBOOLEAN'
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: 'TSTRING'
+    +EtiqFuncion: 'Etcadena'
+
+* LEXEMA: 'imprime'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 3
+  +TipoParam1: 'TSTRING'
+  +ModoParam1: 1     (es por valor)
+   +TipoParam2: 'TSTRING'
+   +ModoParam2: 1     (es por valor)
+    +TipoParam3: 'TINT'
+    +ModoParam3: 1     (es por valor)
+     +TipoRetorno: 'TVACIO'
+      +EtiqFuncion: 'Etimprime'
+
+* LEXEMA: 'While'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 68
+
+* LEXEMA: 'functional'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 67
+
+* LEXEMA: 'For'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 66
+
+* LEXEMA: 'Factorial'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 1
+  +TipoParam1: 'TINT'
+  +ModoParam1: 1     (es por valor)
+   +TipoRetorno: 'TINT'
+    +EtiqFuncion: 'EtFactorial'
+
+* LEXEMA: 'UNO'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 65
+
+* LEXEMA: 'uno'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 64
+
+* LEXEMA: 's'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 1 (de funcion Factorial) :
+
+* LEXEMA: 'n'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 2 (de funcion imprime) :
+
+* LEXEMA: 'f'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 128
+
+* LEXEMA: 'msg'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 64
+
+* LEXEMA: 's'
+ATRIBUTOS:
++ tipo: 'TSTRING'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 3 (de funcion cadena) :
+
+* LEXEMA: 'log'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
 + despl : 0
 
 --------- ----------

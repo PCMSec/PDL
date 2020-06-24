@@ -1,14 +1,40 @@
-switch (num)
+var string s;	
+var int    uno;
+var int    UNO;
+function int Factorial (int n)	
 {
-	case 1:
-	case 0: print (n); break;
-			if (nu_m < 0)
-			print ("No existe el factorial de un negativo.\n");
-	case 2: var int i_a=55; break;
-		
-		
+	if (n < 0)	return 1;
+	return n + Factorial (n + 1);	
 }
+var int For;
+var int functional;
+var int While;
 
-if (4<55) i=0; /* esta mal */
+function imprime (string s, string msg, int f)	
+{
+	print (s); print (msg); print (f);
+	return;	
+}
+function string cadena (boolean log)
+{
+switch (UNO)
+  {
+	case 99:	if (uno < UNO)	return s;
+	case 88: return ("entero");
+	case 0:  imprime (s, "adios", 33);
+
+  }
+}
+s = "El factorial ";
+test = Factorial(5)+5;
+print (s);
+print ("Introduce un numero.");
+input (num);
+var 
+boolean 
+booleano;
+if (num < 0)		print ("No existe el factorial de un negativo.");
+imprime (cadena (true), "recursivo es: ", Factorial (num));
+
 
 /* /home/pablo/eclipse-workspace/PDL/src/carpetaTest/fuente.txt */
