@@ -1,116 +1,120 @@
 CONTENIDO DE LA TABLA # 0 (de funcion GLOBAL) :
 
-* LEXEMA: 'booleano'
+* LEXEMA: 'juan'
 ATRIBUTOS:
 + tipo: 'TBOOLEAN'
 + despl : 71
 
-* LEXEMA: 'num'
+* LEXEMA: 'n'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 70
 
-* LEXEMA: 'test'
+* LEXEMA: 'x'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 69
 
-* LEXEMA: 'cadena'
-ATRIBUTOS:
-+ tipo: 'TFUNC'
- +NumParam: 1
-  +TipoParam1: 'TBOOLEAN'
-  +ModoParam1: 1     (es por valor)
-   +TipoRetorno: 'TSTRING'
-    +EtiqFuncion: 'Etcadena'
-
-* LEXEMA: 'imprime'
-ATRIBUTOS:
-+ tipo: 'TFUNC'
- +NumParam: 3
-  +TipoParam1: 'TSTRING'
-  +ModoParam1: 1     (es por valor)
-   +TipoParam2: 'TSTRING'
-   +ModoParam2: 1     (es por valor)
-    +TipoParam3: 'TINT'
-    +ModoParam3: 1     (es por valor)
-     +TipoRetorno: 'TVACIO'
-      +EtiqFuncion: 'Etimprime'
-
-* LEXEMA: 'While'
+* LEXEMA: 'entero'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 68
 
-* LEXEMA: 'functional'
+* LEXEMA: 's'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 67
 
-* LEXEMA: 'For'
+* LEXEMA: 'UNO'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 66
 
-* LEXEMA: 'Factorial'
+* LEXEMA: 'Func2'
 ATRIBUTOS:
 + tipo: 'TFUNC'
- +NumParam: 1
+ +NumParam: 3
   +TipoParam1: 'TINT'
   +ModoParam1: 1     (es por valor)
-   +TipoRetorno: 'TINT'
-    +EtiqFuncion: 'EtFactorial'
+   +TipoParam2: 'TINT'
+   +ModoParam2: 1     (es por valor)
+    +TipoParam3: 'TINT'
+    +ModoParam3: 1     (es por valor)
+     +TipoRetorno: 'TINT'
+      +EtiqFuncion: 'EtFunc2'
 
-* LEXEMA: 'UNO'
+* LEXEMA: 'Func1'
+ATRIBUTOS:
++ tipo: 'TFUNC'
+ +NumParam: 2
+  +TipoParam1: 'TINT'
+  +ModoParam1: 1     (es por valor)
+   +TipoParam2: 'TBOOLEAN'
+   +ModoParam2: 1     (es por valor)
+    +TipoRetorno: 'TINT'
+     +EtiqFuncion: 'EtFunc1'
+
+* LEXEMA: 'h'
 ATRIBUTOS:
 + tipo: 'TINT'
 + despl : 65
 
-* LEXEMA: 'uno'
-ATRIBUTOS:
-+ tipo: 'TINT'
-+ despl : 64
-
-* LEXEMA: 's'
+* LEXEMA: 'z'
 ATRIBUTOS:
 + tipo: 'TSTRING'
++ despl : 1
+
+* LEXEMA: 'y'
+ATRIBUTOS:
++ tipo: 'TINT'
 + despl : 0
 
 --------- ----------
 
-CONTENIDO DE LA TABLA # 1 (de funcion Factorial) :
+CONTENIDO DE LA TABLA # 1 (de funcion Func1) :
+
+* LEXEMA: 'w'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
++ despl : 2
+
+* LEXEMA: 'y'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
++ despl : 1
+
+* LEXEMA: 'x'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 0
+
+--------- ----------
+
+CONTENIDO DE LA TABLA # 2 (de funcion Func2) :
+
+* LEXEMA: 'pepe'
+ATRIBUTOS:
++ tipo: 'TBOOLEAN'
++ despl : 4
+
+* LEXEMA: 'Uno'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 3
+
+* LEXEMA: 'a'
+ATRIBUTOS:
++ tipo: 'TINT'
++ despl : 2
 
 * LEXEMA: 'n'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 0
++ despl : 1
 
---------- ----------
-
-CONTENIDO DE LA TABLA # 2 (de funcion imprime) :
-
-* LEXEMA: 'f'
+* LEXEMA: 'z'
 ATRIBUTOS:
 + tipo: 'TINT'
-+ despl : 128
-
-* LEXEMA: 'msg'
-ATRIBUTOS:
-+ tipo: 'TSTRING'
-+ despl : 64
-
-* LEXEMA: 's'
-ATRIBUTOS:
-+ tipo: 'TSTRING'
-+ despl : 0
-
---------- ----------
-
-CONTENIDO DE LA TABLA # 3 (de funcion cadena) :
-
-* LEXEMA: 'log'
-ATRIBUTOS:
-+ tipo: 'TBOOLEAN'
 + despl : 0
 
 --------- ----------

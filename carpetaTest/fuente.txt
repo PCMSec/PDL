@@ -1,40 +1,36 @@
-var string s;	
-var int    uno;
-var int    UNO;
-function int Factorial (int n)	
-{
-	if (n < 0)	return 1;
-	return n + Factorial (n + 1);	
+var int y;
+var string z;
+var int h;
+function int Func1 (int x, boolean y)  
+{  var boolean w;
+   x = 13;
+   z = "hola";
+   return x;
+   /* //return y; */
 }
-var int For;
-var int functional;
-var int While;
 
-function imprime (string s, string msg, int f)	
-{
-	print (s); print (msg); print (f);
-	return;	
-}
-function string cadena (boolean log)
-{
-switch (UNO)
-  {
-	case 99:	if (uno < UNO)	return s;
-	case 88: return ("entero");
-	case 0:  imprime (s, "adios", 33);
+function int Func2 (int z, int n,int a)
+{  
+	var int Uno;
+	switch (UNO)
+  	{
+		case 99:	if (1 < UNO)	return s;
+		case 88: return (entero);
+		case 0:  return h;
 
-  }
+	}
+   n = 13;
+   z = y;
+   var boolean pepe;
+   pepe = h < 3;
+   Func1(5,pepe);
+   n = Func2(n,5,n);
+   return 5+n;
 }
-s = "El factorial ";
-test = Factorial(5)+5;
-print (s);
-print ("Introduce un numero.");
-input (num);
-var 
-boolean 
-booleano;
-if (num < 0)		print ("No existe el factorial de un negativo.");
-imprime (cadena (true), "recursivo es: ", Factorial (num));
+
+var int x;
+var boolean juan = x < 5+n;
+
 
 
 /* /home/pablo/eclipse-workspace/PDL/src/carpetaTest/fuente.txt */

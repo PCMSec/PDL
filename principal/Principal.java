@@ -73,7 +73,7 @@ public class Principal {
 			if ((noContar) && !((token.matches(comentario2)))) {
 				continue;
 			}
-			else if (token.matches(entero)) {
+			else if (token.matches(entero) && (!encadenado)) {
 				Token aux=new Token(TiposToken.TENTERO, Integer.parseInt(token));
 				if (Integer.parseInt(token)>32767) {
 					Error.writer.write("LEXICO: Entero \"" + token + "\" supera el rango asignado por el lenguaje");
